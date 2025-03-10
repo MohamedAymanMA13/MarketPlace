@@ -1,0 +1,27 @@
+{
+  "Successfully removed from favorites!": "Successfully removed from favorites!",
+  "Failed to remove from favorites!": "Failed to remove from favorites!",
+  "Failed to add to favorites!": "Failed to add to favorites!",
+  "Failed to fetch favorites!": "Failed to fetch favorites!",
+  "Fetching configuration tables...": "Fetching configuration tables...",
+  "Got the config tables": "Got the config tables",
+  "Failed to fetch tables!": "Failed to fetch tables!",
+  "Welcome Back!": "Welcome Back!",
+  "Login Failed!": "Login Failed!",
+  "Successfully logged out!": "Successfully logged out!",
+  "Account Successfully Created!": "Account Successfully Created!",
+  "Failed to create an account! Please try again later.": "Failed to create an account! Please try again later.",
+  "Your company is successfully added and currently under reviewing!": "Your company is successfully added and currently under reviewing!",
+  "Failed to add company!": "Failed to add company!",
+  "Booking Successfully Updated!": "Booking Successfully Updated!",
+  "Failed to update the booking. Please try again!": "Failed to update the booking. Please try again!",
+  "Failed to fetch booking details!": "Failed to fetch booking details!",
+  "Booking cancelled successfully!": "Booking cancelled successfully!",
+  "Failed to cancel the booking!": "Failed to cancel the booking!",
+  "Booking Failed. Please try again!": "Booking Failed. Please try again!",
+  "Failed to fetch package details!": "Failed to fetch package details!",
+
+  "Are you sure you want to cancel your booking?": "Are you sure you want to cancel your booking?",
+  "There's": "There's",
+  "a 200 EGP cancellation fee": "a 200 EGP cancellation fee"
+}

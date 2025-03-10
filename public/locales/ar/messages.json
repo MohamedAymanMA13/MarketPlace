@@ -1,0 +1,27 @@
+{
+  "Successfully removed from favorites!": "تم الحذف بنجاح!",
+  "Failed to remove from favorites!": "فشل في الحذف!",
+  "Failed to add to favorites!": "فشل في الإضافة إالى المفضلة!",
+  "Failed to fetch favorites!": "فشل في تحميل المفضلة!",
+  "Fetching configuration tables...": "جاري تحميل جداول الاعدادات...",
+  "Got the config tables": "تم تحميل جداول الاعدادات",
+  "Failed to fetch tables!": "فشل في تحميل جداول الاعدادات",
+  "Welcome Back!": "أهلا بك!",
+  "Login Failed!": "فشل في تسجيل الدخول!",
+  "Successfully logged out!": "تم تسجيل الخروج بنجاح!",
+  "Account Successfully Created!": "تم إنشاء الحساب بنجاح!",
+  "Failed to create an account! Please try again later.": "فشل في إنشاء الحساب. برجاء المحاولة لاحقا!",
+  "Your company is successfully added and currently under reviewing!": "تم إضافة شركتكم بنجاح وهي الآن قيد المراجعة!",
+  "Failed to add company!": "فشل في إضافة الشركة. برجاء المحاولة لاحقا!",
+  "Booking Successfully Updated!": "تم تحديث الحجز بنجاح!",
+  "Failed to update the booking. Please try again!": "فشل في تحديث الحجز.  برجاء المحاولة لاحقا!",
+  "Failed to fetch booking details!": "فشل في تحميل بيانات الحجز!",
+  "Booking cancelled successfully!": "تم إالغاء الحجز بنجاح!",
+  "Failed to cancel the booking!": "فشل في إالغاء الحجز. برجاء المحاولة لاحقا!",
+  "Booking Failed. Please try again!": "فشل في إكمال الحجز. برجاء المحاولة لاحقا!",
+  "Failed to fetch package details!": "فشل في تحميل بيانات الباقة!",
+
+  "Are you sure you want to cancel your booking?": "هل أنت متأكد من إالغاء الحجز؟",
+  "There's": "يوجد",
+  "a 200 EGP cancellation fee": "200 جم مصاريف إلغاء"
+}

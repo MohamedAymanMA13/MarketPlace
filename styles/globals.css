@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* === Poppins Start === */
+  @font-face {
+    font-family: 'Poppins';
+    src: url(/assets/fonts/poppins/Poppins-Bold.ttf) format('truetype');
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    src: url(/assets/fonts/poppins/Poppins-SemiBold.ttf) format('truetype');
+    font-weight: 600;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    src: url(/assets/fonts/poppins/Poppins-Medium.ttf) format('truetype');
+    font-weight: 500;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    src: url(/assets/fonts/poppins/Poppins-Regular.ttf) format('truetype');
+    font-weight: 400;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    src: url(/assets/fonts/poppins/Poppins-Light.ttf) format('truetype');
+    font-weight: 300;
+    font-display: swap;
+  }
+  /* === Poppins END === */
+
+  /* === noto Start === */
+  @font-face {
+    font-family: 'noto';
+    src: url(/assets/fonts/noto/NotoSansArabic-Bold.ttf) format('truetype');
+    font-weight: 700;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'noto';
+    src: url(/assets/fonts/noto/NotoSansArabic-SemiBold.ttf) format('truetype');
+    font-weight: 600;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'noto';
+    src: url(/assets/fonts/noto/NotoSansArabic-Medium.ttf) format('truetype');
+    font-weight: 500;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'noto';
+    src: url(/assets/fonts/noto/NotoSansArabic-Regular.ttf) format('truetype');
+    font-weight: 400;
+    font-display: swap;
+  }
+  /* === noto END === */
+}
+
+@layer components {
+  .nav__item {
+    @apply relative hover:text-main font-medium text-sm lg:text-base;
+  }
+
+  .form__input {
+    @apply w-full border-[#B6B6B6] text-copy text-xs 2xl:text-sm rounded-[10px] focus:border-main focus:ring-main;
+  }
+  .react-datepicker-wrapper {
+    display: flex !important;
+  }
+  .timeline__ltr::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    background-color: #5c48c1;
+    top: 0;
+    bottom: 0;
+    left: 40%;
+    margin-left: -2px;
+  }
+
+  .timeline__rtl::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    background-color: #5c48c1;
+    top: 0;
+    bottom: 0;
+    right: 40%;
+    /* margin-right: 4px; */
+  }
+
+  .wrapper__time--ltr,
+  .wrapper__time--rtl {
+    display: grid;
+    grid-template-columns: 0.65fr 1fr;
+  }
+
+  .wrapper__date--ltr::after {
+    content: '';
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    background-color: #5c48c1;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+    left: 100%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 0 5px #eeecf9;
+  }
+
+  .wrapper__date--rtl::after {
+    content: '';
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    background-color: #5c48c1;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+    right: 100%;
+    transform: translateX(50%);
+    box-shadow: 0 0 0 5px #eeecf9;
+  }
+
+  .wrapper__time--ltr::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 40%;
+    transform: translateX(-50%);
+    background-color: #5c48c1;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  .wrapper__time--rtl::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    right: 40%;
+    transform: translateX(50%);
+    background-color: #5c48c1;
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+  @media (min-width: 768px) {
+    .timeline__ltr::after {
+      left: 20%;
+    }
+
+    .timeline__rtl::after {
+      right: 20%;
+    }
+
+    .wrapper__time--ltr,
+    .wrapper__time--rtl {
+      grid-template-columns: 0.23fr 1fr;
+    }
+
+    .wrapper__time--ltr::after {
+      left: 20%;
+    }
+
+    .wrapper__time--rtl::after {
+      right: 20%;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .wrapper__time--ltr,
+    .wrapper__time--rtl {
+      grid-template-columns: 0.24fr 1fr;
+    }
+  }
+}
