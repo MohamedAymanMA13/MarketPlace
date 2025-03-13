@@ -1,12 +1,12 @@
 import { axios_instance as axios } from 'apis/axios-instance';
 
-export function fetchHomeData(lang) {
-  return axios.get('/ClientPackage/GetAll', {
-    headers: {
-      lang,
-    },
-  });
-}
+// export function fetchHomeData(lang) {
+//   return axios.get('/ClientPackage/GetAll', {
+//     headers: {
+//       lang,
+//     },
+//   });
+// }
 
 export function searchPackages(queryParams, lang) {
   return axios.get('/ClientPackage/Packages', {
@@ -77,19 +77,20 @@ export function searchCatering(queryParams, lang) {
 }
 
 export function searchFlights(queryParams, lang) {
-  return axios.get('/Flight/GetAllFlightWebsiteContent', {
+  console.log('Query Parameters:', queryParams); // This should log the query parameters
+  return axios.get('/Flights/marketplace/travels', {
     params: queryParams,
-    headers: {
-      lang,
-    },
+    // headers: {
+    //   lang,
+    // },
   });
 }
 
 export function searchTransportation(queryParams, lang) {
-  return axios.get('/TransportationCompany/GetWebsiteContentAllTransportations', {
+  return axios.get('/Transportations/marketplace/travels', {
     params: queryParams,
-    headers: {
-      lang,
-    },
+    // headers: {
+    //   lang,
+    // },
   });
 }

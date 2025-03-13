@@ -61,54 +61,54 @@ export default function Home({ response,optionsFontSize }) {
         "value": "5"
     }
   ]
-  const submitHandler = async (values) => {
-    console.log('Form Submitted:', values);
+  // const submitHandler = async (values) => {
+  //   console.log('Form Submitted:', values);
 
-    const valuesToSubmit = {
-      hotelName: -1,
-      location: values.location || 0 ,
-      rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
-      from_date: startDate.toISOString(),
-      to_date: endDate.toISOString(),
-      // numberOfRooms,
+  //   const valuesToSubmit = {
+  //     hotelName: -1,
+  //     location: values.location || 0 ,
+  //     rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
+  //     from_date: startDate.toISOString(),
+  //     to_date: endDate.toISOString(),
+  //     // numberOfRooms,
 
-    };
+  //   };
   
-    console.log('Form valuesToSubmit:', valuesToSubmit);
+  //   console.log('Form valuesToSubmit:', valuesToSubmit);
 
-    router.push({
-      pathname: '/hotels',
-      query: valuesToSubmit,
-    });
-  };
-  useEffect(() => {
-    // This effect toggles the form visibility based on the response
-    if (response) {
-      setFormVisible(true); // Show the form if response is received
-    } else {
-      setFormVisible(false); // Hide the form if no response
-    }
-  }, [response]);
+  //   router.push({
+  //     pathname: '/hotels',
+  //     query: valuesToSubmit,
+  //   });
+  // };
+  // useEffect(() => {
+  //   // This effect toggles the form visibility based on the response
+  //   if (response) {
+  //     setFormVisible(true); // Show the form if response is received
+  //   } else {
+  //     setFormVisible(false); // Hide the form if no response
+  //   }
+  // }, [response]);
   
-  useEffect(() => {
-    if (selectedCountry) {
-      async function fetchCities() {
-        try {
-          const response = await GetCities(selectedCountry);
-          setCities(response.data?.Data);
-        } catch (error) {
-          console.error('Error fetching cities:', error);
-        }
-      }
-      fetchCities();
-    } else {
-      setCities([]); 
-    }
-  }, [selectedCountry]);
+  // useEffect(() => {
+  //   if (selectedCountry) {
+  //     async function fetchCities() {
+  //       try {
+  //         const response = await GetCities(selectedCountry);
+  //         setCities(response.data?.Data);
+  //       } catch (error) {
+  //         console.error('Error fetching cities:', error);
+  //       }
+  //     }
+  //     fetchCities();
+  //   } else {
+  //     setCities([]); 
+  //   }
+  // }, [selectedCountry]);
   return (
     <PageLayout pageTitle={t('Home Page')}>
       <div className="relative">
-        <TopCarousel Packages={response?.UmrahPackages} />
+        {/* <TopCarousel Packages={response?.UmrahPackages} /> */}
 
         {formVisible && (
           <div className="absolute inset-0 flex w-[40%]">
@@ -279,7 +279,7 @@ export default function Home({ response,optionsFontSize }) {
         </h2>
 
         <div className="mt-6 w-full">
-          <CardsCarousel Packages={response?.BestOffersPackages} />
+          {/* <CardsCarousel Packages={response?.BestOffersPackages} /> */}
         </div>
       </section>
 
@@ -291,7 +291,7 @@ export default function Home({ response,optionsFontSize }) {
               <div className="flex flex-col items-center text-white">
                 <UserIcon className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" />
                 <p className="md:mt-2 lg:mt-4 font-bold text-lg md:text-xl lg:text-4xl">
-                  {response.TravelAgencies}
+                  {/* {response.TravelAgencies} */}
                 </p>
                 <p className="font-medium md:text-lg">{t('Agencies')}</p>
               </div>
@@ -299,7 +299,7 @@ export default function Home({ response,optionsFontSize }) {
               <div className="flex flex-col items-center text-white">
                 <PackageIcon className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" />
                 <p className="md:mt-2 lg:mt-4 font-bold text-lg md:text-xl lg:text-4xl">
-                  {response.Packages}
+                  {/* {response.Packages} */}
                 </p>
                 <p className="font-medium md:text-lg">{t('Packages')}</p>
               </div>
@@ -307,7 +307,7 @@ export default function Home({ response,optionsFontSize }) {
               <div className="flex flex-col items-center text-white">
                 <TravelCompanyIcon className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" />
                 <p className="md:mt-2 lg:mt-4 font-bold text-lg md:text-xl lg:text-4xl">
-                  {response.Trips}
+                  {/* {response.Trips} */}
                 </p>
                 <p className="font-medium md:text-lg">{t('Trips')}</p>
               </div>
@@ -325,7 +325,7 @@ export default function Home({ response,optionsFontSize }) {
         </h2>
 
         <div className="mt-6 w-full">
-          <CardsCarousel Packages={response?.UmrahPackages} withArrows={true} />
+          {/* <CardsCarousel Packages={response?.UmrahPackages} withArrows={true} /> */}
         </div>
       </section>
 
@@ -336,11 +336,11 @@ export default function Home({ response,optionsFontSize }) {
 
 export async function getServerSideProps(context) {
   const { locale } = context;
-  const response = await fetchHomeData(locale);
+  // const response = await fetchHomeData(locale);
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'messages'])),
-      response: response.data.Data,
+      // response: response.data.Data,
     },
   };
 }
