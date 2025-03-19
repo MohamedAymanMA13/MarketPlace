@@ -39,8 +39,8 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
   useEffect(() => {
     if (PkgDetails?.CateringCategories) {
       const initialItems = PkgDetails.CateringCategories.flatMap(category =>
-        category.items.map(item => ({
-          id: item.ID,
+        category.CateringCategoryItems.map(item => ({
+          id: item.Id,
           quantity: 0,
         }))
       );
@@ -49,7 +49,7 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
 
     if (PkgDetails?.CateringCombos) {
       const initialCombos = PkgDetails.CateringCombos.map(combo => ({
-        id: combo.ID,
+        id: combo.Id,
         quantity: 0,
       }));
       setItemsCombo(initialCombos);
@@ -95,7 +95,7 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
     console.log('%csrc\pages\cateringpackages\[packageId]\index.js:95 {...values, id: PkgDetails.ID ,startDate, endDate}', 'color: #007acc;', {
       CateringCombos: filteredCombos,
       CateringItems: filteredItems,
-      id: PkgDetails.ID,
+      id: PkgDetails.Id,
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
     });
@@ -105,7 +105,7 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
       const response = await axios.post('/Catering/AddCateringWebsiteReservation', {
         CateringCombos: filteredCombos,
         CateringItems: filteredItems,
-        id: PkgDetails.ID,
+        id: PkgDetails.Id,
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
       }, {
@@ -114,9 +114,9 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
         },
       });
   
-      console.log('%csrc\pages\cateringpackages\[packageId]\index.js:99 response.data.Data', 'color: #007acc;', response.data.Data);
+      console.log('%csrc\pages\cateringpackages\[packageId]\index.js:99 response.data.Data', 'color: #007acc;', response.data.data);
   
-      if (response.data.Data) {
+      if (response.data.data) {
         router.push('/');  // Redirect to homepage
       } else {
         toast.error(response.data.Message);  // Show error message
@@ -149,21 +149,24 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
           </div>
         </div>
 
-        <div className="relative aspect-[12/9] sm:aspect-video lg:aspect-[3/1] rounded-md overflow-hidden">
+       
+        <section className="py-2 px-3 bg-white rounded-md text-copy">
+        <div className="relative w-[200px] mb-3 h-[200px] aspect-[12/9] sm:aspect-video lg:aspect-[3/1] rounded-md overflow-hidden">
           <Image
             alt="package cover"
-            src={`${PkgDetails?.CompanyLogo}` || '/bg5.jpg'}
+            src={`http://gammats.com:7009/be/${PkgDetails?.Photo}` || '/bg5.jpg'}
             layout="fill"
-            className="w-full h-full "
+            className=" w-[400px] h-[400px] min-h-fit "
             priority
+            width={'400px'}
+            height={'400px'}
           />
         </div>
-        <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">
             {t('Catering Details')}
           </h3>
           <div className="mt-2">
-            Phone : {PkgDetails?.TelephoneNumber}
+            Phone : {PkgDetails?.PhoneNumber}
           </div>
           <div className="mt-2">
             Website : {PkgDetails?.Website}
@@ -172,14 +175,14 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
             Email : {PkgDetails?.Email}
           </div>
           <div className="mt-2">
-            Facebook : {PkgDetails?.Facebook}
+            Facebook : {PkgDetails?.FacebookLink}
           </div>
           <div className="mt-2">
-            Instagram : {PkgDetails?.Instagram}
+            Instagram : {PkgDetails?.InstagramLink}
           </div>
           <div className="mt-2">
             cities : {' '}
-            {PkgDetails?.FK_Cities?.map((city , i) => (
+            {PkgDetails?.CateringCities?.map((city , i) => (
               <span key={i}>
                 {city?.Value} , {' '}
               </span>
@@ -202,7 +205,7 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
               values,
             }) => (
               <>
-               <section className="py-2 px-3 bg-white rounded-md text-copy" >
+               {/* <section className="py-2 px-3 bg-white rounded-md text-copy" >
                   <h3 className="text-sm md:text-base font-bold">
                     {t('Choose Date')}
                   </h3>
@@ -235,51 +238,51 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
                       />
                     </div>
                   </div>
-                </section>
+                </section> */}
 
                 <section className="py-2 px-3 bg-white rounded-md text-copy">
                   <h3 className="text-sm md:text-base font-bold">
                     {t('Catering Category')}
                   </h3>
                   {PkgDetails?.CateringCategories?.map((category) => (
-                    <div key={category?.ID} className="mb-8">
-                      <h2 className="text-center text-sm font-bold mb-4"> {category?.Category}</h2>
+                    <div key={category?.Id} className="mb-8">
+                      <h2 className="text-center text-sm font-bold mb-4"> {category?.Name}</h2>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
-                        {category?.items?.map((item) => (
-                          <div key={item?.ID} className="max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 flex flex-col">
+                        {category?.CateringCategoryItems?.map((item) => (
+                          <div key={item?.Id} className="max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 flex flex-col">
                             <a className="block relative aspect-[10/5] sm:aspect-[10/6]">
                                 <Image
                                   alt={`${item?.item} cover`}
-                                  src={`${item?.img}` || '/bg3.jpg'}
+                                  src={`http://gammats.com:7009/be/${item?.Photo}` || '/bg3.jpg'}
                                   layout="fill"
                                   className="w-full h-full object-cover"
                                 />
                               </a>
                               <div className="p-4 flex-1">
-                                <h3 className="text-lg font-semibold"> {item?.item}</h3>
+                                <h3 className="text-lg font-semibold"> {item?.Name}</h3>
                                 <p className="text-gray-700">{item?.Description}</p>
                               </div>
                               <div className="p-4 mt-auto flex items-center justify-between">
                                 <p className="text-main text-lg font-bold">
                                   Price: {item?.Price}
                                 </p>
-                                <div className="text-copy text-sm flex items-center gap-1">
+                                {/* <div className="text-copy text-sm flex items-center gap-1">
                                   <button 
-                                    onClick={() => decrementItem(item.ID)}
+                                    onClick={() => decrementItem(item.Id)}
                                     disabled={!auth.user?.loggedIn}
                                     className="text-gray-500 border p-2"
                                   >
                                     <MinusIcon className="h-5 w-5" />
                                   </button>
-                                  <span className="mx-4 text-main text-lg font-bold">{items.find(i => i.id === item.ID)?.quantity || 0}</span>
+                                  <span className="mx-4 text-main text-lg font-bold">{items.find(i => i.id === item.Id)?.quantity || 0}</span>
                                   <button 
-                                    onClick={() => incrementItem(item.ID)}
+                                    onClick={() => incrementItem(item.Id)}
                                     disabled={!auth.user?.loggedIn}
                                     className="text-gray-500 border p-2"
                                   >
                                     <PlusIcon className="h-5 w-5" />
                                   </button>
-                                </div>
+                                </div> */}
                               </div>
                           </div>
                         ))}
@@ -292,23 +295,23 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
                   <h3 className="text-sm md:text-base font-bold">
                     {t('Catering Combo')}
                   </h3>
-                    <div  className="mb-8">
+                    {<div  className="mb-8">
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
                       {PkgDetails?.CateringCombos.map((combo) => (
-                        <div key={combo?.ID} className="max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 flex flex-col">
+                        <div key={combo?.iD} className="max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 flex flex-col">
                           <a className="block relative aspect-[10/5] sm:aspect-[10/6]">
                             <Image
                               alt={`${combo?.Name} cover`}
-                              src={`${combo?.Photo}` || '/bg3.jpg'}
+                              src={`http://gammats.com:7009/be/${combo?.Photo}` || '/bg3.jpg'}
                               layout="fill"
                               className="w-full h-full object-cover"
                             />
                           </a>
                           <div className="p-4 flex-1">
                             <h3 className="text-lg font-semibold"> {combo?.Name}</h3>
-                            {combo?.items?.map((item) => (
+                            {combo?.CateringComboItems?.map((item) => (
                               
-                                <p className="text-gray-700" key={item?.ID}>{item?.item}</p>
+                                <p className="text-gray-700" key={item?.Id}>{item?.Name}</p>
                               
                             ))}
                           </div>
@@ -316,75 +319,29 @@ export default function PackageDetailsPage({ PkgDetails,optionsFontSize }) {
                             <p className="text-main text-lg font-bold">
                               Price: {combo?.Price}
                             </p>
-                            <div className="text-copy text-sm flex items-center gap-1">
+                            {/* <div className="text-copy text-sm flex items-center gap-1">
                               <button 
-                                onClick={() => decrementCombo(combo.ID)}
+                                onClick={() => decrementCombo(combo.id)}
                                 className="text-gray-500 border p-2"
                                 disabled={!auth.user?.loggedIn}
                               >
                                 <MinusIcon className="h-5 w-5" />
                               </button>
-                              <span className="mx-4 text-main text-lg font-bold">{itemsCombo.find(i => i.id === combo.ID)?.quantity || 0}</span>
+                              <span className="mx-4 text-main text-lg font-bold">{itemsCombo.find(i => i.id === combo.id)?.quantity || 0}</span>
                               <button 
-                                onClick={() => incrementCombo(combo.ID)}
+                                onClick={() => incrementCombo(combo.Id)}
                                 disabled={!auth.user?.loggedIn}
                                 className="text-gray-500 border p-2"
                               >
                                 <PlusIcon className="h-5 w-5" />
                               </button>
-                            </div>
+                            </div> */}
                           </div>
                         </div>
                       ))}
                       </div>
-                    </div>
-                    {auth.user?.loggedIn ? 
-                      <div className="sm:self-end flex gap-4 items-center justify-center">
-                        <button
-                          type="button"
-                          onClick={handleSubmit} // Call handleSubmit here
-                          className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                          {reqLoading ? (
-                            <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className='animate-spin h-5 w-5 mr-3 text-main'
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                          ) : (
-                            t('Book Now')
-                          )}
-                        </button>
-                      </div>
-                      :
-                      <div className="sm:self-end flex gap-4 items-center justify-center">
-                        <PopoverBtn
-                          triggerElement={
-                            <button
-                              type="button"
-                              className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                              {t('Book Now')}
-                            </button>
-                          }
-                        />
-                    </div>
-                    }
+                    </div>}
+                    
 
 
 
@@ -422,8 +379,8 @@ export async function getServerSideProps(context) {
   try {
     const response = await GetCateringById(PkgId, locale);
 
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response.data && response.data?.data) {
+      resToSend = response.data.data;
     } else {
       throw new Error('not found');
     }

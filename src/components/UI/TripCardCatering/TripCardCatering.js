@@ -28,11 +28,11 @@ const TripCardCatering = ({
     <div
       className={`relative bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center flex flex-col ${additionalClasses}`}
     >
-      <Link href={`/cateringpackages/${PkgDetails?.ID}`}>
+      <Link href={`/cateringpackages/${PkgDetails?.Id}`}>
         <a className={`block relative ${imgAspectRatio}`}>
           <Image
             alt={`${PkgDetails?.Name} cover`}
-            src={PkgDetails?.CompanyLogo || '/bg3.jpg'}
+            src={`http://gammats.com:7009/be/${PkgDetails?.Photo}` || '/bg3.jpg'}
             layout="fill"
             className="w-full h-full object-cover"
           />
@@ -66,7 +66,7 @@ const TripCardCatering = ({
             </p>
           </div>
 
-          <Link href={`/cateringpackages/${PkgDetails?.ID}`}>
+          <Link href={`/cateringpackages/${PkgDetails?.Id}`}>
             <a className="block py-2 mt-4 w-full bg-main text-white font-medium text-sm text-center rounded-md">
               {t('Book Now')}
             </a>

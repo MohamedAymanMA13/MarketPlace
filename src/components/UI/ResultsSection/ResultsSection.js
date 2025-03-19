@@ -1,7 +1,7 @@
 import { TripCard, Spinner } from '..';
 import { isEmpty } from 'lodash';
 
-const ResultsSection = ({ Packages, isLoading }) => {
+const ResultsSection = ({ Packages, isLoading , forPackageDetails }) => {
   return (
     <div className="mt-4 gap-4 flex flex-col sm:flex-row flex-wrap items-center justify-start">
       {isLoading ? (
@@ -13,14 +13,26 @@ const ResultsSection = ({ Packages, isLoading }) => {
           No packages available!
         </p>
       ) : (
-        Packages?.map(pkg => (
+        <div className='flex'>
+          
+        { forPackageDetails ?  Packages?.packageHotels?.map(pkg => (
           <TripCard
-            key={pkg.PkgId}
+            key={pkg.Id}
             additionalClasses="w-full max-w-sm sm:w-72 sm:max-w-none"
             imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
             PkgDetails={pkg}
-          />
-        ))
+            forPackageDetails={forPackageDetails }
+            />
+        )) :
+        Packages?.map(pkg => (
+          <TripCard
+            key={pkg.Id}
+            additionalClasses="w-full max-w-sm sm:w-72 sm:max-w-none"
+            imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
+            PkgDetails={pkg}
+            />
+        )) }
+        </div>
       )}
     </div>
   );
