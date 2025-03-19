@@ -29,10 +29,10 @@ const TripCardFlight = ({
     
           <div className="flex w-full">
         {/* Airline logo and info */}
-        <div className="flex-shrink-0 w-1/3 ">
+        <div className="flex-shrink-0 h-[170px] w-1/3 ">
           {/* <Link href={`/flightpackage/packageId=${PkgDetails?.AircraftTypeID}&ID=${PkgDetails?.ID}&DepartureAirport=${PkgDetails?.DepartureAirport}&ArrivalAirport=${PkgDetails?.ArrivalAirport}&AircraftType=${PkgDetails?.AircraftType}&BusinessClassPrice=${PkgDetails?.BusinessClassPrice}&EconomyClassPrice=${PkgDetails?.EconomyClassPrice}`}> */}
             <img
-              className="h-36 w-full object-cover"
+              className="h-full w-full object-cover"
               src={`http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` || '/hotel1.jpg'}
               alt={PkgDetails?.HotelDetails?.Name}
             />

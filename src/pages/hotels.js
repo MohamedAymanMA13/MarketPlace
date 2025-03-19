@@ -41,8 +41,6 @@ export default function Hotels({ response,optionsFontSize }) {
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(addDays(new Date(), 1));
-  const [cities, setCities] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState(null);
 const rating =[
   {
       "id": 1,
@@ -66,21 +64,7 @@ const rating =[
   }
 ]
 
-  useEffect(() => {
-    if (selectedCountry) {
-      async function fetchCities() {
-        try {
-          const response = await GetCities(selectedCountry);
-          setCities(response.data?.Data);
-        } catch (error) {
-          console.error('Error fetching cities:', error);
-        }
-      }
-      fetchCities();
-    } else {
-      setCities([]); 
-    }
-  }, [selectedCountry]);
+
 
 
   const toggleModal = () => {
@@ -89,11 +73,11 @@ const rating =[
 
   const submitHandler = async (values) => {
     console.log('Form Submitted:', values);
-
+    console.log(values.ratings , "values.rating")
     const valuesToSubmit = {
-      // hotelName: -1,
-      // location: values.location || 0 ,
-      // rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
+      cityId: values.cityId,
+      countryId: values.countryId ,
+      ratings: values.ratings  || [1 ,2 ,3 ,4 ,5],
       checkIn: startDate.toISOString(),
       checkOut: endDate.toISOString(),
       // numberOfRooms,
@@ -113,6 +97,23 @@ const rating =[
       setIsLoading(false);
     }
   }, [isLoading, response]);
+  const [cities, setCities] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState(null);
+  useEffect(() => {
+    if (selectedCountry) {
+      async function fetchCities() {
+        try {
+          const response = await GetCities(selectedCountry);
+          setCities(response.data?.data);
+        } catch (error) {
+          console.error('Error fetching cities:', error);
+        }
+      }
+      fetchCities();
+    } else {
+      setCities([]); 
+    }
+  }, [selectedCountry]);
 
   return (
     <>
@@ -149,7 +150,7 @@ const rating =[
                   <div>
                     <div className="mt-2 space-y-2">
                       <Field
-                        name="Countries"
+                        name="countryId"
                         component={SelectField}
                         label="Country"
                         options={config.tables?.fromCountries}
@@ -159,7 +160,7 @@ const rating =[
                     </div>
                     <div className="mt-2 space-y-2">
                       <Field
-                        name="location"
+                        name="cityId"
                         component={SelectField}
                         label="Cities"
                         firstNoOption="Select Cities"
@@ -199,7 +200,7 @@ const rating =[
                       <div className="mt-2 space-y-2">
                         {rating?.map(item => (
                           <Field
-                            name="rating"
+                            name="ratings"
                             component={StarsCheckbox}
                             key={item.id}
                             starsCount={+item.value}
