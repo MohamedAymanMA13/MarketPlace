@@ -60,7 +60,7 @@ console.log('%csrc\pages\transportationpackages\[packageId]\index.js:52 matchedD
 
   const submitHandler = async values => {
     console.log('%csrc\pages\cateringpackages\[packageId]\index.js:95 {...values, id: PkgDetails.ID ,startDate, endDate}', 'color: #007acc;', {
-      Buses: filteredBuses,
+      values,
       id: PkgId,
 
     });
@@ -68,10 +68,8 @@ console.log('%csrc\pages\transportationpackages\[packageId]\index.js:52 matchedD
     try {
       setReqLoading(true);
       const response = await axios.post('/Transportation/AddTransportationWebsiteReservation', {
-        Buses: filteredBuses,
+        values,
         id: PkgId,
-        // startDate: startDate.toISOString(),
-        // endDate: endDate.toISOString(),
       }, {
         headers: {
           authorization: 'Bearer ' + auth.user.AccessToken,
