@@ -211,7 +211,7 @@ export default function PackageDetailsPage({
 
     return (basePrice + extraCost) * selectedRoom.count;
   };
-
+  const [choosenImage, setChoosenImage] = useState();
   const services = ["ExtraBedPrice", "LunchPrice", "DinnerPrice"];
 
   return (
@@ -240,6 +240,7 @@ export default function PackageDetailsPage({
           <Image
             alt="package cover"
             src={
+              choosenImage ||
               `http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
               "/bg5.jpg"
             }
@@ -247,6 +248,24 @@ export default function PackageDetailsPage({
             className="w-full h-full object-cover"
             priority
           />
+        </div>
+        <div className="w-full  flex flex-wrap mt-4  rounded-xl">
+          {PkgDetails?.HotelDetails?.Paths.map((ele) => {
+            return (
+              <div key={ele} className="w-20 h-20 me-4 cursor-pointer rounded-lg ">
+                <Image
+                  alt="package cover"
+                  src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
+                  className="w-20 h-20 object-cover rounded-lg "
+                  width={80}
+                  onClick={() =>
+                    setChoosenImage(`http://gammats.com:7009/be/${ele}`)
+                  }
+                  height={80}
+                />
+              </div>
+            );
+          })}
         </div>
         <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">
@@ -376,6 +395,16 @@ export default function PackageDetailsPage({
                     {t("No rooms available")}
                   </p>
                 )}
+                <div className="w-full flex justify-center ">
+                  <Link
+                    className="w-[220px] mx-auto"
+                    href={`${router.asPath}/new-booking`}
+                  >
+                    <a className="block py-2 w-[220px] sm:px-8  bg-main text-white font-medium text-sm text-center rounded-md">
+                      {t("Book Now")}
+                    </a>
+                  </Link>
+                </div>
               </div>
             )}
           />
