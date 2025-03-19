@@ -29,6 +29,7 @@ import BookingCardCatering from './BookingCardCatering/BookingCardCatering';
 import BookingCardFlight from './BookingCardFlight/BookingCardFlight';
 import BookingCardHotels from './BookingCardHotels/BookingCardHotels';
 import TripCardTransportation from './TripCardTransportation/TripCardTransportation';
+import TripCardOffers from './TripCardOffers/TripCardOffers';
 
 
 
@@ -65,4 +66,5 @@ export {
   BookingCardFlight,
   BookingCardHotels,
   TripCardTransportation,
+  TripCardOffers
 };

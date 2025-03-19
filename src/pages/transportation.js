@@ -40,19 +40,13 @@ export default function Transportation({ response,optionsFontSize }) {
   const [priceRange, setPriceRange] = useState([0, 1000]);
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
-  const Cuisine = [
-    { ID: 'International', Value: 'International' },
-    { ID: 'Egyptian', Value: 'Egyptian' },
-    { ID: 'Italian', Value: 'Italian' },
-    { ID: 'Asian', Value: 'Asian' },
-    { ID: 'oriental', Value: 'oriental' }
-  ];
+
   useEffect(() => {
     if (selectedCountry) {
       async function fetchCities() {
         try {
           const response = await GetCities(selectedCountry);
-          setCities(response.data?.Data);
+          setCities(response.data?.data);
         } catch (error) {
           console.error('Error fetching cities:', error);
         }
@@ -62,7 +56,7 @@ export default function Transportation({ response,optionsFontSize }) {
       setCities([]); 
     }
   }, [selectedCountry]);
-
+console.log('%csrc\pages\transportation.js:59 selectedCountry', 'color: #007acc;', cities);
   const toggleModal = () => {
     setIsOpen(prevState => !prevState);
   };
@@ -116,22 +110,32 @@ export default function Transportation({ response,optionsFontSize }) {
                 </h3>
                   <div>
                   <div>
-                    <div className="mt-2 space-y-2">
+                  <div className="mt-2 space-y-2">
+                        <Field
+                          name="departureCountryId"
+                          component={SelectField}
+                          label="Country"
+                          options={config.tables?.fromCountries}
+                          firstNoOption="Select Countries"
+                          onChangeCustom={(value) => setSelectedCountry(value)}
+                        />
+                      </div>
+                      <div className="mt-2 space-y-2">
                       <Field
-                        name="country"
+                        name="departureCityId"
                         component={SelectField}
-                        label="Country"
-                        options={config.tables?.fromCountries}
-                        firstNoOption="Select Countries"
-                        onChangeCustom={(value) => setSelectedCountry(value)}
+                        label="From City"
+                        firstNoOption="Select City"
+                        options={cities}
+                        // validate={required}
                       />
                     </div>
                     <div className="mt-2 space-y-2">
                       <Field
-                        name="city"
+                        name="arrivalCityId"
                         component={SelectField}
-                        label="Cities"
-                        firstNoOption="Select Cities"
+                        label="To City"
+                        firstNoOption="Select City"
                         options={cities}
                         // validate={required}
                       />
@@ -156,57 +160,6 @@ export default function Transportation({ response,optionsFontSize }) {
               </section>
 
                 <div>
-                  {/* <div className="p-4 mx-auto max-w-sm sm:max-w-full bg-white rounded-md sm:flex sm:items-center sm:justify-between sm:gap-3 md:gap-2">
-                    <div className='w-full flex flex-wrap '>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="country"
-                            component={SelectField}
-                            label="Country"
-                            options={config.tables?.fromCountries}
-                            firstNoOption="Select Countries"
-                            onChangeCustom={(value) => setSelectedCountry(value)}
-                          />
-                        </div>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="city"
-                            component={SelectField}
-                            label="Cities"
-                            firstNoOption="Select Cities"
-                            options={cities}
-                          />
-                        </div>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="coverage"
-                            component={SelectField}
-                            label="Coverage"
-                            firstNoOption="Select Coverage"
-                            options={config.tables?.coverages}
-                          />
-                        </div>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="cuisine"
-                            component={SelectField}
-                            label="Cuisine"
-                            firstNoOption="Select Cuisine"
-                            options={Cuisine}
-                          />
-                        </div>
-
-                        <div className='w-full px-1 py-1 mt-6 flex justify-end place-content-end		'>
-                          <button
-                            className=" w-32 h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                            type="submit"
-                          >
-                            {t('Search')}
-                          </button>
-                        </div>
-                        
-                    </div>
-                  </div> */}
 
                   {/* {JSON.stringify(response)} */}
                   <ResultsSectionHotel
@@ -230,7 +183,7 @@ export default function Transportation({ response,optionsFontSize }) {
                     <div>
                       <div className="mt-2 space-y-2">
                         <Field
-                          name="country"
+                          name="departureCountryId"
                           component={SelectField}
                           label="Country"
                           options={config.tables?.fromCountries}
@@ -239,15 +192,25 @@ export default function Transportation({ response,optionsFontSize }) {
                         />
                       </div>
                       <div className="mt-2 space-y-2">
-                        <Field
-                          name="city"
-                          component={SelectField}
-                          label="Cities"
-                          firstNoOption="Select Cities"
-                          options={cities}
-                          // validate={required}
-                        />
-                      </div>
+                      <Field
+                        name="departureCityId"
+                        component={SelectField}
+                        label="From City"
+                        firstNoOption="Select Cities"
+                        options={cities}
+                        // validate={required}
+                      />
+                    </div>
+                    <div className="mt-2 space-y-2">
+                      <Field
+                        name="arrivalCityId"
+                        component={SelectField}
+                        label="To City"
+                        firstNoOption="Select Cities"
+                        options={cities}
+                        // validate={required}
+                      />
+                    </div>
 
 
                     </div>
@@ -287,7 +250,7 @@ export async function getServerSideProps(context) {
 
   let resToSend;
   try {
-    const response = await searchTransportation(updatedQuery, locale);
+    const response = await searchTransportation(updatedQuery);
     if (response.data && response.data?.data) {
       resToSend = response.data.data;
     }

@@ -1,6 +1,6 @@
 // import { useRef, useState, useEffect } from 'react';
 
-import { TripCard } from 'components/UI';
+import { TripCardOffers } from 'components/UI';
 
 // import { ArrowRightIcon, ArrowLeftIcon } from '@heroicons/react/outline';
 
@@ -86,7 +86,7 @@ const CardsCarousel = ({ Packages, withArrows }) => {
         className="relative px-3 md:px-8 lg:px-16 pb-3 flex gap-4 overflow-x-auto scroll-smooth snap-x"
       >
         {Packages?.map(Pkg => (
-          <TripCard
+          <TripCardOffers
             key={Pkg?.PkgId}
             additionalClasses="w-72"
             imgAspectRatio="aspect-[10/6]"

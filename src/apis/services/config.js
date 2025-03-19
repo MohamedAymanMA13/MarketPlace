@@ -15,10 +15,10 @@ export function fetchConfigTables(lang) {
 //     },
 //   });
 // }
-// export function GetCities(id,lang) {
-//   return axios.get(`/Lookup/GetCities?countryId=${id}`, {
-//     headers: {
-//       lang,
-//     },
-//   });
-// }
+export function GetCities(id,lang) {
+  return axios.get(`/Configurations/countries/${id}/cities`, {
+    // headers: {
+    //   lang,
+    // },
+  });
+}

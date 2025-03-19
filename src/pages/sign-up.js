@@ -47,7 +47,7 @@ export default function SignUp() {
                 <div className="mt-5 w-full max-w-xs space-y-2">
                   <div className="flex flex-col w-full">
                     <Field
-                      name="firstName"
+                      name="FirstName"
                       component={TextField}
                       placeholder="First Name"
                       validate={required}
@@ -56,7 +56,7 @@ export default function SignUp() {
 
                   <div className="flex flex-col w-full">
                     <Field
-                      name="lastName"
+                      name="LastName"
                       component={TextField}
                       placeholder="Last Name"
                       validate={required}
@@ -65,7 +65,7 @@ export default function SignUp() {
 
                   <div className="flex flex-col w-full">
                     <Field
-                      name="phoneNo"
+                      name="Phone"
                       component={TextField}
                       placeholder="Phone No."
                       validate={required}
@@ -74,7 +74,7 @@ export default function SignUp() {
 
                   <div className="flex flex-col w-full">
                     <Field
-                      name="userName"
+                      name="Username"
                       component={TextField}
                       placeholder="User Name"
                       validate={required}
@@ -83,7 +83,7 @@ export default function SignUp() {
 
                   <div className="flex flex-col w-full">
                     <Field
-                      name="email"
+                      name="Email"
                       component={TextField}
                       placeholder="Email"
                       validate={composeValidators(required, emailAddress)}
@@ -92,7 +92,7 @@ export default function SignUp() {
 
                   <div className="flex flex-col w-full">
                     <Field
-                      name="password"
+                      name="Password"
                       component={PasswordField}
                       placeholder="Password"
                       validate={required}

@@ -20,12 +20,12 @@ function useProvideAuth() {
 
     try {
       const response = await signIn(values);
-      if (response.data.Data) {
+      if (response.data.Token) {
         setIsLoading(false);
-        setUser({ ...response.data.Data, loggedIn: true });
+        setUser({ ...response.data.UserInfo,Token:response.data.Token, loggedIn: true });
         localStorage.setItem(
           'loggedInUser',
-          JSON.stringify({ ...response.data.Data, loggedIn: true })
+          JSON.stringify({ ...response.data.UserInfo,Token:response.data.Token, loggedIn: true })
         );
         toast.success(<b>{t('Welcome Back!')}</b>);
         cb();
@@ -49,7 +49,7 @@ function useProvideAuth() {
 
     try {
       const response = await signUp(values);
-      if (response.data.Data) {
+      if (response.data.message) {
         setIsLoading(false);
         toast.success(<b>{t('Account Successfully Created!')}</b>);
         router.push('/sign-in');

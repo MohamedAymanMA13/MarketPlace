@@ -259,7 +259,7 @@ export async function getServerSideProps(context) {
 
   let resToSend;
   try {
-    const response = await searchFlights();
+    const response = await searchFlights(updatedQuery);
     if (response.data && response.data?.data) {
       resToSend = response.data.data;
     }

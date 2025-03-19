@@ -1,12 +1,12 @@
 import { axios_instance as axios } from 'apis/axios-instance';
 
-// export function fetchHomeData(lang) {
-//   return axios.get('/ClientPackage/GetAll', {
-//     headers: {
-//       lang,
-//     },
-//   });
-// }
+export function fetchHomeData(lang) {
+  return axios.get('/Offer/MarketPlace', {
+    // headers: {
+    //   lang,
+    // },
+  });
+}
 
 export function searchPackages(queryParams, lang) {
   return axios.get('/ClientPackage/Packages', {
