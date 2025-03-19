@@ -17,57 +17,89 @@ const TripCard = ({
   imgAspectRatio,
   PkgDetails,
   children,
+  forPackageDetails
 }) => {
   const { t } = useTranslation();
   const { locale } = useRouter();
-
+  const PkgCurrency = "EGP";
+  const getStarRating = (rating) => {
+    return rating
+  };
   return (
     <div
-      className={`relative bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center ${additionalClasses}`}
+      className={`relative mx-2 bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center ${additionalClasses}`}
     >
-      <Link href={`/packages/${PkgDetails?.PkgId}`}>
+      {forPackageDetails ? 
+      <Link href={`/hotels/${PkgDetails?.HotelId}`}>
+      <a className={`block relative ${imgAspectRatio}`}>
+        <Image
+          alt={`${PkgDetails?.Name} cover`}
+          src={`http://gammats.com:7009/be/${PkgDetails?.Images[0]}`|| '/bg3.jpg'}
+          layout="fill"
+          className="w-full h-full object-cover"
+        />
+      </a>
+      </Link>
+      :<Link href={`/packages/${PkgDetails?.Id}`}>
         <a className={`block relative ${imgAspectRatio}`}>
           <Image
-            alt={`${PkgDetails?.PkgTitle} cover`}
-            src={PkgDetails?.PkgPhoto || '/bg3.jpg'}
+            alt={`${PkgDetails?.Name} cover`}
+            src={`http://gammats.com:7009/be/${PkgDetails?.PackageImage}`|| '/bg3.jpg'}
             layout="fill"
             className="w-full h-full object-cover"
           />
         </a>
-      </Link>
+      </Link>}
 
       <div className="p-4 text-copy">
-        <StarRating filledStars={PkgDetails?.PkgClass} />
-        <p className="font-bold first-letter:uppercase">
-          {PkgDetails?.PkgTitle}
+        <p className="font-bold first-letter:uppercase flex justify-between w-full ">
+          <span>{PkgDetails?.Name}</span>
+          {forPackageDetails && <span className='mt-1'>
+          <StarRating filledStars={getStarRating(PkgDetails.Rating)} />
+          </span>}
         </p>
+
+        {forPackageDetails ?
+        <p className="mt-2 text-sm font-normal">
+        {locale === 'ar'
+          ? new Date(PkgDetails?.CheckInDate).toLocaleDateString('ar-EG') +
+            ' - ' +
+            new Date(PkgDetails?.CheckOutDate).toLocaleDateString('ar-EG')
+          : format(new Date(PkgDetails?.CheckInDate), 'dd/LL/uuuu') +
+            ' - ' +
+            format(new Date(PkgDetails?.CheckOutDate), 'dd/LL/uuuu')}
+      </p>
+        : 
 
         <p className="mt-2 text-sm font-normal">
           {locale === 'ar'
-            ? new Date(PkgDetails?.FromDt).toLocaleDateString('ar-EG') +
+            ? new Date(PkgDetails?.StartDate).toLocaleDateString('ar-EG') +
               ' - ' +
-              new Date(PkgDetails?.ToDt).toLocaleDateString('ar-EG')
-            : format(new Date(PkgDetails?.FromDt), 'dd/LL/uuuu') +
+              new Date(PkgDetails?.EndDate).toLocaleDateString('ar-EG')
+            : format(new Date(PkgDetails?.StartDate), 'dd/LL/uuuu') +
               ' - ' +
-              format(new Date(PkgDetails?.ToDt), 'dd/LL/uuuu')}
-        </p>
+              format(new Date(PkgDetails?.EndDate), 'dd/LL/uuuu')}
+        </p>}
 
         <div className="mt-4 flex items-center justify-between">
-          <p className="text-main text-lg font-bold">
-            {moneyRenderer(locale, PkgDetails?.PkgCurrency, PkgDetails?.PkgPrice)}
-          </p>
-
-          <div className="text-copy text-sm flex items-center gap-1">
-            <EyeIcon className="h-5 w-5" />
-            <span>{PkgDetails?.views}</span>
-          </div>
+          {!forPackageDetails && <p className="text-main text-lg font-bold">
+            {moneyRenderer(locale,PkgCurrency, PkgDetails?.Price)}
+          </p>}
+          {forPackageDetails && <p className="text-main text-lg font-bold">
+            {PkgDetails?.CityName}
+          </p>}
+          {forPackageDetails && <Link className='cursor-pointer ' href={`/hotels/${PkgDetails?.HotelId}`}>
+            <div className="text-copy cursor-pointer text-sm flex items-center gap-1">
+              <EyeIcon className="h-5 w-5" />
+            </div>
+          </Link>}
         </div>
-
-        <Link href={`/packages/${PkgDetails.PkgId}`}>
+        {!forPackageDetails && <Link href={`/packages/${PkgDetails.Id}`}>
           <a className="block py-2 mt-4 w-full bg-main text-white font-medium text-sm text-center rounded-md">
             {t('Book Now')}
           </a>
-        </Link>
+        </Link>}
+        
       </div>
 
       {children}

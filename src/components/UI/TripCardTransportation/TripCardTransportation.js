@@ -29,7 +29,7 @@ const TripCardTransportation = ({
     const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
     return ` ${formattedDate} , ${formattedTime}`;
   };
-
+  console.log(PkgDetails , "PkgDetails")
   const PkgCurrency = "EGP";
 
   return (
@@ -39,10 +39,14 @@ const TripCardTransportation = ({
       <Link href={`/transportationpackages/${PkgDetails?.Id}`}>
         <a className={`block relative ${imgAspectRatio}`}>
           <Image
-            alt={`${PkgDetails?.Name} cover`}
-            src={ '/transportationcards.jpg'}
+            alt={`${PkgDetails?.Name || 'Transportation'} cover`}
+            src={`http://192.168.1.26:45455/api/${PkgDetails?.Photo}` || '/transportationcards.jpg'}
             layout="fill"
             className="w-full h-full object-cover"
+            priority={true}
+            onError={(e) => {
+              e.target.src = '/transportationcards.jpg';
+            }}
           />
         </a>
       </Link>

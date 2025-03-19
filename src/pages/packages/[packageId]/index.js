@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 
 import { PageLayout } from 'components/layout';
-import { RoomTypeSec, StarRating, Timeline } from 'components/UI';
+import { ResultsSection, RoomTypeSec, StarRating, Timeline } from 'components/UI';
 import HeartBtn from 'components/UI/HeartBtn/HeartBtn';
 import ShareBtn from 'components/UI/ShareBtn/ShareBtn';
 
@@ -18,6 +18,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
 import { fetchPackageById } from 'apis/services/packages';
 import { isEmpty } from 'lodash';
+import ResultsSectionForTransportation from 'components/UI/ResultsSection/ResultsSectionForTransportation';
 
 export default function PackageDetailsPage({ PkgDetails }) {
   const { t } = useTranslation();
@@ -33,68 +34,32 @@ export default function PackageDetailsPage({ PkgDetails }) {
       auth.setUser(JSON.parse(user));
     }
   }, [auth]);
+  const PkgCurrency = "EGP";
+  const getStarRating = (rating) => {
+    const match = rating?.match(/(\d+)\s*Star/);
+    return match ? parseInt(match[1], 10) : 0; // Default to 0 if no match found
+  };
 
   return (
-    <PageLayout pageTitle={PkgDetails.PkgTitle}>
+    <PageLayout pageTitle={PkgDetails.Name}>
       <div className="px-4 pt-6 pb-10 space-y-4">
-        <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
-          <div>
-            <StarRating filledStars={PkgDetails.PkgClass} />
-            <h2 className="font-bold text-base md:text-lg xl:text-xl text-copy">
-              {PkgDetails.PkgTitle}
-            </h2>
-
-            <div className="mt-2 flex items-center justify-between sm:flex-col sm:items-start sm:gap-2">
-              <p className="text-copy text-sm font-medium xl:text-base">
-                {PkgDetails.NoOfNights} {t('Nights')}
-              </p>
-              <p className="text-main text-lg xl:text-2lg font-bold">
-                {moneyRenderer(
-                  router.locale,
-                  PkgDetails.PkgCurrency,
-                  PkgDetails.PkgPrice
-                )}
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 flex items-center justify-between gap-4">
-            <HeartBtn
-              isSignedIn={auth.user?.loggedIn}
-              pkgId={PkgDetails.pkgId}
-              auth={auth}
-            />
-
-            <ShareBtn  />
-
-            <Link href={`${router.asPath}/new-booking`}>
-              <a className="block py-2 sm:px-8 w-full bg-main text-white font-medium text-sm text-center rounded-md">
-                {t('Book Now')}
-              </a>
-            </Link>
-          </div>
-        </div>
-
-        <div className="relative aspect-[12/9] sm:aspect-video lg:aspect-[3/1] rounded-md overflow-hidden">
+        <div className="relative aspect-[12/9] h-[400px] w-full object-cover sm:aspect-video lg:aspect-[3/1] rounded-md overflow-hidden">
           <Image
             alt="package cover"
-            src={PkgDetails.PkgPhoto || '/bg5.jpg'}
+            src={`http://gammats.com:7009/be/${PkgDetails.PackageImage}` || '/bg5.jpg'}
             layout="fill"
             className="w-full h-full object-cover"
             priority
           />
         </div>
-
         <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">
-            {t('Package Details')}
+            {t('Package Details')} {`(${PkgDetails.OriginCountryName} To ${PkgDetails.DestinationCountryName}) `}
           </h3>
-
           <div className="mt-2">
-            <Timeline tlDetails={PkgDetails.PkgDetails} />
+            <Timeline tlDetails={PkgDetails.packageAgendas} />
           </div>
         </section>
-
         {isEmpty(PkgDetails.roomTypes) ? null : (
           <section className="py-4 px-3 bg-white rounded-md text-copy">
             <h3 className="text-sm md:text-base font-bold">
@@ -102,36 +67,61 @@ export default function PackageDetailsPage({ PkgDetails }) {
             </h3>
 
             <div className="mt-3 space-y-5">
-              {PkgDetails.roomTypes.map((room, i) => (
+              {PkgDetails.packageHotels.map((room, i) => (
                 <RoomTypeSec key={i} pricingDetails={room} />
               ))}
             </div>
           </section>
         )}
+        <div className='flex justify-start items-start'>
 
+        <ResultsSection
+                    Packages={PkgDetails}
+                    forPackageDetails={true}
+                  />
+        <div className='flex flex-col flex-wrap'>
+
+        <ResultsSectionForTransportation
+                            kind="Flight"
+                            Packages={PkgDetails}
+                            forPackageDetails={true}
+                            />
+        <ResultsSectionForTransportation
+                    kind="Transportation"
+                    Packages={PkgDetails}
+                    forPackageDetails={true}
+                    />
+                    </div>
+                    </div>
         <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">
             {t('Package Notes')}
           </h3>
-
           <div className="mt-2 font-medium text-xs md:text-sm">
             <p className="whitespace-pre-line leading-normal">
               {PkgDetails.Notes}
             </p>
           </div>
         </section>
-
         <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">
             {t('Terms & Conditions')}
           </h3>
-
           <div className="mt-2 font-medium text-xs md:text-sm">
             <p className="whitespace-pre-line leading-normal">
               {PkgDetails.TermsConditions}
             </p>
           </div>
         </section>
+        <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
+          <div className=" my-2 mx-auto  flex items-center justify-center gap-4">
+            <Link className='w-[220px]' href={`${router.asPath}/new-booking`}>
+              <a className="block py-2 w-[220px] sm:px-8  bg-main text-white font-medium text-sm text-center rounded-md">
+                {t('Book Now')}
+              </a>
+            </Link>
+          </div>
+        </div>
       </div>
     </PageLayout>
   );
@@ -146,8 +136,8 @@ export async function getServerSideProps(context) {
   try {
     const response = await fetchPackageById(packageId, locale);
 
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response.data && response.data?.Items) {
+      resToSend = response.data.Items;
     } else {
       throw new Error('not found');
     }

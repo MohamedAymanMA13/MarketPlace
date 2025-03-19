@@ -22,42 +22,21 @@ export default function Tourism({ response }) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [priceRange, setPriceRange] = useState();
 
   const toggleModal = () => {
     setIsOpen(prevState => !prevState);
   };
 
   const submitHandler = async values => {
-    console.log(values);
-    const clonedValues = { ...values };
-    const valuesToSubmit = {
-      packageType: 1,
-      offset: 0,
-      limit: 1000,
-    };
-    const entries = Object.entries(clonedValues);
-    for (let i = 0; i < entries.length; i++) {
-      const element = entries[i];
-      const _key = element[0];
-      const _value = element[1];
+    if (priceRange && priceRange.length === 2) {
 
-      if (Array.isArray(_value)) {
-        valuesToSubmit[_key] = _value.join(',');
-      } else {
-        valuesToSubmit[_key] = _value;
-      }
+      values.minPrice = priceRange[0]
+      values.maxPrice = priceRange[1]
     }
-
-    if (values.rangeToggle) {
-      valuesToSubmit.minPrice = priceRange[0];
-      valuesToSubmit.maxPrice = priceRange[1];
-    }
-    console.log(valuesToSubmit);
-
     router.push({
       pathname: '/tourism',
-      query: valuesToSubmit,
+      query: values,
     });
   };
 
@@ -73,7 +52,7 @@ export default function Tourism({ response }) {
         <section className="relative w-full h-32 md:h-48 lg:h-60 bg-tourism bg-cover bg-bottom bg-no-repeat">
           <div className="bg-main/50 w-full h-full flex items-center">
             <h2 className="px-6 md:px-8 lg:px-16 text-2xl md:text-3xl lg:text-4xl text-white font-bold">
-              {t('Tourism')}
+              {t('Packages')}
             </h2>
           </div>
         </section>
@@ -96,8 +75,8 @@ export default function Tourism({ response }) {
                   reset={reset}
                   submitting={submitting}
                   pristine={pristine}
-                  minPrice={response.MinPrice}
-                  maxPrice={response.MaxPrice}
+                  minPrice={1000}
+                  maxPrice={10000}
                   setPriceRange={setPriceRange}
                   disabledSlider={!values.rangeToggle}
                   formId="tourism_form"
@@ -107,8 +86,8 @@ export default function Tourism({ response }) {
                   <div className="p-4 mx-auto max-w-sm sm:max-w-full bg-white rounded-md sm:flex sm:items-center sm:justify-between sm:gap-3 md:gap-2">
                     <p className="font-medium text-sm text-copy">
                       <span className="font-bold text-main">
-                        {response && response?.Packages
-                          ? response?.Packages.length
+                        {response 
+                          ? response.length
                           : 0}
                       </span>{' '}
                       {t('packages found')}
@@ -146,9 +125,8 @@ export default function Tourism({ response }) {
                   </div>
 
                   <ResultsSection
-                    Packages={response?.Packages}
+                    Packages={response}
                     isLoading={isLoading}
-                    // success={success}
                   />
                 </div>
               </div>
@@ -160,8 +138,8 @@ export default function Tourism({ response }) {
                   reset={reset}
                   submitting={submitting}
                   pristine={pristine}
-                  minPrice={response.MinPrice}
-                  maxPrice={response.MaxPrice}
+                  minPrice={200}
+                  maxPrice={400}
                   setPriceRange={setPriceRange}
                   disabledSlider={!values.rangeToggle}
                   inModal={true}
@@ -184,23 +162,20 @@ export async function getServerSideProps(context) {
   let updatedQuery;
 
   if (isEmpty(query)) {
-    updatedQuery = {
-      packageType: 1,
-      offset: 0,
-      limit: 1000,
-    };
+    updatedQuery = null;
+
   } else {
     updatedQuery = query;
   }
 
-  let resToSend;
+  let resToSend = null;
   try {
     const response = await searchPackages(updatedQuery, locale);
-
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response?.data.Items?.Items) {
+      resToSend = response.data.Items.Items;
     }
   } catch (error) {
+    console.log(error, "er");
     resToSend = [];
   }
 

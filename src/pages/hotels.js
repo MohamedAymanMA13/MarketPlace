@@ -91,11 +91,11 @@ const rating =[
     console.log('Form Submitted:', values);
 
     const valuesToSubmit = {
-      hotelName: -1,
-      location: values.location || 0 ,
-      rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
-      from_date: startDate.toISOString(),
-      to_date: endDate.toISOString(),
+      // hotelName: -1,
+      // location: values.location || 0 ,
+      // rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
+      checkIn: startDate.toISOString(),
+      checkOut: endDate.toISOString(),
       // numberOfRooms,
 
     };
@@ -419,8 +419,8 @@ export async function getServerSideProps(context) {
   let resToSend;
   try {
     const response = await searchHotels(updatedQuery, locale);
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response.data && response?.data.Items) {
+      resToSend = response?.data.Items;
     }
   } catch (error) {
     resToSend = [];

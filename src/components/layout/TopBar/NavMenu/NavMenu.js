@@ -130,15 +130,15 @@ const NavMenu = ({ isMenuShown, toggleMenuHandler }) => {
 
         <Link href="/tourism">
           <a className="flex items-center gap-1 text-copy hover:text-main font-medium">
-            {t('Tourism')}
+            {t('Packages')}
           </a>
         </Link>
 
-        <Link href="/umrah">
+        {/* <Link href="/umrah">
           <a className="flex items-center gap-1 text-copy hover:text-main font-medium">
             {t('Umrah')}
           </a>
-        </Link>
+        </Link> */}
 
         <a
           href="http://gammats.com:8002/Hotels"
