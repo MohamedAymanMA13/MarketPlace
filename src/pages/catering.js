@@ -47,12 +47,13 @@ export default function Catering({ response,optionsFontSize }) {
     { ID: 'Asian', Value: 'Asian' },
     { ID: 'oriental', Value: 'oriental' }
   ];
+  console.log(response , "res")
   useEffect(() => {
     if (selectedCountry) {
       async function fetchCities() {
         try {
           const response = await GetCities(selectedCountry);
-          setCities(response.data?.Data);
+          setCities(response.data?.data);
         } catch (error) {
           console.error('Error fetching cities:', error);
         }
@@ -68,9 +69,6 @@ export default function Catering({ response,optionsFontSize }) {
   };
 
   const submitHandler = async (values) => {
-    console.log('Form Submitted:', values);
-
-
     router.push({
       pathname: '/catering',
       query: values,
@@ -118,7 +116,7 @@ export default function Catering({ response,optionsFontSize }) {
                   <div>
                     <div className="mt-2 space-y-2">
                       <Field
-                        name="country"
+                        name="countryId"
                         component={SelectField}
                         label="Country"
                         options={config.tables?.fromCountries}
@@ -128,7 +126,7 @@ export default function Catering({ response,optionsFontSize }) {
                     </div>
                     <div className="mt-2 space-y-2">
                       <Field
-                        name="city"
+                        name="cityId"
                         component={SelectField}
                         label="Cities"
                         firstNoOption="Select Cities"
@@ -148,7 +146,7 @@ export default function Catering({ response,optionsFontSize }) {
                     </div>
                     <div className="mt-2 space-y-2">
                       <Field
-                        name="cuisine"
+                        name="cuisineId"
                         component={SelectField}
                         label="Cuisine"
                         firstNoOption="Select Cuisine"
@@ -156,7 +154,6 @@ export default function Catering({ response,optionsFontSize }) {
                         // validate={required}
                       />
                     </div>
-
                   </div>
                 </div>
                 <button
@@ -299,7 +296,12 @@ export default function Catering({ response,optionsFontSize }) {
                   <button
                     type="button"
                     className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={reset}
+                    onClick={() => {
+                      router.push({
+                        pathname: '/catering',
+                        query: ""
+                      })
+                    }}
                   >
                     {t('Reset')}
                   </button>
@@ -315,31 +317,28 @@ export default function Catering({ response,optionsFontSize }) {
 
 export async function getServerSideProps(context) {
   const { query, locale } = context;
-  let updatedQuery;
-
-  if (isEmpty(query)) {
-    updatedQuery = {
-
-    };
-  } else {
-    updatedQuery = query;
-  }
-
-  let resToSend;
+  let updatedQuery = isEmpty(query) ? {} : query;
+  let resToSend = [];
   try {
     const response = await searchCatering(updatedQuery, locale);
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response?.data?.data) {
+      resToSend = response.data.data;
     }
+    
+    return {
+      props: {
+        ...(await serverSideTranslations(locale, ['common', 'messages'])),
+        response: resToSend,
+      },
+    };
   } catch (error) {
-    resToSend = [];
+    // Return empty array in case of error
+    return {
+      props: {
+        ...(await serverSideTranslations(locale, ['common', 'messages'])),
+        response: [],
+      },
+    };
   }
-
-  return {
-    props: {
-      ...(await serverSideTranslations(locale, ['common', 'messages'])),
-      response: resToSend,
-    },
-  };
 }
 

@@ -56,11 +56,11 @@ const TopBar = () => {
                 : 'text-copy'
             }`}
           >
-            {t('Tourism')}
+            {t('Packages')}
           </a>
         </Link>
 
-        <Link href="/umrah">
+        {/* <Link href="/umrah">
           <a
             className={`nav__item nav__link ${
               pathname === '/umrah'
@@ -70,7 +70,7 @@ const TopBar = () => {
           >
             {t('Umrah')}
           </a>
-        </Link>
+        </Link> */}
 {/* ------------------------------------------------------------------------------------- */}
         <Link href="/hotels">
           <a

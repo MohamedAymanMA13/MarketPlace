@@ -15,7 +15,7 @@ const ResultsSectionFlight = ({ Packages, isLoading }) => {
       ) : (
         Packages?.map(pkg => (
           <TripCardFlight
-            key={pkg.ID}
+            key={pkg.Id}
             additionalClasses="w-full max-w-sm sm:w-72 flex-grow"
             imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
             PkgDetails={pkg}

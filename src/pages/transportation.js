@@ -280,9 +280,7 @@ export async function getServerSideProps(context) {
   let updatedQuery;
 
   if (isEmpty(query)) {
-    updatedQuery = {
-
-    };
+    updatedQuery = query;
   } else {
     updatedQuery = query;
   }
@@ -290,8 +288,8 @@ export async function getServerSideProps(context) {
   let resToSend;
   try {
     const response = await searchTransportation(updatedQuery, locale);
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response.data && response.data?.data) {
+      resToSend = response.data.data;
     }
   } catch (error) {
     resToSend = [];

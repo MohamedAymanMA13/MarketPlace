@@ -1,37 +1,33 @@
 import { axios_instance as axios } from 'apis/axios-instance';
 
-export function fetchHomeData(lang) {
-  return axios.get('/ClientPackage/GetAll', {
-    headers: {
-      lang,
-    },
-  });
-}
+// export function fetchHomeData(lang) {
+//   return axios.get('/ClientPackage/GetAll', {
+//     headers: {
+//       lang,
+//     },
+//   });
+// }
 
 export function searchPackages(queryParams, lang) {
-  return axios.get('/ClientPackage/Packages', {
+  return axios.get('/Packages/MarketPlace', {
     params: queryParams,
-    headers: {
-      lang,
-    },
+    // headers: {
+    //   lang,
+    // },
   });
 }
 
 export function fetchPackageById(PkgId, lang) {
-  return axios.get(`/ClientPackage/GetClientPackageById?id=${PkgId}`, {
-    headers: {
-      lang,
-    },
+  return axios.get(`/Packages/${PkgId}/MarketPlace`, {
+    // headers: {
+    //   lang,
+    // },
   });
 }
-export function GetHotelDetailsWebsiteContent(PkgId, startDate, endDate, lang) {
-  const url = `/Hotel/GetHotelDetailsWebsiteContent?hotelId=${PkgId}&from_date=${startDate}&to_date=${endDate}`;
+export function GetHotelDetailsWebsiteContent(PkgId) {
+  const url = `/EntityHotelSeason/${PkgId}/MarketPlace`;
   console.log('API URL:', url); // Log the full URL being called
-  return axios.get(url, {
-    headers: {
-      lang,
-    },
-  });
+  return axios.get(url);
 }
 export function GetFlightTypeStructure(PkgId,  lang) {
   const url = `/Flight/GetFlightTypeStructure?aircraftTypeId=${PkgId}`;
@@ -43,8 +39,7 @@ export function GetFlightTypeStructure(PkgId,  lang) {
   });
 }
 export function GetCateringById(PkgId,  lang) {
-  const url = `/Catering/WebsiteGetById?id=${PkgId}`;
-  console.log('API URL:', url); // Log the full URL being called
+  const url = `/Caterings/${PkgId}/marketplace`;
   return axios.get(url, {
     headers: {
       lang,
@@ -52,11 +47,9 @@ export function GetCateringById(PkgId,  lang) {
   });
 }
 export function searchHotels(queryParams, lang) {
-  return axios.get('/Hotel/SearchInGetHotelWebsiteContent', {
+  return axios.get('/EntityHotelSeason/MarketPlace', {
     params: queryParams,
-    headers: {
-      lang,
-    },
+    
   });
 }
 export function searchHotels2( lang) {
@@ -68,8 +61,8 @@ export function searchHotels2( lang) {
 }
 
 export function searchCatering(queryParams, lang) {
-  return axios.get('/Catering/GetWebsiteContentAllCaterings', {
-    params: queryParams,
+  return axios.get('/Caterings/marketplace', {
+    params: queryParams || null,
     headers: {
       lang,
     },
@@ -77,19 +70,20 @@ export function searchCatering(queryParams, lang) {
 }
 
 export function searchFlights(queryParams, lang) {
-  return axios.get('/Flight/GetAllFlightWebsiteContent', {
+  console.log('Query Parameters:', queryParams); // This should log the query parameters
+  return axios.get('/Flights/marketplace/travels', {
     params: queryParams,
-    headers: {
-      lang,
-    },
+    // headers: {
+    //   lang,
+    // },
   });
 }
 
 export function searchTransportation(queryParams, lang) {
-  return axios.get('/TransportationCompany/GetWebsiteContentAllTransportations', {
+  return axios.get('/Transportations/marketplace/travels', {
     params: queryParams,
-    headers: {
-      lang,
-    },
+    // headers: {
+    //   lang,
+    // },
   });
 }

@@ -42,8 +42,9 @@ const FiltersPane = ({
   });
 
   const handleSubmit = (event) => {
+    console.log(event , "event")
     event.preventDefault(); // Prevent default form submission
-  
+    
     const form = document.getElementById(formId);
     if (!form) {
       console.error("Form not found with ID:", formId);
@@ -51,7 +52,7 @@ const FiltersPane = ({
     }
   
     const formData = new FormData(form);
-  
+    console.log(formData ,"formData")
     const updatedFilters = {
       ...filters,
       fromCountryId: formData.get('fromCountryId') || '',
@@ -68,17 +69,11 @@ const FiltersPane = ({
     setFilters(updatedFilters);
   
     // Convert filters to query parameters with 'searchDTO.' prefix
-    const query = Object.keys(updatedFilters)
-      .filter((key) => updatedFilters[key] !== '' && updatedFilters[key] !== null)
-      .reduce((acc, key) => {
-        acc[`searchDTO.${key}`] = updatedFilters[key]; // Add 'searchDTO.' prefix to each key
-        return acc;
-      }, {});
-  
+    console.log(updatedFilters , "updatedFilters")
     // Update the URL with query parameters
     router.replace({
       pathname: router.pathname,
-      query: query,
+      query: updatedFilters,
     }, undefined, { shallow: true });
   };
   
@@ -96,7 +91,7 @@ const FiltersPane = ({
       <div className="mt-3 space-y-5">
         <div className="relative w-full flex justify-between">
           <Field
-            name="fromCountryId"
+            name="originCountryId"
             component="select"
             className="py-2 w-full text-sm font-medium bg-transparent text-inputGray border-[#B6B6B6] rounded-[10px]"
           >
@@ -112,7 +107,7 @@ const FiltersPane = ({
         {router.pathname !== '/umrah' && (
           <div className="relative w-full flex justify-between">
             <Field
-              name="toCountryId"
+              name="destinationCountryId"
               component="select"
               className="py-2 w-full text-sm font-medium bg-transparent text-inputGray border-[#B6B6B6] rounded-[10px]"
             >
@@ -126,7 +121,7 @@ const FiltersPane = ({
           </div>
         )}
 
-        <Field
+        {/* <Field
           name="travelAgencyId"
           component="select"
           className="py-2 w-full text-sm font-medium bg-transparent text-inputGray border-[#B6B6B6] rounded-[10px]"
@@ -137,7 +132,7 @@ const FiltersPane = ({
               {agency.value}
             </option>
           ))}
-        </Field>
+        </Field> */}
 
         <div>
           <div className="flex items-center justify-between">
@@ -162,9 +157,9 @@ const FiltersPane = ({
         </div>
 
         <div>
-          <h4 className="text-inputGray text-xs md:text-sm font-semibold">
+          {/* <h4 className="text-inputGray text-xs md:text-sm font-semibold">
             {t('Package Class')}
-          </h4>
+          </h4> */}
           <div className="mt-2 space-y-2">
             {tables?.classes?.map(item => (
               <Field
@@ -195,7 +190,7 @@ const FiltersPane = ({
         <button
           type="submit"
           className="py-1 mt-6 w-3/4 self-center sm:w-full bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-          onClick={handleSubmit}
+          // onClick={handleSubmit}
         >
           {t('Apply')}
         </button>

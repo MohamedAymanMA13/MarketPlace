@@ -24,6 +24,15 @@ const TripCardFlight = ({
 
   const PkgCurrency = "EGP";
   console.log('%csrc\components\UI\TripCardFlight\TripCardFlight.js:26 object', 'color: #007acc;', PkgDetails);
+
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = date.toLocaleDateString(undefined, options).replace(/\//g, '-');
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    return ` ${formattedDate} , ${formattedTime}`;
+  };
+
   return (
     <div
     className={`relative bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center flex flex-col w-full `}
@@ -45,13 +54,14 @@ const TripCardFlight = ({
         <div className="flex-grow p-4 border-r border-blue-200 ">
           <div className='py-1'>
             <p className="font-bold first-letter:uppercase ">
-              {PkgDetails?.AircraftType}
+              {PkgDetails?.CompanyName}
             </p>
           </div>
           <div className="flex justify-between text-main py-1">
             <div>
-              <p className="font-semibold">{PkgDetails?.DepartureAirport}</p>
-              <p className="text-sm pt-5">Departure at  {PkgDetails?.departureTime}</p>
+              <p className="font-semibold">{locale === 'ar' ? PkgDetails?.FromAirportNameAr : PkgDetails?.FromAirportName}</p>
+              <p className="text-sm pt-2">{t('Departure at')} </p>
+              <p className="text-sm pt-2">{formatDateTime(PkgDetails?.DepartureDateTime)}</p>
             </div>
             <div className="flex items-center">
             <img
@@ -61,26 +71,12 @@ const TripCardFlight = ({
             />
             </div>
             <div>
-              <p className="font-semibold">{PkgDetails?.ArrivalAirport}</p>
-              <p className="text-sm pt-5">Arrival at  {PkgDetails?.ArrivalTime}</p>
+              <p className="font-semibold">{locale === 'ar' ? PkgDetails?.ToAirportNameAr : PkgDetails?.ToAirportName}</p>
+              <p className="text-sm pt-2">{t('Arrival at')}</p>
+              <p className="text-sm pt-2">{formatDateTime(PkgDetails?.ArrivalDateTime)}</p>
+
             </div>
           </div>
-          
-{/* 
-            <div className="mt-4 flex space-x-4 text-gray-600">
-              <div className="flex items-center space-x-1">
-                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h7"></path></svg>
-                <span className="text-sm">Economy</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M4.75 3.75l14.5 14.5m0-14.5l-14.5 14.5"></path></svg>
-                <span className="text-sm">Airbus</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <svg className="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M3 18v6h4v-6H3zm14 0v6h4v-6h-4zm-6-6a4 4 0 100-8 4 4 0 000 8zm6 0h4a4 4 0 000-8h-4"></path></svg>
-                <span className="text-sm">1 hour 30 min</span>
-              </div>
-            </div> */}
         </div>
 
         {/* Price and Booking */}
@@ -88,7 +84,7 @@ const TripCardFlight = ({
           <p className="text-2xl font-semibold text-main">{moneyRenderer(locale, PkgCurrency, PkgDetails?.EconomyClassPrice)}</p>
           <p className="text-sm text-gray-600">Price Start</p>
           {/* <button className="mt-4 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">Check Details & Book</button> */}
-          <Link href={`/flightpackage/packageId=${PkgDetails?.AircraftTypeID}&ID=${PkgDetails?.ID}&DepartureAirport=${PkgDetails?.DepartureAirport}&ArrivalAirport=${PkgDetails?.ArrivalAirport}&AircraftType=${PkgDetails?.AircraftType}&BusinessClassPrice=${PkgDetails?.BusinessClassPrice}&EconomyClassPrice=${PkgDetails?.EconomyClassPrice}`}>
+          <Link href={`/flightpackage/packageId=${PkgDetails?.Id}&ID=${PkgDetails?.Id}&DepartureAirport=${PkgDetails?.FromAirportName}&ArrivalAirport=${PkgDetails?.ToAirportName}&AircraftType=${PkgDetails?.CompanyName}&BusinessClassPrice=${PkgDetails?.BusinessClassPrice}&EconomyClassPrice=${PkgDetails?.EconomyClassPrice}&DepartureDateTime=${PkgDetails?.DepartureDateTime}&ArrivalDateTime=${PkgDetails?.ArrivalDateTime}`}>
             <a className="block py-2 px-4 mt-4 w-full bg-main text-white font-medium text-sm text-center rounded-md">
               {t('Check & Book Now')}
             </a>

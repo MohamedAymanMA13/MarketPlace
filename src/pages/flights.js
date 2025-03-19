@@ -43,7 +43,7 @@ export default function Flights({ response,optionsFontSize }) {
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
 
-
+console.log('%csrc\pages\flights.js:46 response', 'color: #007acc;', response);
   useEffect(() => {
     if (selectedCountry) {
       async function fetchCities() {
@@ -65,19 +65,18 @@ export default function Flights({ response,optionsFontSize }) {
   };
   const today = new Date().toISOString().split('T')[0];
   const submitHandler = async (values) => {
-
-    const valuesToSubmit = {
-
-      to: values.to || -1,
-      from: values.from || -1,
-      date: values.date || today,
-
-    };
-  
-
+    // Ensure values are being logged for debugging
+    console.log('Submitting values:', values);
+    
+    // Call searchFlights with the values as queryParams
+    const response = await searchFlights(values);
+    
+    // Handle the response as needed
+    console.log('Search response:', response);
+    
     router.push({
       pathname: '/flights',
-      query: valuesToSubmit,
+      query: values,
     });
   };
 
@@ -122,7 +121,7 @@ export default function Flights({ response,optionsFontSize }) {
                   <div>
                     <div className="mt-2 space-y-2">
                     <Field
-                      name="from"
+                      name="departureCountryId"
                       component={SelectField}
                       label="Countries from"
                       options={config.tables?.fromCountries}
@@ -131,7 +130,7 @@ export default function Flights({ response,optionsFontSize }) {
                     </div>
                     <div className="mt-2 space-y-2">
                     <Field
-                      name="to"
+                      name="arrivalCountryId"
                       component={SelectField}
                       label="Countries to"
                       firstNoOption="Select Countries to"
@@ -164,44 +163,6 @@ export default function Flights({ response,optionsFontSize }) {
               </section>
 
                 <div>
-                  {/* <div className="p-4 mx-auto max-w-sm sm:max-w-full bg-white rounded-md sm:flex sm:items-center sm:justify-between sm:gap-3 md:gap-2">
-                    <div className='w-full flex flex-wrap '>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="from"
-                            component={SelectField}
-                            label="Countries from"
-                            options={config.tables?.fromCountries}
-                            firstNoOption="Select Countries from"
-                          />
-                        </div>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="to"
-                            component={SelectField}
-                            label="Countries to"
-                            firstNoOption="Select Countries to"
-                            options={config.tables?.fromCountries}
-                          />
-                        </div>
-                        <div className='w-1/4 px-1'>
-                          <Field
-                            name="date"
-                            component={DateField}
-                            label="Date"
-                          />
-                        </div>
-                        <div className='w-full px-1 py-1 mt-6 flex justify-end place-content-end		'>
-                          <button
-                            className=" w-32 h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                            type="submit"
-                          >
-                            {t('Search')}
-                          </button>
-                        </div>
-                        
-                    </div>
-                  </div> */}
 
                   {/* {JSON.stringify(response)} */}
                   <ResultsSectionFlight
@@ -225,7 +186,7 @@ export default function Flights({ response,optionsFontSize }) {
                   <div>
                     <div className="mt-2 space-y-2">
                     <Field
-                      name="from"
+                      name="departureCountryId"
                       component={SelectField}
                       label="Countries from"
                       options={config.tables?.fromCountries}
@@ -234,7 +195,7 @@ export default function Flights({ response,optionsFontSize }) {
                     </div>
                     <div className="mt-2 space-y-2">
                     <Field
-                      name="to"
+                      name="arrivalCountryId"
                       component={SelectField}
                       label="Countries to"
                       firstNoOption="Select Countries to"
@@ -280,11 +241,7 @@ export async function getServerSideProps(context) {
   let updatedQuery;
 
   if (isEmpty(query)) {
-    updatedQuery = {
-      to: -1,
-      from: -1,
-      date: new Date().toISOString().split('T')[0],
-    };
+    updatedQuery = query;
   } else {
     updatedQuery = query;
   }
@@ -302,9 +259,9 @@ export async function getServerSideProps(context) {
 
   let resToSend;
   try {
-    const response = await searchFlights(updatedQuery, locale);
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    const response = await searchFlights();
+    if (response.data && response.data?.data) {
+      resToSend = response.data.data;
     }
   } catch (error) {
     resToSend = [];
