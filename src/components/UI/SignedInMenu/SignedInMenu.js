@@ -13,7 +13,7 @@ const SignedInMenu = ({ auth }) => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button className="min-w-max text-sm font-semibold text-main flex items-center justify-between">
-          <span>{t('Hi, ') + auth.user.Name}</span>
+          <span>{t('Hi, ') + auth.user.FullName}</span>
           <ChevronDownIcon className="w-4 h-4" />
         </button>
       </DropdownMenu.Trigger>
@@ -25,7 +25,7 @@ const SignedInMenu = ({ auth }) => {
         <div className="flex items-center gap-4">
           <AvatarIcon className="flex-shrink-0 h-10 w-10" />
           <p className="text-base font-semibold text-copy">
-            {auth.user.Name}
+            {auth.user.FullName}
           </p>
         </div>
         <hr className="my-4" />

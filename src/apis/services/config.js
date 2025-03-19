@@ -16,9 +16,9 @@ export function fetchConfigTables(lang) {
 //   });
 // }
 export function GetCities(id,lang) {
-  return axios.get(`Configurations/countries/${id}/cities`, {
-    headers: {
-      lang,
-    },
+  return axios.get(`/Configurations/countries/${id}/cities`, {
+    // headers: {
+    //   lang,
+    // },
   });
 }

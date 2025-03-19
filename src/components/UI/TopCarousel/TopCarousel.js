@@ -38,25 +38,14 @@ const TopCarousel = ({ Packages }) => {
         <Slider>
           
           {Packages?.map((pkg, i) => (
-            <Slide key={pkg?.PkgId} index={i}>
+            <Slide key={pkg?.Id} index={i}>
               <Image
                 isBgImage
-                tag="div"
-                src={pkg?.PkgPhoto || '/bg2.jpg'}
+                // tag="div"
+                src={`http://gammats.com:7009/be/${pkg?.Image}` || '/bg2.jpg'}
                 alt={`${pkg?.PkgTitle} cover`}
                 className="aspect-[12/10] sm:aspect-[21/10]"
               >
-                <div className="ltr:pl-10 ltr:sm:pl-24 ltr:md:pl-[41%] rtl:pr-10 rtl:sm:pr-24 rtl:md:pr-[41%] bg-black/30 h-full w-full text-white font-medium flex flex-col justify-center">
-                  <p className="md:text-2xl lg:text-3xl">{pkg?.PkgTitle}</p>
-                  <h2 className="text-3xl md:text-3xl lg:text-5xl font-bold uppercase">
-                    {pkg?.PkgLocation}
-                  </h2>
-                  <Link href={`/packages/${pkg?.PkgId}`}>
-                    <a className="mt-3 py-3 px-7 md:px-8 lg:px-10 block w-max font-medium text-sm md:text-base lg:text-base bg-white text-main rounded-md">
-                      {t('Book & Enjoy it Now!')}
-                    </a>
-                  </Link>
-                </div>
               </Image>
             </Slide>
           ))}

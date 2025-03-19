@@ -36,7 +36,7 @@ const SelectField = ({
       >
         {firstNoOption ? <option value="">{t(firstNoOption)}</option> : null}
         {options?.map(option => (
-          <option key={option.id || option.ID} value={option.id || option.ID}>
+          <option key={option.id || option.ID || option.Id} value={option.id || option.ID || option.Id}>
             {option[displayPropName] || option.Value}
           </option>
         ))}
