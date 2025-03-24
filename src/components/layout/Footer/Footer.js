@@ -1,8 +1,8 @@
-import { FBIcon, InstagramIcon, TwitterIcon, YTIcon } from 'components/Icons';
+import { FBIcon, InstagramIcon, TwitterIcon, YTIcon } from "components/Icons";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useTranslation } from 'next-i18next';
+import Image from "next/image";
+import Link from "next/link";
+import { useTranslation } from "next-i18next";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -15,7 +15,7 @@ const Footer = () => {
             <a className="block relative h-8 w-20 lg:h-10 lg:w-28">
               <Image
                 alt="company logo"
-                src="/logo.png"
+                src="/logo1.png"
                 layout="fill"
                 className="object-contain"
               />
@@ -24,18 +24,18 @@ const Footer = () => {
 
           <div className="mt-6 md:mt-0 flex flex-col md:flex-row md:items-center gap-4 md:gap-6 text-copy text-xs lg:text-sm font-medium">
             <Link href="/about-us">
-              <a className="hover:text-main">{t('About Us')}</a>
+              <a className="hover:text-main">{t("About Us")}</a>
             </Link>
 
             <Link href="/contact-us">
-              <a className="hover:text-main">{t('Contact Us')}</a>
+              <a className="hover:text-main">{t("Contact Us")}</a>
             </Link>
 
             <Link href="/terms-conditions">
-              <a className="hover:text-main">{t('Terms & Conditions')}</a>
+              <a className="hover:text-main">{t("Terms & Conditions")}</a>
             </Link>
             <Link href="/FAQ">
-              <a className="hover:text-main">{t('FAQ')}</a>
+              <a className="hover:text-main">{t("FAQ")}</a>
             </Link>
           </div>
         </div>
@@ -57,7 +57,7 @@ const Footer = () => {
       </div>
 
       <div className="py-2 bg-main w-full text-center text-white text-xs ltr:font-poppins rtl:font-noto">
-        {t('All rights reserved. Travel')} ©{' '}
+        {t("All rights reserved. Madar")} ©{" "}
         <span className="font-medium">2022</span>
       </div>
     </>

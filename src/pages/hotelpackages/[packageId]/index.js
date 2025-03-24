@@ -38,7 +38,7 @@ export default function PackageDetailsPage({
   // const [matchedDetails, setMatchedDetails] = useState(null);
   // const [numberOfRooms, setNumberOfRooms] = useState(PkgDetails.map(() => 0));
   const [reqLoading, setReqLoading] = useState(false);
-  const [hotelReservationRooms, setHotelReservationRooms] = useState({})
+  const [hotelReservationRooms, setHotelReservationRooms] = useState({});
 
   // const valuesToSubmit = {
   //   hotelName: -1,
@@ -103,22 +103,30 @@ export default function PackageDetailsPage({
     console.log(
       "%csrcpageshotelpackages[packageId]index.js:84 detailsValue",
       "color: #007acc;",
-      {...hotelReservationRooms,reservationHotelCompanions: values.reservationPackageCompanions,},
+      {
+        ...hotelReservationRooms,
+        reservationHotelCompanions: values.reservationPackageCompanions,
+      }
     );
     try {
       setReqLoading(true);
       const response = await axios.post(
         "/Reservations/hotel/MarketPlace",
-        
-        {...hotelReservationRooms,reservationHotelCompanions: values.reservationPackageCompanions}
-       ,
+
+        {
+          ...hotelReservationRooms,
+          reservationHotelCompanions: values.reservationPackageCompanions,
+        },
         {
           headers: {
             authorization: "Bearer " + auth.user.Token,
           },
         }
       );
-      if (response.data.Message === "Hotel Reservation Has Been Created Successfully") {
+      if (
+        response.data.Message ===
+        "Hotel Reservation Has Been Created Successfully"
+      ) {
         router.push("/");
       } else {
         toast.error(response.data.Message);
@@ -147,7 +155,11 @@ export default function PackageDetailsPage({
   }, [Id, startDate, endDate]);
 
   const [selectedRooms, setSelectedRooms] = useState([]);
-console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 'color: #007acc;', selectedRooms);
+  console.log(
+    "%csrcpageshotelpackages[packageId]index.js:159 selectedRooms",
+    "color: #007acc;",
+    selectedRooms
+  );
   useEffect(() => {
     if (detailsValue) {
       setSelectedRooms(
@@ -205,14 +217,14 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
   const [choosenImage, setChoosenImage] = useState();
   const services = ["ExtraBedPrice", "LunchPrice", "DinnerPrice"];
   const updateHotelReservationRooms = () => {
-    const HotelReservationRooms = selectedRooms.map(room => {
-      const basePrice = room.RoomPrice || 0
-      const selectedExtras = room.extras
+    const HotelReservationRooms = selectedRooms.map((room) => {
+      const basePrice = room.RoomPrice || 0;
+      const selectedExtras = room.extras;
       const extraCost = selectedExtras.reduce((sum, extra) => {
         const extraValue = room[extra];
-        return sum + (typeof extraValue === 'number' ? extraValue : 0);
-      }, 0)
-      const totalPrice = (basePrice + extraCost) * room.count
+        return sum + (typeof extraValue === "number" ? extraValue : 0);
+      }, 0);
+      const totalPrice = (basePrice + extraCost) * room.count;
 
       return {
         // Id: 0,
@@ -220,27 +232,37 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
         HotelRoomId: room.id,
         RoomPrice: room.RoomPrice,
         DiscountPrice: 0,
-        ExtraBedPrice: room.extras.includes('ExtraBedPrice') ? room.ExtraBedPrice || 0 : 0,
-        LunchPrice: room.extras.includes('LunchPrice') ? room.LunchPrice || 0 : 0,
-        DinnerPrice: room.extras.includes('DinnerPrice') ? room.DinnerPrice || 0 : 0,
+        ExtraBedPrice: room.extras.includes("ExtraBedPrice")
+          ? room.ExtraBedPrice || 0
+          : 0,
+        LunchPrice: room.extras.includes("LunchPrice")
+          ? room.LunchPrice || 0
+          : 0,
+        DinnerPrice: room.extras.includes("DinnerPrice")
+          ? room.DinnerPrice || 0
+          : 0,
         TotalPrice: totalPrice,
         NumberOfRooms: room.count,
-      }
-    })
+      };
+    });
 
     setHotelReservationRooms({
       CheckInDate: startDate,
       CheckoutDate: endDate,
-      HotelId: Number(Id)|| 0,
+      HotelId: Number(Id) || 0,
       HotelReservationRooms,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    updateHotelReservationRooms()
+    updateHotelReservationRooms();
     // setCompany(hotelReservationRooms)
-  }, [selectedRooms])
-  console.log('%csrc\pages\hotelpackages\[packageId]\index.js:253 hotelReservationRooms', 'color: #007acc;', hotelReservationRooms);
+  }, [selectedRooms]);
+  console.log(
+    "%csrcpageshotelpackages[packageId]index.js:253 hotelReservationRooms",
+    "color: #007acc;",
+    hotelReservationRooms
+  );
   return (
     <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
@@ -279,7 +301,10 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
         <div className="w-full  flex flex-wrap mt-4  rounded-xl">
           {PkgDetails?.HotelDetails?.Paths.map((ele) => {
             return (
-              <div key={ele} className="w-20 h-20 me-4 cursor-pointer rounded-lg ">
+              <div
+                key={ele}
+                className="w-20 h-20 me-4 cursor-pointer rounded-lg "
+              >
                 <Image
                   alt="package cover"
                   src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
@@ -308,7 +333,7 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
           </div>
           <div className="mt-2">
             <span className="font-bold">Website</span> :{" "}
-            {PkgDetails?.HotelDetails?.Website}
+            <p className="break-words">{PkgDetails?.HotelDetails?.Website}</p>
           </div>
           <div className="mt-2">
             <span className="font-bold">Description</span> :{" "}
@@ -358,11 +383,11 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
                         key={room.Id}
                         className="p-4 mb-4 border rounded-xl bg-[#F0EDF5] shadow-sm"
                       >
-                        <div className="flex justify-between items-center mb-2">
-                          <h3 className="text-sm ">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-2">
+                          <h3 className="text-sm mb-3 md:mb-0">
                             {room.RoomType} {t("Room")}
                           </h3>
-                          <div className="flex gap-4 flex-wrap">
+                          <div className="flex gap-4 justify-center md:justify-between flex-wrap">
                             {services.map((service) => {
                               const isActive =
                                 selectedRoom.extras.includes(service);
@@ -384,7 +409,7 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
                               );
                             })}
                           </div>
-                          <div className="flex w-[150px] justify-center items-center flex-col ">
+                          <div className="flex mt-3 md:mt-0 w-full justify-around md:justify-center items-center flex-row md:w-[150px] md:flex-col ">
                             <p className="text-sm ">{t("Total Price")}</p>
                             <span className="text-sm py-1 font-bold">
                               {calculateTotalPrice(room)} {t("EGP/Night")}
@@ -422,8 +447,8 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
                     {t("No rooms available")}
                   </p>
                 )}
-                                <section className="py-2 px-3 bg-white rounded-md text-copy">
-                  {auth.user?.loggedIn ? 
+                <section className="py-2 px-3 bg-white rounded-md text-copy">
+                  {auth.user?.loggedIn ? (
                     <div className="my-2 space-y-4 flex flex-col">
                       <BookingForm
                         handleSubmit={handleSubmit}
@@ -433,7 +458,7 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
                         change={change}
                       />
                     </div>
-                    :
+                  ) : (
                     <div className="sm:self-end flex gap-4 items-center justify-center my-2">
                       <PopoverBtn
                         triggerElement={
@@ -441,14 +466,14 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
                             type="button"
                             className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            {t('Book Now')}
+                            {t("Book Now")}
                           </button>
                         }
                       />
                     </div>
-                  }
-                </section>   
-                </div>
+                  )}
+                </section>
+              </div>
             )}
           />
         </>
