@@ -1,9 +1,9 @@
-import { StarRating } from 'components/UI';
-import { moneyRenderer } from 'utils/helpers/general.helpers';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
+import { StarRating } from "components/UI";
+import { moneyRenderer } from "utils/helpers/general.helpers";
+import Image from "next/image";
+import Link from "next/link";
+import { useTranslation } from "next-i18next";
+import { useRouter } from "next/router";
 // import PropTypes from 'prop-types';
 
 const TripCardCatering = ({
@@ -16,7 +16,7 @@ const TripCardCatering = ({
 }) => {
   const { t } = useTranslation();
   const { locale } = useRouter();
-  
+
   const getStarRating = (rating) => {
     const match = rating?.match(/(\d+)\s*Star/);
     return match ? parseInt(match[1], 10) : 0; // Default to 0 if no match found
@@ -32,7 +32,9 @@ const TripCardCatering = ({
         <a className={`block relative ${imgAspectRatio}`}>
           <Image
             alt={`${PkgDetails?.Name} cover`}
-            src={`http://gammats.com:7009/be/${PkgDetails?.Photo}` || '/bg3.jpg'}
+            src={
+              `http://gammats.com:7009/be/${PkgDetails?.Photo}` || "/bg3.jpg"
+            }
             layout="fill"
             className="w-full h-full object-cover"
           />
@@ -41,7 +43,9 @@ const TripCardCatering = ({
 
       <div className="p-4 flex flex-col flex-grow">
         <div>
-          <StarRating filledStars={getStarRating(PkgDetails?.ProperteyRating)} />
+          <StarRating
+            filledStars={getStarRating(PkgDetails?.ProperteyRating)}
+          />
           <p className="font-bold first-letter:uppercase mt-2">
             {PkgDetails?.Name}
           </p>
@@ -62,13 +66,13 @@ const TripCardCatering = ({
         <div className="mt-auto">
           <div className="mt-4 flex items-center justify-between">
             <p className=" text-lg font-bold">
-            Cuisine : {PkgDetails?.Cuisine}
+              Cuisine : {PkgDetails?.Cuisine}
             </p>
           </div>
 
           <Link href={`/cateringpackages/${PkgDetails?.Id}`}>
             <a className="block py-2 mt-4 w-full bg-main text-white font-medium text-sm text-center rounded-md">
-              {t('Book Now')}
+              {t("Book Now")}
             </a>
           </Link>
         </div>

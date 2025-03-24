@@ -278,7 +278,7 @@ export default function PackageDetailsPage({
           </div>
           <div className="mt-2">
             <span className="font-bold">Website</span> :{" "}
-            {PkgDetails?.HotelDetails?.Website}
+            <p className="break-words">{PkgDetails?.HotelDetails?.Website}</p>
           </div>
           <div className="mt-2">
             <span className="font-bold">Description</span> :{" "}
@@ -328,11 +328,11 @@ export default function PackageDetailsPage({
                         key={room.Id}
                         className="p-4 mb-4 border rounded-xl bg-[#F0EDF5] shadow-sm"
                       >
-                        <div className="flex justify-between items-center mb-2">
-                          <h3 className="text-sm ">
+                        <div className="flex flex-col md:flex-row justify-between items-center mb-2">
+                          <h3 className="text-sm mb-3 md:mb-0">
                             {room.RoomType} {t("Room")}
                           </h3>
-                          <div className="flex gap-4 flex-wrap">
+                          <div className="flex gap-4 justify-center md:justify-between flex-wrap">
                             {services.map((service) => {
                               const isActive =
                                 selectedRoom.extras.includes(service);
@@ -354,7 +354,7 @@ export default function PackageDetailsPage({
                               );
                             })}
                           </div>
-                          <div className="flex w-[150px] justify-center items-center flex-col ">
+                          <div className="flex mt-3 md:mt-0 w-full justify-around md:justify-center items-center flex-row md:w-[150px] md:flex-col ">
                             <p className="text-sm ">{t("Total Price")}</p>
                             <span className="text-sm py-1 font-bold">
                               {calculateTotalPrice(room)} {t("EGP/Night")}

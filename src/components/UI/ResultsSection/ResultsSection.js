@@ -1,9 +1,9 @@
-import { TripCard, Spinner } from '..';
-import { isEmpty } from 'lodash';
+import { TripCard, Spinner } from "..";
+import { isEmpty } from "lodash";
 
-const ResultsSection = ({ Packages, isLoading , forPackageDetails }) => {
+const ResultsSection = ({ Packages, isLoading, forPackageDetails }) => {
   return (
-    <div className="mt-4 gap-4 flex flex-col sm:flex-row flex-wrap items-center justify-start">
+    <div className="mt-4  gap-4 flex flex-col sm:flex-row flex-wrap items-center justify-start">
       {isLoading ? (
         <div className="my-10 w-full flex items-center justify-center">
           <Spinner />
@@ -13,25 +13,25 @@ const ResultsSection = ({ Packages, isLoading , forPackageDetails }) => {
           No packages available!
         </p>
       ) : (
-        <div className='flex'>
-          
-        { forPackageDetails ?  Packages?.packageHotels?.map(pkg => (
-          <TripCard
-            key={pkg.Id}
-            additionalClasses="w-full max-w-sm sm:w-72 sm:max-w-none"
-            imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
-            PkgDetails={pkg}
-            forPackageDetails={forPackageDetails }
-            />
-        )) :
-        Packages?.map(pkg => (
-          <TripCard
-            key={pkg.Id}
-            additionalClasses="w-full max-w-sm sm:w-72 sm:max-w-none"
-            imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
-            PkgDetails={pkg}
-            />
-        )) }
+        <div className="flex flex-wrap justify-center sm:justify-start">
+          {forPackageDetails
+            ? Packages?.packageHotels?.map((pkg) => (
+                <TripCard
+                  key={pkg.Id}
+                  additionalClasses="  mb-2 w-full sm:max-w-none  "
+                  imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
+                  PkgDetails={pkg}
+                  forPackageDetails={forPackageDetails}
+                />
+              ))
+            : Packages?.map((pkg) => (
+                <TripCard
+                  key={pkg.Id}
+                  additionalClasses="w-full max-w-sm sm:w-72 sm:max-w-none"
+                  imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
+                  PkgDetails={pkg}
+                />
+              ))}
         </div>
       )}
     </div>

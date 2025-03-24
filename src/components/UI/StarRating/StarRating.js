@@ -1,17 +1,17 @@
-import { StarIcon } from '@heroicons/react/solid';
+import { StarIcon } from "@heroicons/react/solid";
 
-const StarRating = ({ filledStars }) => {
+const StarRating = ({ filledStars, additionalClass }) => {
   return (
-    <div className="flex">
+    <div className={`flex ${additionalClass}`}>
       {filledStars
         ? new Array(+filledStars)
-            .fill('star')
+            .fill("star")
             .map((star, i) => (
               <StarIcon key={i} className="w-4 h-4 text-yellow-500" />
             ))
         : null}
       {filledStars
-        ? new Array(5 - +filledStars).fill('star').map((star, i) => (
+        ? new Array(5 - +filledStars).fill("star").map((star, i) => (
             <svg
               key={i * 10}
               xmlns="http://www.w3.org/2000/svg"

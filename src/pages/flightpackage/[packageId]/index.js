@@ -1,22 +1,22 @@
-import { useEffect, useState } from 'react';
-import { PageLayout } from 'components/layout';
-import { RoomTypeSec, StarRating, Timeline } from 'components/UI';
-import HeartBtn from 'components/UI/HeartBtn/HeartBtn';
-import ShareBtn from 'components/UI/ShareBtn/ShareBtn';
-import BookingForm from 'components/UI/BookingForm/BookingForm';
-import { Form } from 'react-final-form';
-import arrayMutators from 'final-form-arrays';
-import { useAuth } from 'hooks/useAuth';
-import { axios_instance as axios } from 'apis/axios-instance';
-import { MinusIcon, PlusIcon } from '@heroicons/react/outline';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { GetFlightTypeStructure, searchHotels } from 'apis/services/packages';
-import { isEmpty } from 'lodash';
-import { PopoverBtn } from 'components/UI';
+import { useEffect, useState } from "react";
+import { PageLayout } from "components/layout";
+import { RoomTypeSec, StarRating, Timeline } from "components/UI";
+import HeartBtn from "components/UI/HeartBtn/HeartBtn";
+import ShareBtn from "components/UI/ShareBtn/ShareBtn";
+import BookingForm from "components/UI/BookingForm/BookingForm";
+import { Form } from "react-final-form";
+import arrayMutators from "final-form-arrays";
+import { useAuth } from "hooks/useAuth";
+import { axios_instance as axios } from "apis/axios-instance";
+import { MinusIcon, PlusIcon } from "@heroicons/react/outline";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { GetFlightTypeStructure, searchHotels } from "apis/services/packages";
+import { isEmpty } from "lodash";
+import { PopoverBtn } from "components/UI";
 
 export default function PackageDetailsPage({
   PkgDetails,
@@ -28,8 +28,7 @@ export default function PackageDetailsPage({
   BusinessClassPrice,
   EconomyClassPrice,
   ArrivalDateTime,
-  DepartureDateTime
-
+  DepartureDateTime,
 }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -39,48 +38,57 @@ export default function PackageDetailsPage({
 
   const formatDateTime = (dateTime) => {
     const date = new Date(dateTime);
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const formattedDate = date.toLocaleDateString(undefined, options).replace(/\//g, '-');
-    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    const formattedDate = date
+      .toLocaleDateString(undefined, options)
+      .replace(/\//g, "-");
+    const formattedTime = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
     return ` ${formattedDate} , ${formattedTime}`;
   };
-  
+
   const submitHandler = async (values) => {
     console.log(
-      '%csrc\\pages\\hotelpackages\\[packageId]\\index.js:90 values',
-      'color: #007acc;',
+      "%csrc\\pages\\hotelpackages\\[packageId]\\index.js:90 values",
+      "color: #007acc;",
       {
         reservationHotelCompanions: values.reservationPackageCompanions,
         id: ID,
-        price:selectedClass.price,
-        className:selectedClass.name
-
+        price: selectedClass.price,
+        className: selectedClass.name,
       }
     );
 
     try {
       setReqLoading(true);
-      const response = await axios.post('/Flight/AddFlightWebsiteReservation', {
-        reservationHotelCompanions: values.reservationPackageCompanions,
-        id: ID,
-        price:selectedClass.price,
-        className:selectedClass.name
-      }, {
-        headers: {
-          authorization: 'Bearer ' + auth.user.AccessToken,
+      const response = await axios.post(
+        "/Flight/AddFlightWebsiteReservation",
+        {
+          reservationHotelCompanions: values.reservationPackageCompanions,
+          id: ID,
+          price: selectedClass.price,
+          className: selectedClass.name,
         },
-      });
+        {
+          headers: {
+            authorization: "Bearer " + auth.user.AccessToken,
+          },
+        }
+      );
       if (response.data.Data) {
-        router.push('/');  // Redirect to homepage
+        router.push("/"); // Redirect to homepage
       } else {
-        toast.error(response.data.Message);  // Show error message
+        toast.error(response.data.Message); // Show error message
       }
     } catch (error) {
       // Handle the error
       const errorMsg = httpErrorHandler(
         error,
-        t('Booking Failed. Please try again!', {
-          ns: 'messages',
+        t("Booking Failed. Please try again!", {
+          ns: "messages",
         })
       );
       toast.error(errorMsg);
@@ -88,7 +96,11 @@ export default function PackageDetailsPage({
       setReqLoading(false);
     }
   };
-console.log('%csrc\pages\flightpackage\[packageId]\index.js:91 ArrivalDateTime', 'color: #007acc;', ArrivalDateTime);
+  console.log(
+    "%csrcpages\flightpackage[packageId]index.js:91 ArrivalDateTime",
+    "color: #007acc;",
+    ArrivalDateTime
+  );
   return (
     <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
@@ -106,30 +118,38 @@ console.log('%csrc\pages\flightpackage\[packageId]\index.js:91 ArrivalDateTime',
         <div className="relative aspect-[12/5]  lg:aspect-[5/1] rounded-md overflow-hidden">
           <Image
             alt="package cover"
-            src={PkgDetails?.photo || '/f.jpg'}
+            src={PkgDetails?.photo || "/f.jpg"}
             layout="fill"
             className="w-full h-full object-cover"
             priority
           />
         </div>
         <section className="py-2 px-3 bg-white rounded-md text-copy">
-          <h3 className="text-sm md:text-base font-bold">{t('Flights Details')}</h3>
+          <h3 className="text-sm md:text-base font-bold">
+            {t("Flights Details")}
+          </h3>
           <div className="my-2">
-            <div className="flex flex-wrap justify-center first-letter:uppercase font-bold px-8">
+            <div className="flex flex-wrap  md:justify-start first-letter:uppercase font-bold v">
               {AircraftType}
             </div>
-            <div className="flex flex-wrap justify-center px-8">
-              <div className="px-16">
-                <p className="font-bold first-letter:uppercase">Departure Airport</p>
+            <div className="flex flex-wrap justify-center ">
+              <div className="w-full  md:text-start">
+                <p className="font-bold first-letter:uppercase">
+                  Departure Airport
+                </p>
                 <p className="first-letter:uppercase">{DepartureAirport}</p>
-                <p className="first-letter:uppercase">{formatDateTime(DepartureDateTime)}</p>
-
+                <p className="first-letter:uppercase">
+                  {formatDateTime(DepartureDateTime)}
+                </p>
               </div>
-              <div className="px-16">
-                <p className="font-bold first-letter:uppercase">Arrival Airport</p>
+              <div className="w-full  md:text-start">
+                <p className="font-bold first-letter:uppercase">
+                  Arrival Airport
+                </p>
                 <p className="first-letter:uppercase">{ArrivalAirport}</p>
-                <p className="first-letter:uppercase">{formatDateTime(ArrivalDateTime)}</p>
-
+                <p className="first-letter:uppercase">
+                  {formatDateTime(ArrivalDateTime)}
+                </p>
               </div>
             </div>
           </div>
@@ -150,34 +170,48 @@ console.log('%csrc\pages\flightpackage\[packageId]\index.js:91 ArrivalDateTime',
             }) => (
               <>
                 <section className="py-2 px-3 bg-white rounded-md text-copy ">
-                  <h3 className="text-sm md:text-base font-bold">{t('Select Class')}</h3>
-                  <div className="my-2 flex gap-4 justify-center">
-                    <label className='px-10'>
+                  <h3 className="text-sm md:text-base font-bold">
+                    {t("Select Class")}
+                  </h3>
+                  <div className="my-2 flex flex-col md:flex-row gap-4 justify-center">
+                    <label className="">
                       <input
                         type="radio"
                         name="BusinessClass"
                         value={BusinessClassPrice}
                         checked={selectedClass.price === BusinessClassPrice}
-                        onChange={() => setSelectedClass({ price: BusinessClassPrice, name: 'Business Class' })}
+                        onChange={() =>
+                          setSelectedClass({
+                            price: BusinessClassPrice,
+                            name: "Business Class",
+                          })
+                        }
                         className="mr-2"
                       />
-                      Business Class Price: <span className='font-bold'>{BusinessClassPrice}</span>
+                      Business Class Price:{" "}
+                      <span className="font-bold">{BusinessClassPrice}</span>
                     </label>
-                    <label className='px-10'>
+                    <label className="">
                       <input
                         type="radio"
                         name="EconomyClass"
                         value={EconomyClassPrice}
                         checked={selectedClass.price === EconomyClassPrice}
-                        onChange={() => setSelectedClass({ price: EconomyClassPrice, name: 'Economy Class' })}
+                        onChange={() =>
+                          setSelectedClass({
+                            price: EconomyClassPrice,
+                            name: "Economy Class",
+                          })
+                        }
                         className="mr-2"
                       />
-                      Economy Class Price: <span className='font-bold'>{EconomyClassPrice}</span>
+                      Economy Class Price:{" "}
+                      <span className="font-bold">{EconomyClassPrice}</span>
                     </label>
                   </div>
                 </section>
                 <section className="py-2 px-3 bg-white rounded-md text-copy">
-                  {auth.user?.loggedIn ? 
+                  {auth.user?.loggedIn ? (
                     <div className="my-2 space-y-4 flex flex-col">
                       <BookingForm
                         handleSubmit={handleSubmit}
@@ -187,20 +221,20 @@ console.log('%csrc\pages\flightpackage\[packageId]\index.js:91 ArrivalDateTime',
                         change={change}
                       />
                     </div>
-                    :
+                  ) : (
                     <div className="sm:self-end flex gap-4 items-center justify-center my-2">
                       <PopoverBtn
                         triggerElement={
                           <button
                             type="button"
-                            className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="py-2 sm:px-8 lg:px-28 mt-4 w-full  sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                           >
-                            {t('Book Now')}
+                            {t("Book Now")}
                           </button>
                         }
                       />
                     </div>
-                  }
+                  )}
                 </section>
               </>
             )}
@@ -215,20 +249,27 @@ export async function getServerSideProps(context) {
   const { query, locale } = context;
   let { packageId } = query;
 
-  let PkgId, ID, DepartureAirport, ArrivalAirport, AircraftType, BusinessClassPrice, EconomyClassPrice, DepartureDateTime,ArrivalDateTime ;
+  let PkgId,
+    ID,
+    DepartureAirport,
+    ArrivalAirport,
+    AircraftType,
+    BusinessClassPrice,
+    EconomyClassPrice,
+    DepartureDateTime,
+    ArrivalDateTime;
 
-  if (packageId.includes('&')) {
+  if (packageId.includes("&")) {
     const params = new URLSearchParams(packageId);
-    PkgId = params.get('packageId');
-    ID = params.get('ID');
-    DepartureAirport = params.get('DepartureAirport');
-    ArrivalAirport = params.get('ArrivalAirport');
-    AircraftType = params.get('AircraftType');
-    BusinessClassPrice = params.get('BusinessClassPrice');
-    EconomyClassPrice = params.get('EconomyClassPrice');
-    DepartureDateTime = params.get('DepartureDateTime');
-    ArrivalDateTime = params.get('ArrivalDateTime');
-
+    PkgId = params.get("packageId");
+    ID = params.get("ID");
+    DepartureAirport = params.get("DepartureAirport");
+    ArrivalAirport = params.get("ArrivalAirport");
+    AircraftType = params.get("AircraftType");
+    BusinessClassPrice = params.get("BusinessClassPrice");
+    EconomyClassPrice = params.get("EconomyClassPrice");
+    DepartureDateTime = params.get("DepartureDateTime");
+    ArrivalDateTime = params.get("ArrivalDateTime");
   }
 
   let resToSend;
@@ -250,7 +291,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'messages'])),
+      ...(await serverSideTranslations(locale, ["common", "messages"])),
       // PkgDetails: resToSend,
       PkgId,
       ID,
@@ -260,7 +301,7 @@ export async function getServerSideProps(context) {
       BusinessClassPrice,
       EconomyClassPrice,
       DepartureDateTime,
-      ArrivalDateTime
+      ArrivalDateTime,
     },
   };
 }
