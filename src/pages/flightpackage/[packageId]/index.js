@@ -27,74 +27,51 @@ export default function PackageDetailsPage({
   AircraftType,
   BusinessClassPrice,
   EconomyClassPrice,
+  ArrivalDateTime,
+  DepartureDateTime
+
 }) {
   const { t } = useTranslation();
   const router = useRouter();
   const auth = useAuth();
   const [reqLoading, setReqLoading] = useState(false);
-  const [seatSelect, setSeatSelect] = useState([]); // State to store selected seats
-  const [selectedClass, setSelectedClass] = useState({ price: "", name: "" }); // State to store selected class
+  const [selectedClass, setSelectedClass] = useState({ price: "", name: "" });
 
-  console.log(
-    '%csrc\\pages\\flightpackage\\[packageId]\\index.js:26 seatSelect',
-    'color: #007acc;',
-    selectedClass
-  );
-
-  const handleSeatClick = (seat) => {
-    if (seat.status === 0) {
-      setSeatSelect((prevSeatSelect) => {
-        // Check if the seat is already selected
-        const isSelected = prevSeatSelect.some((s) => s.id === seat.id);
-        if (isSelected) {
-          // If already selected, remove it from the selection
-          return prevSeatSelect.filter((s) => s.id !== seat.id);
-        } else {
-          // If not selected, add it to the selection
-          return [...prevSeatSelect, { id: seat.id }];
-        }
-      });
-    }
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = date.toLocaleDateString(undefined, options).replace(/\//g, '-');
+    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    return ` ${formattedDate} , ${formattedTime}`;
   };
-
-  const isSeatSelected = (seatId) => seatSelect.some((s) => s.id === seatId);
-
-  console.log(
-    '%csrc\\pages\\flightpackage\\[packageId]\\index.js:30 PkgDetails',
-    'color: #007acc;',
-    PkgDetails
-  );
-
+  
   const submitHandler = async (values) => {
-   
-
     console.log(
       '%csrc\\pages\\hotelpackages\\[packageId]\\index.js:90 values',
       'color: #007acc;',
       {
-        reservationHotelCompanions: values.reservationPackageCompanions,
-        id: ID,
-        seatSelect,
-        price:selectedClass.price,
-        className:selectedClass.name
+        ReservationFlightCompanions: values.reservationPackageCompanions,
+        FlightTravelId: Number(ID),
+        Price: Number(selectedClass.price),
+        ClassName:selectedClass.name
 
       }
     );
 
     try {
       setReqLoading(true);
-      const response = await axios.post('/Flight/AddFlightWebsiteReservation', {
-        reservationHotelCompanions: values.reservationPackageCompanions,
-        id: ID,
-        seatSelect,
-        price:selectedClass.price,
-        className:selectedClass.name
+      const response = await axios.post('/Reservations/flight/MarketPlace', {
+        ReservationFlightCompanions: values.reservationPackageCompanions,
+        FlightTravelId: +ID,
+        Price: +selectedClass.price,
+        ClassName:selectedClass.name
+
       }, {
         headers: {
-          authorization: 'Bearer ' + auth.user.AccessToken,
+          authorization: 'Bearer ' + auth.user.Token,
         },
       });
-      if (response.data.Data) {
+      if (response.data.Message === "Flight Reservation Has Been Created Successfully") {
         router.push('/');  // Redirect to homepage
       } else {
         toast.error(response.data.Message);  // Show error message
@@ -112,30 +89,22 @@ export default function PackageDetailsPage({
       setReqLoading(false);
     }
   };
-
+console.log('%csrc\pages\flightpackage\[packageId]\index.js:91 ArrivalDateTime', 'color: #007acc;', ArrivalDateTime);
   return (
     <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
-        <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
+        {/* <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
           <div>
             <h2 className="font-bold text-base md:text-lg xl:text-xl text-copy">
               {AircraftType}
             </h2>
-            <div className="mt-2 flex items-center justify-between sm:flex-col sm:items-start sm:gap-2">
-              <p className="text-copy text-sm font-medium xl:text-base">
-                {/* {matchedDetails?.City} , {matchedDetails?.Country} */}
-              </p>
-              <p className="text-copy text-sm font-medium xl:text-base">
-                {/* {calculateNights(startDate, endDate)} {t('Nights')} */}
-              </p>
-            </div>
           </div>
           <div className="mt-4 flex items-center justify-between gap-4">
             <ShareBtn />
           </div>
-        </div>
+        </div> */}
 
-        <div className="relative aspect-[12/9] sm:aspect-video lg:aspect-[3/1] rounded-md overflow-hidden">
+        <div className="relative aspect-[12/5]  lg:aspect-[5/1] rounded-md overflow-hidden">
           <Image
             alt="package cover"
             src={PkgDetails?.photo || '/f.jpg'}
@@ -146,31 +115,26 @@ export default function PackageDetailsPage({
         </div>
         <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">{t('Flights Details')}</h3>
-          <div className="mt-2">
-            {/* {matchedDetails?.Description} */}
+          <div className="my-2">
+            <div className="flex flex-wrap justify-center first-letter:uppercase font-bold px-8">
+              {AircraftType}
+            </div>
             <div className="flex flex-wrap justify-center px-8">
               <div className="px-16">
                 <p className="font-bold first-letter:uppercase">Departure Airport</p>
                 <p className="first-letter:uppercase">{DepartureAirport}</p>
+                <p className="first-letter:uppercase">{formatDateTime(DepartureDateTime)}</p>
+
               </div>
               <div className="px-16">
                 <p className="font-bold first-letter:uppercase">Arrival Airport</p>
                 <p className="first-letter:uppercase">{ArrivalAirport}</p>
+                <p className="first-letter:uppercase">{formatDateTime(ArrivalDateTime)}</p>
+
               </div>
             </div>
           </div>
         </section>
-        {isEmpty(PkgDetails.roomTypes) ? null : (
-          <section className="py-4 px-3 bg-white rounded-md text-copy">
-            <h3 className="text-sm md:text-base font-bold">{t('Select Room Type')}</h3>
-
-            <div className="mt-3 space-y-5">
-              {PkgDetails.roomTypes.map((room, i) => (
-                <RoomTypeSec key={i} pricingDetails={room} />
-              ))}
-            </div>
-          </section>
-        )}
         <>
           <Form
             onSubmit={submitHandler}
@@ -188,7 +152,7 @@ export default function PackageDetailsPage({
               <>
                 <section className="py-2 px-3 bg-white rounded-md text-copy ">
                   <h3 className="text-sm md:text-base font-bold">{t('Select Class')}</h3>
-                  <div className="mt-2 flex gap-4 justify-center">
+                  <div className="my-2 flex gap-4 justify-center">
                     <label className='px-10'>
                       <input
                         type="radio"
@@ -213,32 +177,9 @@ export default function PackageDetailsPage({
                     </label>
                   </div>
                 </section>
-                <section className="py-2 px-3 bg-white rounded-md text-copy ">
-                  <h3 className="text-sm md:text-base font-bold">{t('Select Seats')}</h3>
-                  <div className="p-4">
-                    {PkgDetails.rows.map((row, rowIndex) => (
-                      <div key={rowIndex} className={`grid grid-cols-${PkgDetails.columns.length} gap-2 mb-2 mx-100`}>
-                        {row.seats.map((seat, seatIndex) => (
-                          <div
-                            key={seatIndex}
-                            className={`text-center p-2 rounded-lg cursor-pointer 
-                              ${seat.status === 0 ? 'bg-green-200' : ''}
-                              ${seat.status === 1 ? 'bg-yellow-200' : ''}
-                              ${seat.status === 2 ? 'bg-red-200' : ''}
-                              ${isSeatSelected(seat.id) ? '!bg-blue-500 !text-white' : ''}
-                              hover:bg-blue-200`}
-                            onClick={() => handleSeatClick(seat)}
-                          >
-                            {seat.name}
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </section>
                 <section className="py-2 px-3 bg-white rounded-md text-copy">
                   {auth.user?.loggedIn ? 
-                    <div className="mt-4 space-y-4 flex flex-col">
+                    <div className="my-2 space-y-4 flex flex-col">
                       <BookingForm
                         handleSubmit={handleSubmit}
                         submitting={submitting}
@@ -248,7 +189,7 @@ export default function PackageDetailsPage({
                       />
                     </div>
                     :
-                    <div className="sm:self-end flex gap-4 items-center justify-center">
+                    <div className="sm:self-end flex gap-4 items-center justify-center my-2">
                       <PopoverBtn
                         triggerElement={
                           <button
@@ -275,7 +216,7 @@ export async function getServerSideProps(context) {
   const { query, locale } = context;
   let { packageId } = query;
 
-  let PkgId, ID, DepartureAirport, ArrivalAirport, AircraftType, BusinessClassPrice, EconomyClassPrice;
+  let PkgId, ID, DepartureAirport, ArrivalAirport, AircraftType, BusinessClassPrice, EconomyClassPrice, DepartureDateTime,ArrivalDateTime ;
 
   if (packageId.includes('&')) {
     const params = new URLSearchParams(packageId);
@@ -286,29 +227,32 @@ export async function getServerSideProps(context) {
     AircraftType = params.get('AircraftType');
     BusinessClassPrice = params.get('BusinessClassPrice');
     EconomyClassPrice = params.get('EconomyClassPrice');
+    DepartureDateTime = params.get('DepartureDateTime');
+    ArrivalDateTime = params.get('ArrivalDateTime');
+
   }
 
   let resToSend;
-  try {
-    const response = await GetFlightTypeStructure(PkgId, locale);
-    console.log('%csrc\\pages\\flightpackage\\[packageId]\\index.js:213 object', 'color: #007acc;', response);
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
-    } else {
-      throw new Error('not found');
-    }
-  } catch (error) {
-    console.log('%csrc\\pages\\flightpackage\\[packageId]\\index.js:213 object', 'color: #007acc;', error);
+  // try {
+  //   const response = await GetFlightTypeStructure(PkgId, locale);
+  //   console.log('%csrc\\pages\\flightpackage\\[packageId]\\index.js:213 object', 'color: #007acc;', response);
+  //   if (response.data && response.data?.Data) {
+  //     resToSend = response.data.Data;
+  //   } else {
+  //     throw new Error('not found');
+  //   }
+  // } catch (error) {
+  //   console.log('%csrc\\pages\\flightpackage\\[packageId]\\index.js:213 object', 'color: #007acc;', error);
 
-    return {
-      notFound: true,
-    };
-  }
+  //   return {
+  //     notFound: true,
+  //   };
+  // }
 
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'messages'])),
-      PkgDetails: resToSend,
+      // PkgDetails: resToSend,
       PkgId,
       ID,
       DepartureAirport,
@@ -316,6 +260,8 @@ export async function getServerSideProps(context) {
       AircraftType,
       BusinessClassPrice,
       EconomyClassPrice,
+      DepartureDateTime,
+      ArrivalDateTime
     },
   };
 }

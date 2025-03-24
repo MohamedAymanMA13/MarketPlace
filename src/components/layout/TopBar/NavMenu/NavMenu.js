@@ -19,7 +19,7 @@ const NavMenu = ({ isMenuShown, toggleMenuHandler }) => {
   const { t } = useTranslation();
   const auth = useAuth();
   const { asPath } = useRouter();
-
+console.log('%csrc\components\layout\TopBar\NavMenu\NavMenu.js:22 auth.user', 'color: #007acc;', auth);
   const menuClasses = classNames('inset-0 w-full h-screen bg-white', {
     absolute: isMenuShown,
     hidden: !isMenuShown,
@@ -60,7 +60,7 @@ const NavMenu = ({ isMenuShown, toggleMenuHandler }) => {
           <div className="space-y-5">
             <p className="text-sm font-semibold text-main flex items-center gap-2">
               <UserIcon className="h-5 w-5" />
-              {t('Hi, ') + auth.user.fullName}
+              {t('Hi, ') + auth.user.FullName}
             </p>
 
             <Link href="/my-bookings">
@@ -130,15 +130,15 @@ const NavMenu = ({ isMenuShown, toggleMenuHandler }) => {
 
         <Link href="/tourism">
           <a className="flex items-center gap-1 text-copy hover:text-main font-medium">
-            {t('Tourism')}
+            {t('Packages')}
           </a>
         </Link>
 
-        <Link href="/umrah">
+        {/* <Link href="/umrah">
           <a className="flex items-center gap-1 text-copy hover:text-main font-medium">
             {t('Umrah')}
           </a>
-        </Link>
+        </Link> */}
 
         <a
           href="http://gammats.com:8002/Hotels"

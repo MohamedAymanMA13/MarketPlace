@@ -1,67 +1,76 @@
 // TODO: update the image placeholder
 
-import { useEffect,useState } from 'react';
-import { PageLayout } from 'components/layout';
-import { RoomTypeSec, StarRating, Timeline } from 'components/UI';
-import HeartBtn from 'components/UI/HeartBtn/HeartBtn';
-import ShareBtn from 'components/UI/ShareBtn/ShareBtn';
-import BookingForm from 'components/UI/BookingForm/BookingForm';
-import { Form } from 'react-final-form';
-import arrayMutators from 'final-form-arrays';
-import { useAuth } from 'hooks/useAuth';
-import { axios_instance as axios } from 'apis/axios-instance';
+import { useEffect, useState } from "react";
+import { PageLayout } from "components/layout";
+import { RoomTypeSec, StarRating, Timeline } from "components/UI";
+import HeartBtn from "components/UI/HeartBtn/HeartBtn";
+import ShareBtn from "components/UI/ShareBtn/ShareBtn";
+import BookingForm from "components/UI/BookingForm/BookingForm";
+import { Form } from "react-final-form";
+import arrayMutators from "final-form-arrays";
+import { useAuth } from "hooks/useAuth";
+import { axios_instance as axios } from "apis/axios-instance";
+import { MinusIcon, PlusIcon } from "@heroicons/react/outline";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 import {
-  MinusIcon,
-  PlusIcon,
-} from '@heroicons/react/outline';
-import Image from 'next/image';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
-import { GetHotelDetailsWebsiteContent,searchHotels } from 'apis/services/packages';
-import { isEmpty } from 'lodash';
-import { PopoverBtn } from 'components/UI';
+  GetHotelDetailsWebsiteContent,
+  searchHotels,
+} from "apis/services/packages";
+import { isEmpty } from "lodash";
+import { PopoverBtn } from "components/UI";
+import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
 
-export default function PackageDetailsPage({ PkgDetails, PkgId ,startDate, endDate}) {
+export default function PackageDetailsPage({
+  PkgDetails,
+  Id,
+  startDate,
+  endDate,
+}) {
   const { t } = useTranslation();
   const router = useRouter();
   const auth = useAuth();
-  const [detailsValue, setDetailsValue] = useState([]);
-  const [matchedDetails, setMatchedDetails] = useState(null);
-  const [numberOfRooms, setNumberOfRooms] = useState(PkgDetails.map(() => 0));
-  const [reqLoading, setReqLoading] = useState(false);
 
-  const valuesToSubmit = {
-    hotelName: -1,
-    location: 0,
-    rating: -1,
-    from_date: startDate,
-    to_date: endDate,
-  };
+  const [detailsValue, setDetailsValue] = useState([]);
+  // const [matchedDetails, setMatchedDetails] = useState(null);
+  // const [numberOfRooms, setNumberOfRooms] = useState(PkgDetails.map(() => 0));
+  const [reqLoading, setReqLoading] = useState(false);
+  const [hotelReservationRooms, setHotelReservationRooms] = useState({})
+
+  // const valuesToSubmit = {
+  //   hotelName: -1,
+  //   location: 0,
+  //   rating: -1,
+  //   from_date: startDate,
+  //   to_date: endDate,
+  // };
 
   useEffect(() => {
     async function fetchDetails() {
       try {
-        const response = await searchHotels(valuesToSubmit);
-        setDetailsValue(response.data?.Data);
+        const response = await axios.get(
+          `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDate}&checkout=${endDate}`
+        );
+        setDetailsValue(response.data?.data);
       } catch (error) {
-        console.error('Error fetching details:', error);
+        console.error("Error fetching details:", error);
       }
     }
     fetchDetails();
   }, []);
-
-  useEffect(() => {
-    const foundDetail = detailsValue.find(detail => detail.ID === parseInt(PkgId));
-    if (foundDetail) {
-      setMatchedDetails(foundDetail);
-    }
-  }, [detailsValue, PkgId]);
+  console.log(detailsValue, "detailsValue");
+  // useEffect(() => {
+  //   const foundDetail = detailsValue.find(detail => detail.ID === parseInt(PkgId));
+  //   if (foundDetail) {
+  //     setMatchedDetails(foundDetail);
+  //   }
+  // }, [detailsValue, PkgId]);
 
   const getStarRating = (rating) => {
-    const match = rating?.match(/(\d+)\s*Star/);
-    return match ? parseInt(match[1], 10) : 0; // Default to 0 if no match found
+    return rating;
   };
   const calculateNights = (startDate, endDate) => {
     const start = new Date(startDate);
@@ -70,95 +79,246 @@ export default function PackageDetailsPage({ PkgDetails, PkgId ,startDate, endDa
     const nights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
     return nights;
   };
+  const NumberOfNight = calculateNights(startDate, endDate);
+
   const incrementRooms = (index) => {
     setNumberOfRooms((prevRooms) =>
       prevRooms.map((rooms, i) =>
-        i === index && rooms < PkgDetails[index].availableRooms ? rooms + 1 : rooms
+        i === index && rooms < PkgDetails[index].availableRooms
+          ? rooms + 1
+          : rooms
       )
     );
   };
-  
+
   const decrementRooms = (index) => {
     setNumberOfRooms((prevRooms) =>
-      prevRooms.map((rooms, i) => (i === index && rooms > 0 ? rooms - 1 : rooms))
+      prevRooms.map((rooms, i) =>
+        i === index && rooms > 0 ? rooms - 1 : rooms
+      )
     );
   };
-  console.log('%csrc\pages\hotelpackages\[packageId]\index.js:84 detailsValue', 'color: #007acc;', startDate, endDate);
-  const submitHandler = async values => {
-    const roomTypes = PkgDetails.map((data, i) => ({
-      roomId: data.ID, // Assuming RoomTypeId is the correct field in PkgDetails
-      numberOfRooms: numberOfRooms[i],
-      price: data.TotalPrice, // Total price for the rooms selected
-    })).filter(room => room.numberOfRooms > 0); // Only include rooms that have been selected
 
-  console.log('%csrc\pages\hotelpackages\[packageId]\index.js:90 values', 'color: #007acc;', {reservationHotelCompanions :values.reservationPackageCompanions, hotelID : matchedDetails.ID , roomTypes ,startDate, endDate});
-  try {
-    setReqLoading(true);
-    const response = await axios.post('/Hotel/AddHotelWebsiteReservation', {reservationHotelCompanions :values.reservationPackageCompanions, hotelID : matchedDetails.ID , roomTypes ,startDate, endDate}, {
-      headers: {
-        authorization: 'Bearer ' + auth.user.AccessToken,
-      },
-    });
-    if (response.data.Data) {
-      router.push('/');  // Redirect to homepage
-    } else {
-      toast.error(response.data.Message);  // Show error message
-    }
-  } catch (error) {
-    setReqLoading(false);
-    const errorMsg = httpErrorHandler(
-      error,
-      t('Booking Failed. Please try again!', {
-        ns: 'messages',
-      })
+  const submitHandler = async (values) => {
+    console.log(
+      "%csrcpageshotelpackages[packageId]index.js:84 detailsValue",
+      "color: #007acc;",
+      {...hotelReservationRooms,reservationHotelCompanions: values.reservationPackageCompanions,},
     );
-    toast.error(errorMsg);
-  }
+    try {
+      setReqLoading(true);
+      const response = await axios.post(
+        "/Reservations/hotel/MarketPlace",
+        
+        {...hotelReservationRooms,reservationHotelCompanions: values.reservationPackageCompanions}
+       ,
+        {
+          headers: {
+            authorization: "Bearer " + auth.user.Token,
+          },
+        }
+      );
+      if (response.data.Message === "Hotel Reservation Has Been Created Successfully") {
+        router.push("/");
+      } else {
+        toast.error(response.data.Message);
+      }
+    } catch (error) {
+      setReqLoading(false);
+      const errorMsg = httpErrorHandler(
+        error,
+        t("Booking Failed. Please try again!", {
+          ns: "messages",
+        })
+      );
+      toast.error(errorMsg);
+    }
   };
+
+  useEffect(() => {
+    const fetchRoomPricing = async () => {
+      console.log("herre");
+      const res = await axios.get(
+        `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDate}&checkout=${endDate}`
+      );
+      console.log(res, "res");
+    };
+    fetchRoomPricing();
+  }, [Id, startDate, endDate]);
+
+  const [selectedRooms, setSelectedRooms] = useState([]);
+console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 'color: #007acc;', selectedRooms);
+  useEffect(() => {
+    if (detailsValue) {
+      setSelectedRooms(
+        detailsValue.map((room) => ({
+          id: room.Id,
+          count: 0,
+          extras: [],
+          RoomPrice: room.OriginalTotalPrice,
+          ExtraBedPrice: room.ExtraBedPrice,
+          LunchPrice: room.LunchPrice,
+          DinnerPrice: room.DinnerPrice,
+        }))
+      );
+    }
+  }, [detailsValue]);
+
+  const updateCount = (id, change) => {
+    setSelectedRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room.id === id
+          ? { ...room, count: Math.max(0, room.count + change) }
+          : room
+      )
+    );
+  };
+
+  const toggleExtra = (roomId, extra) => {
+    setSelectedRooms((prevRooms) =>
+      prevRooms.map((room) =>
+        room.id === roomId
+          ? {
+              ...room,
+              extras: room.extras.includes(extra)
+                ? room.extras.filter((e) => e !== extra) // Remove if exists
+                : [...room.extras, extra], // Add if not exists
+            }
+          : room
+      )
+    );
+  };
+
+  const calculateTotalPrice = (room) => {
+    const selectedRoom = selectedRooms.find((r) => r.id === room.Id);
+    if (!selectedRoom) return room.OriginalTotalPrice || 0;
+
+    const basePrice = room.OriginalTotalPrice || 0;
+    const selectedExtras = selectedRoom.extras;
+    const extraCost = selectedExtras.reduce((sum, extra) => {
+      const extraValue = room[extra];
+      return sum + (typeof extraValue === "number" ? extraValue : 0);
+    }, 0);
+
+    return (basePrice + extraCost) * selectedRoom.count;
+  };
+  const [choosenImage, setChoosenImage] = useState();
+  const services = ["ExtraBedPrice", "LunchPrice", "DinnerPrice"];
+  const updateHotelReservationRooms = () => {
+    const HotelReservationRooms = selectedRooms.map(room => {
+      const basePrice = room.RoomPrice || 0
+      const selectedExtras = room.extras
+      const extraCost = selectedExtras.reduce((sum, extra) => {
+        const extraValue = room[extra];
+        return sum + (typeof extraValue === 'number' ? extraValue : 0);
+      }, 0)
+      const totalPrice = (basePrice + extraCost) * room.count
+
+      return {
+        // Id: 0,
+        // HotelReservationId: queryParams.id || 0,
+        HotelRoomId: room.id,
+        RoomPrice: room.RoomPrice,
+        DiscountPrice: 0,
+        ExtraBedPrice: room.extras.includes('ExtraBedPrice') ? room.ExtraBedPrice || 0 : 0,
+        LunchPrice: room.extras.includes('LunchPrice') ? room.LunchPrice || 0 : 0,
+        DinnerPrice: room.extras.includes('DinnerPrice') ? room.DinnerPrice || 0 : 0,
+        TotalPrice: totalPrice,
+        NumberOfRooms: room.count,
+      }
+    })
+
+    setHotelReservationRooms({
+      CheckInDate: startDate,
+      CheckoutDate: endDate,
+      HotelId: Number(Id)|| 0,
+      HotelReservationRooms,
+    })
+  }
+
+  useEffect(() => {
+    updateHotelReservationRooms()
+    // setCompany(hotelReservationRooms)
+  }, [selectedRooms])
+  console.log('%csrc\pages\hotelpackages\[packageId]\index.js:253 hotelReservationRooms', 'color: #007acc;', hotelReservationRooms);
   return (
-    <PageLayout >
+    <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
         <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
           <div>
-            <StarRating filledStars={getStarRating(matchedDetails?.ProperteyRating)} />
+            <StarRating
+              filledStars={getStarRating(PkgDetails?.HotelDetails?.Rating)}
+            />
             <h2 className="font-bold text-base md:text-lg xl:text-xl text-copy">
-              {matchedDetails?.ProperteyName}
+              {PkgDetails?.HotelDetails?.Name}
             </h2>
             <div className="mt-2 flex items-center justify-between sm:flex-col sm:items-start sm:gap-2">
               <p className="text-copy text-sm font-medium xl:text-base">
-                {matchedDetails?.City} , {matchedDetails?.Country}
+                {PkgDetails?.HotelDetails?.CityName} ,{" "}
+                {PkgDetails?.HotelDetails?.CountryName}
               </p>
               <p className="text-copy text-sm font-medium xl:text-base">
-                {calculateNights(startDate, endDate)} {t('Nights')}
+                {calculateNights(startDate, endDate)} {t("Nights")}
               </p>
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between gap-4">
-            <ShareBtn  />
-          </div>
         </div>
-
         <div className="relative aspect-[12/9] sm:aspect-video lg:aspect-[3/1] rounded-md overflow-hidden">
           <Image
             alt="package cover"
-            src={matchedDetails?.HotelPagePhoto || '/bg5.jpg'}
+            src={
+              choosenImage ||
+              `http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
+              "/bg5.jpg"
+            }
             layout="fill"
             className="w-full h-full object-cover"
             priority
           />
         </div>
+        <div className="w-full  flex flex-wrap mt-4  rounded-xl">
+          {PkgDetails?.HotelDetails?.Paths.map((ele) => {
+            return (
+              <div key={ele} className="w-20 h-20 me-4 cursor-pointer rounded-lg ">
+                <Image
+                  alt="package cover"
+                  src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
+                  className="w-20 h-20 object-cover rounded-lg "
+                  width={80}
+                  onClick={() =>
+                    setChoosenImage(`http://gammats.com:7009/be/${ele}`)
+                  }
+                  height={80}
+                />
+              </div>
+            );
+          })}
+        </div>
         <section className="py-2 px-3 bg-white rounded-md text-copy">
           <h3 className="text-sm md:text-base font-bold">
-            {t('Hotel Details')}
+            {t("Hotel Details")}
           </h3>
           <div className="mt-2">
-            {matchedDetails?.Description}
+            <span className="font-bold">Address</span> :{" "}
+            {PkgDetails?.HotelDetails?.Address}
+          </div>
+          <div className="mt-2">
+            <span className="font-bold">Closest Landmark</span> :{" "}
+            {PkgDetails?.HotelDetails?.ClosestLandmark1}
+          </div>
+          <div className="mt-2">
+            <span className="font-bold">Website</span> :{" "}
+            {PkgDetails?.HotelDetails?.Website}
+          </div>
+          <div className="mt-2">
+            <span className="font-bold">Description</span> :{" "}
+            {PkgDetails?.HotelDetails?.Description}
           </div>
         </section>
         {isEmpty(PkgDetails.roomTypes) ? null : (
           <section className="py-4 px-3 bg-white rounded-md text-copy">
             <h3 className="text-sm md:text-base font-bold">
-              {t('Select Room Type')}
+              {t("Select Room Type")}
             </h3>
 
             <div className="mt-3 space-y-5">
@@ -182,55 +342,89 @@ export default function PackageDetailsPage({ PkgDetails, PkgId ,startDate, endDa
               pristine,
               values,
             }) => (
-              <>
-                {PkgDetails.map((data, i) => (
-                  <section className="py-2 px-3 bg-white rounded-md text-copy" key={i}>
-                    <div className='p-4 w-full flex flex-wrap	 bg-white rounded-md sm:flex sm:items-start sm:justify-between'>
-                      <div className='w-1/4'>
-                        <p className="text-copy text-sm font-medium xl:text-base">
-                          {data.RoomTypeName}
-                        </p>
-                      </div>
-                      <div className='w-1/4'>
-                          <p className="text-copy text-sm font-medium xl:text-base">
-                            Price/Night: {data.TotalPrice}
-                          </p>
-                      </div>
-                      <div className="w-1/4 flex items-center justify-between gap-4">
-                      
-                        <div className="px-1 text-sm font-medium text-inputGray flex items-center justify-between">
-                          <p className="text-copy text-sm font-medium xl:text-base">{t('Number of Rooms')}</p>
-                          <div className="flex items-center gap-3 px-3">
-                            <button
-                              type="button"
-                              className="p-1 rounded-full bg-zinc-100"
-                              onClick={() => decrementRooms(i)}
-                            >
-                              <MinusIcon className="w-5 h-5" />
-                            </button>
-                            <span className="font-semibold">{numberOfRooms[i]}</span>
-                            <button
-                              type="button"
-                              className="p-1 rounded-full bg-zinc-100"
-                              onClick={() => incrementRooms(i)}
-                            >
-                              <PlusIcon className="w-5 h-5" />
-                            </button>
+              <div className=" rounded-xl bg-white py-5 px-4">
+                <h1 className="font-bold mb-2">Seasons</h1>
+                {detailsValue?.length ? (
+                  detailsValue.map((room) => {
+                    const selectedRoom = selectedRooms.find(
+                      (r) => r.id === room.Id
+                    ) || {
+                      count: 1,
+                      extras: ["ExtraBedPrice", "LunchPrice", "DinnerPrice"],
+                    };
+
+                    return (
+                      <div
+                        key={room.Id}
+                        className="p-4 mb-4 border rounded-xl bg-[#F0EDF5] shadow-sm"
+                      >
+                        <div className="flex justify-between items-center mb-2">
+                          <h3 className="text-sm ">
+                            {room.RoomType} {t("Room")}
+                          </h3>
+                          <div className="flex gap-4 flex-wrap">
+                            {services.map((service) => {
+                              const isActive =
+                                selectedRoom.extras.includes(service);
+                              const color = isActive
+                                ? "bg-[#6a55a0]  text-white  border-[#6a55a0]  border-white"
+                                : "bg-[#F0EDF5] text-[#6A55A0] border-[#6A55A0] hover:bg-[#6a55a0] hover:text-white";
+
+                              return (
+                                <button
+                                  key={service}
+                                  type="button"
+                                  className={`border px-4 py-2 rounded-xl text-sm ${color}`}
+                                  onClick={() => toggleExtra(room.Id, service)}
+                                >
+                                  {service.replace("Price", "")}
+                                  <br />
+                                  {room[service]} {t("EGP/Night")}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          <div className="flex w-[150px] justify-center items-center flex-col ">
+                            <p className="text-sm ">{t("Total Price")}</p>
+                            <span className="text-sm py-1 font-bold">
+                              {calculateTotalPrice(room)} {t("EGP/Night")}
+                            </span>
+                            <div className="flex justify-center items-center">
+                              <div className="flex items-center gap-2">
+                                <button
+                                  className=""
+                                  type="button"
+                                  onClick={() => updateCount(room.Id, -1)}
+                                >
+                                  {/* <img src={minus} alt="minus" className="mx-1 w-7 h-7" /> */}
+                                  -
+                                </button>
+                                <span className=" text-sm">
+                                  {selectedRoom.count}
+                                </span>
+                                <button
+                                  className=""
+                                  type="button"
+                                  onClick={() => updateCount(room.Id, 1)}
+                                >
+                                  {/* <img src={plus} alt="plus" className="mx-1 w-7 h-7" /> */}
+                                  +
+                                </button>
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        
                       </div>
-                      <div className='w-1/4 flex justify-end'>
-                          <p className="text-copy text-sm font-medium xl:text-base">
-                            Total Price: {data.TotalPrice * numberOfRooms[i]}
-                          </p>
-                        </div>
-                    </div>
-                  </section>
-                ))}
-                <section className="py-2 px-3 bg-white rounded-md text-copy">
+                    );
+                  })
+                ) : (
+                  <p className="text-center text-gray-500">
+                    {t("No rooms available")}
+                  </p>
+                )}
+                                <section className="py-2 px-3 bg-white rounded-md text-copy">
                   {auth.user?.loggedIn ? 
-                    <div className="mt-4 space-y-4 flex flex-col">
+                    <div className="my-2 space-y-4 flex flex-col">
                       <BookingForm
                         handleSubmit={handleSubmit}
                         submitting={submitting}
@@ -240,7 +434,7 @@ export default function PackageDetailsPage({ PkgDetails, PkgId ,startDate, endDa
                       />
                     </div>
                     :
-                    <div className="sm:self-end flex gap-4 items-center justify-center">
+                    <div className="sm:self-end flex gap-4 items-center justify-center my-2">
                       <PopoverBtn
                         triggerElement={
                           <button
@@ -253,8 +447,8 @@ export default function PackageDetailsPage({ PkgDetails, PkgId ,startDate, endDa
                       />
                     </div>
                   }
-                </section>
-              </>
+                </section>   
+                </div>
             )}
           />
         </>
@@ -267,25 +461,24 @@ export async function getServerSideProps(context) {
   const { query, locale } = context;
   let { packageId } = query;
 
-  let PkgId, startDate, endDate;
+  let PkgId, startDate, endDate, Id;
 
-  if (packageId.includes('&')) {
+  if (packageId.includes("&")) {
     const params = new URLSearchParams(packageId);
-    PkgId = params.get('packageId');
-    startDate = params.get('fromDate');
-    endDate = params.get('toDate');
+    PkgId = params.get("packageId");
+    startDate = params.get("fromDate");
+    endDate = params.get("toDate");
+    Id = params.get("Id");
   }
-
-
 
   let resToSend;
   try {
-    const response = await GetHotelDetailsWebsiteContent(PkgId, startDate, endDate, locale);
+    const response = await GetHotelDetailsWebsiteContent(PkgId);
 
-    if (response.data && response.data?.Data) {
-      resToSend = response.data.Data;
+    if (response.data && response.data?.Items) {
+      resToSend = response.data.Items;
     } else {
-      throw new Error('not found');
+      throw new Error("not found");
     }
   } catch (error) {
     return {
@@ -295,12 +488,12 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'messages'])),
+      ...(await serverSideTranslations(locale, ["common", "messages"])),
       PkgDetails: resToSend,
       PkgId,
       startDate,
       endDate,
+      Id,
     },
   };
 }
-

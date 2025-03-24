@@ -14,21 +14,21 @@ const Timeline = ({ tlDetails }) => {
         <Fragment key={i}>
           <div className="ltr:wrapper__date--ltr rtl:wrapper__date--rtl py-3 ltr:pr-5 rtl:pl-5 relative w-2/5 md:w-1/5">
             <p className="relative text-base ltr:text-right rtl:text-left text-main font-semibold">
-              {format(new Date(d.day), 'dd/LL/uuuu')}
+              {format(new Date(d.ActivityDate), 'dd/LL/uuuu')}
             </p>
           </div>
 
-          {d.services.map((service, i) => (
+          {d.ActivityDetails.map((service, i) => (
             <div
               key={i}
               className="ltr:wrapper__time--ltr rtl:wrapper__time--rtl relative py-3 px-4 w-full"
             >
               <p className="ltr:pr-3 ltr:md:pr-5 rtl:pl-3 rtl:md:pl-5 text-copy text-sm font-medium ltr:text-right rtl:text-left">
-                {service.time}
+                {service.ActivityTime}
               </p>
 
               <p className="ltr:pl-3 ltr:md:pl-5 rtl:pr-3 rtl:md:pr-5 text-copy w-full text-sm font-medium">
-                <span>
+                {/* <span>
                   {service.type === 'Flight' ? (
                     <PlaneIcon className="w-5 h-5 text-main" />
                   ) : service.type === 'Hotel' ? (
@@ -36,8 +36,8 @@ const Timeline = ({ tlDetails }) => {
                   ) : service.type === 'Transportation' ? (
                     <BusIcon className="w-5 h-5 text-main" />
                   ) : null}
-                </span>
-                <span className="max-w-3xl">{service.details}</span>
+                </span> */}
+                <span className="max-w-3xl">{service.Description}</span>
               </p>
             </div>
           ))}

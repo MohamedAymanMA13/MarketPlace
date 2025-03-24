@@ -21,8 +21,8 @@ export const ConfigProvider = ({ children }) => {
         loading: t('Fetching configuration tables...'),
 
         success: response => {
-          if (response.data.Data) {
-            setTables(response.data.Data);
+          if (response.data.data) {
+            setTables(response.data.data);
             return <b>{t('Got the config tables')}</b>;
           }
         },

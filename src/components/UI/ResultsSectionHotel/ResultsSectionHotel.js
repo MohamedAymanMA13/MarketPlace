@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 const ResultsSectionHotel = ({ Packages,startDate,endDate, isLoading }) => {
   const router = useRouter();
-
+  console.log(Packages ,"Packages")
   return (
     <div className="mt-4 gap-4 flex flex-col sm:flex-row flex-wrap items-stretch justify-start">
       {isLoading ? (
@@ -18,7 +18,7 @@ const ResultsSectionHotel = ({ Packages,startDate,endDate, isLoading }) => {
       ) : router.pathname === '/hotels' ? (
         Packages?.map(pkg => (
           <TripCardHotel
-            key={pkg.ID}
+            key={pkg.Id}
             additionalClasses="w-full max-w-sm sm:w-72 flex-grow"
             imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
             PkgDetails={pkg}
@@ -29,7 +29,7 @@ const ResultsSectionHotel = ({ Packages,startDate,endDate, isLoading }) => {
       ): router.pathname === '/catering' ? (
         Packages?.map(pkg => (
           <TripCardCatering
-            key={pkg.ID}
+            key={pkg.Id}
             additionalClasses="w-full max-w-sm sm:w-72 flex-grow"
             imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
             PkgDetails={pkg}
@@ -38,14 +38,13 @@ const ResultsSectionHotel = ({ Packages,startDate,endDate, isLoading }) => {
       ):router.pathname === '/transportation' && (
         Packages?.map(pkg => (
           <TripCardTransportation
-            key={pkg.ID}
+            key={pkg.Id}
             additionalClasses="w-full max-w-sm sm:w-72 flex-grow"
             imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
             PkgDetails={pkg}
           />
         ))
       )
-
     }
     </div>
   );

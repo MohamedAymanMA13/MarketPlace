@@ -64,26 +64,27 @@ export default function Home({ response,optionsFontSize }) {
   const submitHandler = async (values) => {
     console.log('Form Submitted:', values);
 
-    const valuesToSubmit = {
-      hotelName: -1,
-      location: values.location || 0 ,
-      rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
-      from_date: startDate.toISOString(),
-      to_date: endDate.toISOString(),
-      // numberOfRooms,
+    // const valuesToSubmit = {
+    //   hotelName: -1,
+    //   location: values.location || 0 ,
+    //   rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
+    //   from_date: startDate.toISOString(),
+    //   to_date: endDate.toISOString(),
+    //   // numberOfRooms,
 
-    };
+    // };
   
-    console.log('Form valuesToSubmit:', valuesToSubmit);
+    // console.log('Form valuesToSubmit:', valuesToSubmit);
 
     router.push({
       pathname: '/hotels',
-      query: valuesToSubmit,
+      query: values,
     });
   };
+  console.log('%csrc\pages\index.js:84 response', 'color: #007acc;', response);
   useEffect(() => {
     // This effect toggles the form visibility based on the response
-    if (response) {
+    if (response?.carouselData?.CarouselImages) {
       setFormVisible(true); // Show the form if response is received
     } else {
       setFormVisible(false); // Hide the form if no response
@@ -95,7 +96,7 @@ export default function Home({ response,optionsFontSize }) {
       async function fetchCities() {
         try {
           const response = await GetCities(selectedCountry);
-          setCities(response.data?.Data);
+          setCities(response.data?.data);
         } catch (error) {
           console.error('Error fetching cities:', error);
         }
@@ -108,7 +109,7 @@ export default function Home({ response,optionsFontSize }) {
   return (
     <PageLayout pageTitle={t('Home Page')}>
       <div className="relative">
-        <TopCarousel Packages={response?.UmrahPackages} />
+        <TopCarousel Packages={response?.carouselData?.CarouselImages} />
 
         {formVisible && (
           <div className="absolute inset-0 flex w-[40%]">
@@ -237,11 +238,13 @@ export default function Home({ response,optionsFontSize }) {
         <h2 className='font-bold text-copy md:text-lg lg:text-2xl'>
           {t('About Us')}
         </h2>
-        <p>{t('Defined as a global network the future technologies that provides innovative tools and smart solutions for Tourism Hail and Umrah rituals')}</p>
-        <p>{t('and Religious landmarks and Historical tourism sector services using the latest artificial intelligence technologies, electronic payment')}</p>
+        <p>{response?.carouselData?.CarouselDescription}</p>
+
+        {/* <p>{t('Defined as a global network the future technologies that provides innovative tools and smart solutions for Tourism Hail and Umrah rituals')}</p> */}
+        {/* <p>{t('and Religious landmarks and Historical tourism sector services using the latest artificial intelligence technologies, electronic payment')}</p>
         <p>{t('methods, digital marketing and technical')}</p>
-        
-        <div className="flex w-full justify-center my-7 space-x-6">
+         */}
+        {/* <div className="flex w-full justify-center my-7 space-x-6">
           <div className="flex flex-col items-center w-4/12">
             <img
               className="h-52 w-52 rounded-full"
@@ -266,22 +269,11 @@ export default function Home({ response,optionsFontSize }) {
             />
             <p className="font-medium text-main text-sm md:text-base lg:text-lg text-center my-2">{t('Hotel Booking')}</p>
           </div>
-        </div>
+        </div> */}
       </section>    
-      <HomeSearchForm />
+      {/* <HomeSearchForm /> */}
 
-      <section className="mt-10 md:mt-16 flex flex-col items-center">
-        <h3 className="font-medium text-main text-sm md:text-base lg:text-lg">
-          {t('Offers')}
-        </h3>
-        <h2 className="font-bold text-copy md:text-lg lg:text-2xl">
-          {t('Our Best Offers')}
-        </h2>
 
-        <div className="mt-6 w-full">
-          <CardsCarousel Packages={response?.BestOffersPackages} />
-        </div>
-      </section>
 
       <section className="mt-16 w-full">
         <h2 className="sr-only">{t('services we have')}</h2>
@@ -291,7 +283,7 @@ export default function Home({ response,optionsFontSize }) {
               <div className="flex flex-col items-center text-white">
                 <UserIcon className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" />
                 <p className="md:mt-2 lg:mt-4 font-bold text-lg md:text-xl lg:text-4xl">
-                  {response.TravelAgencies}
+                  {/* {response.TravelAgencies} */}
                 </p>
                 <p className="font-medium md:text-lg">{t('Agencies')}</p>
               </div>
@@ -299,7 +291,7 @@ export default function Home({ response,optionsFontSize }) {
               <div className="flex flex-col items-center text-white">
                 <PackageIcon className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" />
                 <p className="md:mt-2 lg:mt-4 font-bold text-lg md:text-xl lg:text-4xl">
-                  {response.Packages}
+                  {/* {response.Packages} */}
                 </p>
                 <p className="font-medium md:text-lg">{t('Packages')}</p>
               </div>
@@ -307,7 +299,7 @@ export default function Home({ response,optionsFontSize }) {
               <div className="flex flex-col items-center text-white">
                 <TravelCompanyIcon className="w-14 h-14 md:w-16 md:h-16 lg:w-20 lg:h-20" />
                 <p className="md:mt-2 lg:mt-4 font-bold text-lg md:text-xl lg:text-4xl">
-                  {response.Trips}
+                  {/* {response.Trips} */}
                 </p>
                 <p className="font-medium md:text-lg">{t('Trips')}</p>
               </div>
@@ -318,29 +310,30 @@ export default function Home({ response,optionsFontSize }) {
 
       <section className="mt-10 md:mt-16 flex flex-col items-center">
         <h3 className="font-medium text-main text-sm md:text-base lg:text-lg">
-          {t('Umrah & Hajj')}
+          {t('Offers')}
         </h3>
         <h2 className="font-bold text-copy md:text-lg lg:text-2xl">
-          {t('Do Your Umrah Comfortably')}
+          {t('Our Best Offers')}
         </h2>
 
         <div className="mt-6 w-full">
-          <CardsCarousel Packages={response?.UmrahPackages} withArrows={true} />
+          <CardsCarousel Packages={response?.data} />
         </div>
       </section>
 
-      <NewsletterSection />
+      {/* <NewsletterSection /> */}
     </PageLayout>
   );
 }
 
 export async function getServerSideProps(context) {
   const { locale } = context;
+ 
   const response = await fetchHomeData(locale);
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common', 'messages'])),
-      response: response.data.Data,
+      response: response.data,
     },
   };
 }

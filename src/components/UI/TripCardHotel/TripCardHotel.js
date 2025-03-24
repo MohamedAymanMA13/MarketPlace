@@ -18,40 +18,38 @@ const TripCardFlight = ({
   const { locale } = useRouter();
   
   const getStarRating = (rating) => {
-    const match = rating?.match(/(\d+)\s*Star/);
-    return match ? parseInt(match[1], 10) : 0; // Default to 0 if no match found
+    return rating
   };
 
   const PkgCurrency = "EGP";
-  console.log('%csrc\components\UI\TripCardFlight\TripCardFlight.js:26 object', 'color: #007acc;', PkgDetails);
   return (
     <div
     className={`relative bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center flex flex-col w-full `}
   >
     
-          <div className="flex">
+          <div className="flex w-full">
         {/* Airline logo and info */}
-        <div className="flex-shrink-0 ">
+        <div className="flex-shrink-0 h-[170px] w-1/3 ">
           {/* <Link href={`/flightpackage/packageId=${PkgDetails?.AircraftTypeID}&ID=${PkgDetails?.ID}&DepartureAirport=${PkgDetails?.DepartureAirport}&ArrivalAirport=${PkgDetails?.ArrivalAirport}&AircraftType=${PkgDetails?.AircraftType}&BusinessClassPrice=${PkgDetails?.BusinessClassPrice}&EconomyClassPrice=${PkgDetails?.EconomyClassPrice}`}> */}
             <img
-              className="h-100 w-72 object-contain"
-              src={PkgDetails?.HotelPagePhoto || '/hotel1.jpg'}
-              alt={PkgDetails?.ProperteyName}
+              className="h-full w-full object-cover"
+              src={`http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` || '/hotel1.jpg'}
+              alt={PkgDetails?.HotelDetails?.Name}
             />
           {/* </Link> */}
         </div>
 
         {/* Flight details */}
         <div className="flex-grow p-4 border-r border-blue-200 ">
-        <StarRating filledStars={getStarRating(PkgDetails?.ProperteyRating)} />
+        <StarRating filledStars={getStarRating(PkgDetails?.HotelDetails?.Rating)} />
 
           <div className='py-2'>
             <p className="font-bold first-letter:uppercase ">
-              {PkgDetails?.ProperteyName}
+              {PkgDetails?.HotelDetails?.Name}
             </p>
           </div>
           <div className="flex justify-between text-main py-1">
-          {PkgDetails?.City} , {PkgDetails?.Country}
+          {PkgDetails?.HotelDetails?.CityName} , {PkgDetails?.HotelDetails?.CountryName}
           </div>
           
 {/* 
@@ -73,10 +71,10 @@ const TripCardFlight = ({
 
         {/* Price and Booking */}
         <div className="p-4 flex flex-col items-center justify-center bg-blue-50">
-          <p className="text-2xl font-semibold text-main">{moneyRenderer(locale, PkgCurrency, PkgDetails?.DisplayPrice)}</p>
+          <p className="text-2xl font-semibold text-main">{moneyRenderer(locale, PkgCurrency, 400)}</p>
           <p className="text-sm text-gray-600">Price Start</p>
           {/* <button className="mt-4 px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700">Check Details & Book</button> */}
-          <Link href={`/hotelpackages/packageId=${PkgDetails?.ID}&fromDate=${startDate}&toDate=${endDate}`}>
+          <Link href={`/hotelpackages/packageId=${PkgDetails?.SeasonDetails?.Id}&Id=${PkgDetails?.HotelDetails?.Id}&fromDate=${startDate}&toDate=${endDate}`}>
             <a className="block py-2 px-4 mt-4 w-full bg-main text-white font-medium text-sm text-center rounded-md">
               {t('Check & Book Now')}
             </a>

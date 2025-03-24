@@ -52,16 +52,15 @@ export default function SignIn() {
               <form onSubmit={handleSubmit} className="mt-5 w-full max-w-xs">
                 <div className="flex flex-col w-full">
                   <Field
-                    name="username"
+                    name="Username"
                     component={TextField}
                     placeholder="Email"
-                    validate={composeValidators(required, emailAddress)}
-                  />
+                    validate={required}                  />
                 </div>
 
                 <div className="flex flex-col w-full">
                   <Field
-                    name="password"
+                    name="Password"
                     component={PasswordField}
                     placeholder="Password"
                     validate={required}
