@@ -51,9 +51,9 @@ export default function PackageDetailsPage({
       'color: #007acc;',
       {
         reservationHotelCompanions: values.reservationPackageCompanions,
-        id: ID,
-        price:selectedClass.price,
-        className:selectedClass.name
+        FlightTravelId: Number(ID),
+        Price: Number(selectedClass.price),
+        ClassName:selectedClass.name
 
       }
     );
@@ -61,13 +61,14 @@ export default function PackageDetailsPage({
     try {
       setReqLoading(true);
       const response = await axios.post('/Flight/AddFlightWebsiteReservation', {
-        reservationHotelCompanions: values.reservationPackageCompanions,
-        id: ID,
-        price:selectedClass.price,
-        className:selectedClass.name
+        reservationFlightCompanions: values.reservationPackageCompanions,
+        FlightTravelId: +ID,
+        Price: +selectedClass.price,
+        ClassName:selectedClass.name
+
       }, {
         headers: {
-          authorization: 'Bearer ' + auth.user.AccessToken,
+          authorization: 'Bearer ' + auth.user.Token,
         },
       });
       if (response.data.Data) {

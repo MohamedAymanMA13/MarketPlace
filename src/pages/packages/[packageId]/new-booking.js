@@ -53,9 +53,9 @@ export default function NewBooking() {
       //     authorization: 'Bearer ' + auth.user.AccessToken,
       //   },
       // });
-      const response = await axios.post('/Package/AddPackageReservation', {...values,totalPrice: +pkgDetails.PkgPrice * values.reservationPackageCompanions.length,packageId: router.query.packageId},{
+      const response = await axios.post('/Reservations/PackageReservation/MarketPlace', {...values,Price: +pkgDetails.Price ,TotalPrice: +pkgDetails.Price * values.reservationPackageCompanions.length,PackageId: Number(router.query.packageId)},{
         headers: {
-          authorization: 'Bearer ' + auth.user.AccessToken,
+          authorization: 'Bearer ' + auth.user.Token,
         },
       });
       if (response.data === "Success") {
@@ -100,10 +100,10 @@ export default function NewBooking() {
     const fetcher = async PkgId => {
       setDetailLoading(true);
       try {
-        const response = await fetchPackageById(PkgId, router.locale);
+        const response = await fetchPackageById(PkgId);
 
-        if (response.data.Data) {
-          setPkgDetails(response.data.Data);
+        if (response.data.Items) {
+          setPkgDetails(response.data.Items);
         }
         setDetailLoading(false);
       } catch (error) {
@@ -124,7 +124,7 @@ export default function NewBooking() {
       console.log(' 🏧 no fetching! ');
     }
   }, [auth, router, t]);
-
+console.log('%csrc\pages\packages\[packageId]\new-booking.js:127 PkgDetails', 'color: #007acc;', pkgDetails);
   return (
     <PageLayout
       pageTitle={

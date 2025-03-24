@@ -60,19 +60,21 @@ console.log('%csrc\pages\transportationpackages\[packageId]\index.js:52 matchedD
 
   const submitHandler = async values => {
     console.log('%csrc\pages\cateringpackages\[packageId]\index.js:95 {...values, id: PkgDetails.ID ,startDate, endDate}', 'color: #007acc;', {
-      values,
-      id: PkgId,
+      NumberOfSeats:Number(values.NumberOfSeats),
+      TransportationTravelId: Number(PkgId),
+      Price:Number(matchedDetails.Price)
 
     });
   
     try {
       setReqLoading(true);
       const response = await axios.post('/Transportation/AddTransportationWebsiteReservation', {
-        values,
-        id: PkgId,
+        NumberOfSeats:Number(values.NumberOfSeats),
+        TransportationTravelId: Number(PkgId),
+        Price:Number(matchedDetails.Price)
       }, {
         headers: {
-          authorization: 'Bearer ' + auth.user.AccessToken,
+          authorization: 'Bearer ' + auth.user.Token,
         },
       });
   
@@ -161,7 +163,7 @@ console.log('%csrc\pages\transportationpackages\[packageId]\index.js:52 matchedD
                   <div className='w-full flex flex-wrap items-center justify-center'>
                     <div className='w-2/6'>
                       <Field
-                        name="arrivalCountryId"
+                        name="NumberOfSeats"
                         component={TextField}
                         label="No. Of Seats"
                         // validate={required}
