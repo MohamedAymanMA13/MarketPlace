@@ -46,7 +46,7 @@ const TripCardTransportation = ({
         <a className={`block relative ${imgAspectRatio}`}>
           <Image
             alt={`${PkgDetails?.Name || 'Transportation'} cover`}
-            src={`http://gammats.com:7009/be/${PkgDetails?.Photo}` || '/transportationcards.jpg'}
+            src={ '/transportationcards.jpg'}
             layout="fill"
             className="w-full h-full object-cover"
             priority={true}

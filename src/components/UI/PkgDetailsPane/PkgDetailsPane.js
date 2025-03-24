@@ -44,7 +44,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
     if (!detailLoading && !isEmpty(PkgDetails)) {
       // * no query and no rooms
       if (!query.roomType && isEmpty(PkgDetails.roomTypes)) {
-        setSelectedPrice(PkgDetails.PkgPrice);
+        setSelectedPrice(PkgDetails.Price);
         setSelectedRoom(undefined);
 
         // * with rooms
@@ -71,6 +71,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
       }
     }
   }, [detailLoading, PkgDetails, query]);
+  const PkgCurrency = "EGP";
 
   return (
     <>
@@ -87,7 +88,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
           <div className="relative aspect-video lg:aspect-[2/1] rounded-md overflow-hidden">
             <Image
               alt={`${PkgDetails.PkgTitle} cover`}
-              src={PkgDetails.PkgPhoto || '/bg5.jpg'}
+              src={`http://gammats.com:7009/be/${PkgDetails.PackageImage}`|| '/bg5.jpg'}
               layout="fill"
               className="w-full h-full object-cover"
               priority
@@ -97,12 +98,12 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
           <div className="px-1 mt-4 space-y-1">
             <StarRating filledStars={PkgDetails.PkgClass} />
             <h2 className="font-bold text-base lg:text-lg text-copy">
-              {PkgDetails.PkgTitle}
+              {PkgDetails.Name}
             </h2>
 
-            <p className="text-copy text-xs font-medium xl:text-base">
+            {/* <p className="text-copy text-xs font-medium xl:text-base">
               {PkgDetails.NoOfNights} {t('Nights')}
-            </p>
+            </p> */}
           </div>
 
           <hr className="my-4 bg-gray-200" />
@@ -135,7 +136,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
                   {t('Price')}
                 </p>
                 <p className="text-copy text-sm font-semibold">
-                  {moneyRenderer(locale, PkgDetails.PkgCurrency, selectedPrice)}
+                  {moneyRenderer(locale, PkgCurrency, selectedPrice)}
                 </p>
               </div>
               <div className="flex items-center justify-between">
@@ -143,7 +144,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
                   {t('Total Price')}
                 </p>
                 <p className="text-main text-base font-semibold">
-                  {moneyRenderer(locale, PkgDetails.PkgCurrency, totalPrice)}
+                  {moneyRenderer(locale, PkgCurrency, totalPrice)}
                 </p>
               </div>
             </div>

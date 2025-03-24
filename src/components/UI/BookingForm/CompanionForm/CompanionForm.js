@@ -40,7 +40,7 @@ const CompanionForm = ({ comp, index, change }) => {
 
         <div className="flex flex-col w-full">
           <Field
-            name={`${comp}.passportNo`}
+            name={`${comp}.PassportNumber`}
             label="Passport No."
             component={TextField}
             placeholder="Passport No."

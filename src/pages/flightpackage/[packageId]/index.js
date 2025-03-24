@@ -55,30 +55,33 @@ export default function PackageDetailsPage({
       "%csrc\\pages\\hotelpackages\\[packageId]\\index.js:90 values",
       "color: #007acc;",
       {
-        reservationHotelCompanions: values.reservationPackageCompanions,
-        id: ID,
-        price: selectedClass.price,
-        className: selectedClass.name,
+        ReservationFlightCompanions: values.reservationPackageCompanions,
+        FlightTravelId: Number(ID),
+        Price: Number(selectedClass.price),
+        ClassName: selectedClass.name,
       }
     );
 
     try {
       setReqLoading(true);
       const response = await axios.post(
-        "/Flight/AddFlightWebsiteReservation",
+        "/Reservations/flight/MarketPlace",
         {
-          reservationHotelCompanions: values.reservationPackageCompanions,
-          id: ID,
-          price: selectedClass.price,
-          className: selectedClass.name,
+          ReservationFlightCompanions: values.reservationPackageCompanions,
+          FlightTravelId: +ID,
+          Price: +selectedClass.price,
+          ClassName: selectedClass.name,
         },
         {
           headers: {
-            authorization: "Bearer " + auth.user.AccessToken,
+            authorization: "Bearer " + auth.user.Token,
           },
         }
       );
-      if (response.data.Data) {
+      if (
+        response.data.Message ===
+        "Flight Reservation Has Been Created Successfully"
+      ) {
         router.push("/"); // Redirect to homepage
       } else {
         toast.error(response.data.Message); // Show error message

@@ -38,6 +38,7 @@ export default function PackageDetailsPage({
   // const [matchedDetails, setMatchedDetails] = useState(null);
   // const [numberOfRooms, setNumberOfRooms] = useState(PkgDetails.map(() => 0));
   const [reqLoading, setReqLoading] = useState(false);
+  const [hotelReservationRooms, setHotelReservationRooms] = useState({});
 
   // const valuesToSubmit = {
   //   hotelName: -1,
@@ -97,45 +98,35 @@ export default function PackageDetailsPage({
       )
     );
   };
-  console.log(
-    "%csrcpageshotelpackages[packageId]index.js:84 detailsValue",
-    "color: #007acc;",
-    startDate,
-    endDate
-  );
+
   const submitHandler = async (values) => {
-    const roomTypes = PkgDetails.map((data, i) => ({
-      roomId: data.ID, // Assuming RoomTypeId is the correct field in PkgDetails
-      numberOfRooms: numberOfRooms[i],
-      price: data.TotalPrice, // Total price for the rooms selected
-    })).filter((room) => room.numberOfRooms > 0); // Only include rooms that have been selected
-
-    useEffect(async () => {
-      console.log("herre");
-      const res = await axios.get(
-        `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDate}&checkout=${endDate}`
-      );
-      console.log(res, "res");
-    }, []);
-
+    console.log(
+      "%csrcpageshotelpackages[packageId]index.js:84 detailsValue",
+      "color: #007acc;",
+      {
+        ...hotelReservationRooms,
+        reservationHotelCompanions: values.reservationPackageCompanions,
+      }
+    );
     try {
       setReqLoading(true);
       const response = await axios.post(
-        "/Hotel/AddHotelWebsiteReservation",
+        "/Reservations/hotel/MarketPlace",
+
         {
+          ...hotelReservationRooms,
           reservationHotelCompanions: values.reservationPackageCompanions,
-          hotelID: matchedDetails.ID,
-          roomTypes,
-          startDate,
-          endDate,
         },
         {
           headers: {
-            authorization: "Bearer " + auth.user.AccessToken,
+            authorization: "Bearer " + auth.user.Token,
           },
         }
       );
-      if (response.data.Data) {
+      if (
+        response.data.Message ===
+        "Hotel Reservation Has Been Created Successfully"
+      ) {
         router.push("/");
       } else {
         toast.error(response.data.Message);
@@ -152,8 +143,23 @@ export default function PackageDetailsPage({
     }
   };
 
-  const [selectedRooms, setSelectedRooms] = useState([]);
+  useEffect(() => {
+    const fetchRoomPricing = async () => {
+      console.log("herre");
+      const res = await axios.get(
+        `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDate}&checkout=${endDate}`
+      );
+      console.log(res, "res");
+    };
+    fetchRoomPricing();
+  }, [Id, startDate, endDate]);
 
+  const [selectedRooms, setSelectedRooms] = useState([]);
+  console.log(
+    "%csrcpageshotelpackages[packageId]index.js:159 selectedRooms",
+    "color: #007acc;",
+    selectedRooms
+  );
   useEffect(() => {
     if (detailsValue) {
       setSelectedRooms(
@@ -210,7 +216,53 @@ export default function PackageDetailsPage({
   };
   const [choosenImage, setChoosenImage] = useState();
   const services = ["ExtraBedPrice", "LunchPrice", "DinnerPrice"];
+  const updateHotelReservationRooms = () => {
+    const HotelReservationRooms = selectedRooms.map((room) => {
+      const basePrice = room.RoomPrice || 0;
+      const selectedExtras = room.extras;
+      const extraCost = selectedExtras.reduce((sum, extra) => {
+        const extraValue = room[extra];
+        return sum + (typeof extraValue === "number" ? extraValue : 0);
+      }, 0);
+      const totalPrice = (basePrice + extraCost) * room.count;
 
+      return {
+        // Id: 0,
+        // HotelReservationId: queryParams.id || 0,
+        HotelRoomId: room.id,
+        RoomPrice: room.RoomPrice,
+        DiscountPrice: 0,
+        ExtraBedPrice: room.extras.includes("ExtraBedPrice")
+          ? room.ExtraBedPrice || 0
+          : 0,
+        LunchPrice: room.extras.includes("LunchPrice")
+          ? room.LunchPrice || 0
+          : 0,
+        DinnerPrice: room.extras.includes("DinnerPrice")
+          ? room.DinnerPrice || 0
+          : 0,
+        TotalPrice: totalPrice,
+        NumberOfRooms: room.count,
+      };
+    });
+
+    setHotelReservationRooms({
+      CheckInDate: startDate,
+      CheckoutDate: endDate,
+      HotelId: Number(Id) || 0,
+      HotelReservationRooms,
+    });
+  };
+
+  useEffect(() => {
+    updateHotelReservationRooms();
+    // setCompany(hotelReservationRooms)
+  }, [selectedRooms]);
+  console.log(
+    "%csrcpageshotelpackages[packageId]index.js:253 hotelReservationRooms",
+    "color: #007acc;",
+    hotelReservationRooms
+  );
   return (
     <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
@@ -249,7 +301,10 @@ export default function PackageDetailsPage({
         <div className="w-full  flex flex-wrap mt-4  rounded-xl">
           {PkgDetails?.HotelDetails?.Paths.map((ele) => {
             return (
-              <div className="w-20 h-20  me-4 cursor-pointer rounded-lg ">
+              <div
+                key={ele}
+                className="w-20 h-20 me-4 cursor-pointer rounded-lg "
+              >
                 <Image
                   alt="package cover"
                   src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
@@ -392,16 +447,32 @@ export default function PackageDetailsPage({
                     {t("No rooms available")}
                   </p>
                 )}
-                <div className="w-full flex justify-center ">
-                  <Link
-                    className="w-[220px] mx-auto"
-                    href={`${router.asPath}/new-booking`}
-                  >
-                    <a className="block py-2 w-[220px] sm:px-8  bg-main text-white font-medium text-sm text-center rounded-md">
-                      {t("Book Now")}
-                    </a>
-                  </Link>
-                </div>
+                <section className="py-2 px-3 bg-white rounded-md text-copy">
+                  {auth.user?.loggedIn ? (
+                    <div className="my-2 space-y-4 flex flex-col">
+                      <BookingForm
+                        handleSubmit={handleSubmit}
+                        submitting={submitting}
+                        pristine={pristine}
+                        reqLoading={reqLoading}
+                        change={change}
+                      />
+                    </div>
+                  ) : (
+                    <div className="sm:self-end flex gap-4 items-center justify-center my-2">
+                      <PopoverBtn
+                        triggerElement={
+                          <button
+                            type="button"
+                            className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {t("Book Now")}
+                          </button>
+                        }
+                      />
+                    </div>
+                  )}
+                </section>
               </div>
             )}
           />
