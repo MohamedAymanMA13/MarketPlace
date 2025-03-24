@@ -1,19 +1,19 @@
-import { PageLayout } from 'components/layout';
+import { PageLayout } from "components/layout";
 
-import { aboutUs } from 'utils/constants/static.constants';
+import { aboutUs } from "utils/constants/static.constants";
 
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
 
 export default function AboutUs({ response }) {
   const { t } = useTranslation();
 
   return (
-    <PageLayout pageTitle={t('About Us')}>
+    <PageLayout pageTitle={t("About Us")}>
       <section className="relative w-full h-32 md:h-48 lg:h-60 bg-about bg-cover bg-center bg-no-repeat">
         <div className="bg-main/30 w-full h-full flex items-center">
           <h2 className="px-6 md:px-8 lg:px-16 text-2xl md:text-3xl lg:text-4xl text-white font-bold">
-            {t('About Us')}
+            {t("About Us")}
           </h2>
         </div>
       </section>
@@ -40,7 +40,7 @@ export async function getStaticProps(context) {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'messages'])),
+      ...(await serverSideTranslations(locale, ["common", "messages"])),
       response: aboutUs[locale],
     },
   };

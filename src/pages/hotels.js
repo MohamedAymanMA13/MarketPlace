@@ -133,7 +133,9 @@ export default function Hotels({ response, optionsFontSize }) {
             <form onSubmit={handleSubmit} id="hotel_form">
               <div className="px-3 pb-4 md:pb-6 lg:pb-8 md:px-6 lg:px-8 mx-4 sm:mx-auto mt-4 md:mt-6 lg:mt-8 gap-4 grid grid-cols-1 sm:grid-cols-[208px_1fr] md:grid-cols-[240px_1fr] lg:grid-cols-[288px_1fr]">
                 <section
-                  className={`py-4 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col `}
+                  className={`py-4 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col ${
+                    isOpen ? "w-72" : "w-full"
+                  }`}
                 >
                   <h3 className="font-bold text-sm md:text-base lg:text-lg">
                     {t("Filters")}
