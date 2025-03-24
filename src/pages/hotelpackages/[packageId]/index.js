@@ -98,19 +98,19 @@ export default function PackageDetailsPage({
       )
     );
   };
-  console.log(
-    "%csrcpageshotelpackages[packageId]index.js:84 detailsValue",
-    "color: #007acc;",
-    hotelReservationRooms
-  );
-  const submitHandler = async (values) => {
 
+  const submitHandler = async (values) => {
+    console.log(
+      "%csrcpageshotelpackages[packageId]index.js:84 detailsValue",
+      "color: #007acc;",
+      {...hotelReservationRooms,reservationHotelCompanions: values.reservationPackageCompanions,},
+    );
     try {
       setReqLoading(true);
       const response = await axios.post(
         "/Reservations/hotel/MarketPlace",
         
-          hotelReservationRooms
+        {...hotelReservationRooms,reservationHotelCompanions: values.reservationPackageCompanions}
        ,
         {
           headers: {
@@ -422,58 +422,32 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
                     {t("No rooms available")}
                   </p>
                 )}
-                {auth.user?.loggedIn ? 
-                      <div className=" flex  items-center justify-center">
-                        <div className='w-2/6'>
+                                <section className="py-2 px-3 bg-white rounded-md text-copy">
+                  {auth.user?.loggedIn ? 
+                    <div className="my-2 space-y-4 flex flex-col">
+                      <BookingForm
+                        handleSubmit={handleSubmit}
+                        submitting={submitting}
+                        pristine={pristine}
+                        reqLoading={reqLoading}
+                        change={change}
+                      />
+                    </div>
+                    :
+                    <div className="sm:self-end flex gap-4 items-center justify-center my-2">
+                      <PopoverBtn
+                        triggerElement={
                           <button
                             type="button"
-                            onClick={handleSubmit} // Call handleSubmit here
-                            className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center  bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                            {reqLoading ? (
-                              <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className='animate-spin h-5 w-5 mr-3 text-main'
-                              fill="none"
-                              viewBox="0 0 24 24"
-                            >
-                              <circle
-                                className="opacity-25"
-                                cx="12"
-                                cy="12"
-                                r="10"
-                                stroke="currentColor"
-                                strokeWidth="4"
-                              ></circle>
-                              <path
-                                className="opacity-75"
-                                fill="currentColor"
-                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                              ></path>
-                            </svg>
-                            ) : (
-                              t('Book Now')
-                            )}
+                            className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {t('Book Now')}
                           </button>
-                        </div>
-                      </div>
-                      :
-                      <div className=" flex  items-center justify-center">
-                        <div className='w-2/6'>
-                          <PopoverBtn
-                            triggerElement={
-                              <button
-                                type="button"
-                                className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center  bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                              >
-                                {t('Book Now')}
-                              </button>
-                            }
-                          />
-                        </div>
-                        
+                        }
+                      />
                     </div>
-                    }   
+                  }
+                </section>   
                 </div>
             )}
           />

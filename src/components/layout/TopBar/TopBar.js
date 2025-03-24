@@ -121,7 +121,7 @@ const TopBar = () => {
         <Link href="http://gammats.com:7005/">
           <a
             className={`nav__item nav__link ${
-              pathname === '/transportation'
+              pathname === '/Events'
                 ? 'text-main nav__link--active'
                 : 'text-copy'
             }`}

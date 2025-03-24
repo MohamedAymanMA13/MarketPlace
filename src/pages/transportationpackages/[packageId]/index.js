@@ -68,7 +68,7 @@ console.log('%csrc\pages\transportationpackages\[packageId]\index.js:52 matchedD
   
     try {
       setReqLoading(true);
-      const response = await axios.post('/Transportation/AddTransportationWebsiteReservation', {
+      const response = await axios.post('/Reservations/transportation/MarketPlace', {
         NumberOfSeats:Number(values.NumberOfSeats),
         TransportationTravelId: Number(PkgId),
         Price:Number(matchedDetails.Price)
@@ -80,7 +80,7 @@ console.log('%csrc\pages\transportationpackages\[packageId]\index.js:52 matchedD
   
       console.log('%csrc\pages\cateringpackages\[packageId]\index.js:99 response.data.Data', 'color: #007acc;', response.data.Data);
   
-      if (response.data.Data) {
+      if (response.data.Message === "Transportation Reservation Has Been Created Successfully") {
         router.push('/');  // Redirect to homepage
       } else {
         toast.error(response.data.Message);  // Show error message

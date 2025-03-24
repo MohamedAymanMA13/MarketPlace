@@ -58,7 +58,7 @@ export default function NewBooking() {
           authorization: 'Bearer ' + auth.user.Token,
         },
       });
-      if (response.data === "Success") {
+      if (response.data.Message === "Package Reservation Created Successfully.") {
         router.push('/');  // Redirect to homepage
       } else {
         toast.error(response.data.Message);  // Show error message
