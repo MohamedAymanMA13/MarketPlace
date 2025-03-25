@@ -155,7 +155,7 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
           id: room.Id,
           count: 0,
           extras: [],
-          RoomPrice: room.OriginalTotalPrice,
+          RoomPrice: room.DiscountTotalPrice !== 0 ? room.DiscountTotalPrice : room.OriginalTotalPrice,
           ExtraBedPrice: room.ExtraBedPrice,
           LunchPrice: room.LunchPrice,
           DinnerPrice: room.DinnerPrice,
@@ -193,7 +193,7 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
     const selectedRoom = selectedRooms.find((r) => r.id === room.Id);
     if (!selectedRoom) return room.OriginalTotalPrice || 0;
 
-    const basePrice = room.OriginalTotalPrice || 0;
+    const basePrice = room.DiscountTotalPrice !== 0 ? room.DiscountTotalPrice : room.OriginalTotalPrice || 0;
     const selectedExtras = selectedRoom.extras;
     const extraCost = selectedExtras.reduce((sum, extra) => {
       const extraValue = room[extra];
@@ -206,7 +206,7 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
   const services = ["ExtraBedPrice", "LunchPrice", "DinnerPrice"];
   const updateHotelReservationRooms = () => {
     const HotelReservationRooms = selectedRooms.map(room => {
-      const basePrice = room.RoomPrice || 0
+      const basePrice = room.DiscountTotalPrice !== 0 ? room.DiscountTotalPrice : room.OriginalTotalPrice || 0; // Updated line
       const selectedExtras = room.extras
       const extraCost = selectedExtras.reduce((sum, extra) => {
         const extraValue = room[extra];
@@ -240,7 +240,6 @@ console.log('%csrc\pages\hotelpackages\[packageId]\index.js:159 selectedRooms', 
     updateHotelReservationRooms()
     // setCompany(hotelReservationRooms)
   }, [selectedRooms])
-  console.log('%csrc\pages\hotelpackages\[packageId]\index.js:253 hotelReservationRooms', 'color: #007acc;', hotelReservationRooms);
   return (
     <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
