@@ -1,9 +1,9 @@
-import { TripCardFlight, Spinner } from '..';
-import { isEmpty } from 'lodash';
+import { TripCardFlight, Spinner } from "..";
+import { isEmpty } from "lodash";
 
 const ResultsSectionFlight = ({ Packages, isLoading }) => {
   return (
-    <div className="mt-4 gap-4 flex flex-col sm:flex-row flex-wrap items-stretch justify-start">
+    <div className=" gap-4 flex flex-col sm:flex-row flex-wrap items-stretch justify-start">
       {isLoading ? (
         <div className="my-10 w-full flex items-center justify-center">
           <Spinner />
@@ -13,7 +13,7 @@ const ResultsSectionFlight = ({ Packages, isLoading }) => {
           No packages available!
         </p>
       ) : (
-        Packages?.map(pkg => (
+        Packages?.map((pkg) => (
           <TripCardFlight
             key={pkg.Id}
             additionalClasses="w-full max-w-sm sm:w-72 flex-grow"

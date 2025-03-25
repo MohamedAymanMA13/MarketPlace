@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 import {
   CarouselProvider,
@@ -8,11 +8,11 @@ import {
   Dot,
   ButtonBack,
   ButtonNext,
-} from 'pure-react-carousel';
-import 'pure-react-carousel/dist/react-carousel.es.css';
-import Link from 'next/link';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/outline';
-import { useTranslation } from 'next-i18next';
+} from "pure-react-carousel";
+import "pure-react-carousel/dist/react-carousel.es.css";
+import Link from "next/link";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/outline";
+import { useTranslation } from "next-i18next";
 
 const TopCarousel = ({ Packages }) => {
   const { t } = useTranslation();
@@ -32,21 +32,21 @@ const TopCarousel = ({ Packages }) => {
       totalSlides={Packages?.length}
       visibleSlides={1}
       isIntrinsicHeight={true}
+      className="h-full"
       currentSlide={currentSlide} // Control the current slide
     >
-      <div className="">
+      <div style={{ height: "100%" }} className="">
         <Slider>
-          
           {Packages?.map((pkg, i) => (
-            <Slide key={pkg?.Id} index={i}>
+            <Slide className="h-full" key={pkg?.Id} index={i}>
               <Image
                 isBgImage
                 // tag="div"
-                src={`http://gammats.com:7009/be/${pkg?.Image}` || '/bg2.jpg'}
+                src={`http://gammats.com:7009/be/${pkg?.Image}` || "/bg2.jpg"}
                 alt={`${pkg?.PkgTitle} cover`}
-                className="aspect-[12/10] sm:aspect-[21/10]"
-              >
-              </Image>
+                className="aspect-[12/10] object-cover h-full sm:aspect-[21/10]"
+                style={{ height: "100vh" }}
+              ></Image>
             </Slide>
           ))}
         </Slider>
@@ -77,7 +77,7 @@ const TopCarousel = ({ Packages }) => {
               slide={i}
               disabled={false}
               className={`w-3 h-3 rounded-full ${
-                currentSlide === i ? 'bg-white' : 'bg-gray-300'
+                currentSlide === i ? "bg-white" : "bg-gray-300"
               }`}
               onClick={() => setCurrentSlide(i)}
             />
