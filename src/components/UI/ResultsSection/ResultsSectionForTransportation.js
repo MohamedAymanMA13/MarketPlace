@@ -9,7 +9,7 @@ const ResultsSectionForTransportation = ({
   kind,
 }) => {
   return (
-    <div className="mt-4 gap-4 flex flex-col sm:flex-row flex-wrap items-center justify-start">
+    <div className="mt-4 gap-4 h-[170px] flex flex-col sm:flex-row flex-wrap items-center justify-start">
       {isLoading ? (
         <div className="my-10 w-full flex items-center justify-center">
           <Spinner />
@@ -36,7 +36,7 @@ const ResultsSectionForTransportation = ({
                   <TransportaitonCard
                     kind={kind}
                     key={pkg.Id}
-                    additionalClasses="w-72 asd mb-2  md:w-full md:max-w-none p-0"
+                    additionalClasses="md:w-72 w-full mb-2   md:max-w-none p-0"
                     imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
                     PkgDetails={pkg}
                     forPackageDetails={forPackageDetails}
@@ -46,7 +46,7 @@ const ResultsSectionForTransportation = ({
                   <TransportaitonCard
                     kind={kind}
                     key={pkg.Id}
-                    additionalClasses="w-72  mb-2   md:w-full md:max-w-none p-0"
+                    additionalClasses="md:w-72 w-full mb-2    md:max-w-none p-0"
                     imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
                     PkgDetails={pkg}
                     forPackageDetails={forPackageDetails}

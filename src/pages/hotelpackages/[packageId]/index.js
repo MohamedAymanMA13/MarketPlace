@@ -6,7 +6,7 @@ import { RoomTypeSec, StarRating, Timeline } from "components/UI";
 import HeartBtn from "components/UI/HeartBtn/HeartBtn";
 import ShareBtn from "components/UI/ShareBtn/ShareBtn";
 import BookingForm from "components/UI/BookingForm/BookingForm";
-import { Form } from "react-final-form";
+import { Field, Form } from "react-final-form";
 import arrayMutators from "final-form-arrays";
 import { useAuth } from "hooks/useAuth";
 import { axios_instance as axios } from "apis/axios-instance";
@@ -20,15 +20,20 @@ import {
   GetHotelDetailsWebsiteContent,
   searchHotels,
 } from "apis/services/packages";
+import "react-datepicker/dist/react-datepicker.css";
+
 import { isEmpty } from "lodash";
 import { PopoverBtn } from "components/UI";
 import { URLSearchParams } from "next/dist/compiled/@edge-runtime/primitives/url";
+import { SelectField } from "components/form";
+import DatePicker from "react-datepicker";
 
 export default function PackageDetailsPage({
   PkgDetails,
   Id,
   startDate,
   endDate,
+  optionsFontSize,
 }) {
   const { t } = useTranslation();
   const router = useRouter();
@@ -40,6 +45,14 @@ export default function PackageDetailsPage({
   const [reqLoading, setReqLoading] = useState(false);
   const [hotelReservationRooms, setHotelReservationRooms] = useState({});
 
+  const [startDateState, setStartDateState] = useState(
+    startDate ? new Date(startDate) : null
+  );
+  const [endDateState, setEndDateState] = useState(
+    endDate ? new Date(endDate) : null
+  );
+  const [handleSubmit, setHandleSubmit] = useState(false);
+
   // const valuesToSubmit = {
   //   hotelName: -1,
   //   location: 0,
@@ -47,21 +60,30 @@ export default function PackageDetailsPage({
   //   from_date: startDate,
   //   to_date: endDate,
   // };
-
+  // here   
   useEffect(() => {
     async function fetchDetails() {
       try {
+        // Format dates to ISO string format
+        const formattedStartDate = startDateState
+          ? startDateState.toISOString()
+          : "";
+        const formattedEndDate = endDateState ? endDateState.toISOString() : "";
+
         const response = await axios.get(
-          `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDate}&checkout=${endDate}`
+          `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${formattedStartDate}&checkout=${formattedEndDate}`
         );
         setDetailsValue(response.data?.data);
       } catch (error) {
         console.error("Error fetching details:", error);
       }
     }
-    fetchDetails();
-  }, []);
-  console.log(detailsValue, "detailsValue");
+    if (handleSubmit) {
+      fetchDetails();
+      setHandleSubmit(false);
+    }
+  }, [handleSubmit]);
+  console.log(startDateState, "detailsValue");
   // useEffect(() => {
   //   const foundDetail = detailsValue.find(detail => detail.ID === parseInt(PkgId));
   //   if (foundDetail) {
@@ -143,16 +165,14 @@ export default function PackageDetailsPage({
     }
   };
 
-  useEffect(() => {
-    const fetchRoomPricing = async () => {
-      console.log("herre");
-      const res = await axios.get(
-        `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDate}&checkout=${endDate}`
-      );
-      console.log(res, "res");
-    };
-    fetchRoomPricing();
-  }, [Id, startDate, endDate]);
+  // useEffect(() => {
+  //   const fetchRoomPricing = async () => {
+  //     const res = await axios.get(
+  //       `/Hotel/${Id}/rooms-pricing-for-reservation?checkin=${startDateState}&checkout=${endDateState}`
+  //     );
+  //   };
+  //   fetchRoomPricing();
+  // }, [handleSubmit]);
 
   const [selectedRooms, setSelectedRooms] = useState([]);
   console.log(
@@ -247,8 +267,8 @@ export default function PackageDetailsPage({
     });
 
     setHotelReservationRooms({
-      CheckInDate: startDate,
-      CheckoutDate: endDate,
+      CheckInDate: startDateState,
+      CheckoutDate: endDateState,
       HotelId: Number(Id) || 0,
       HotelReservationRooms,
     });
@@ -263,6 +283,11 @@ export default function PackageDetailsPage({
     "color: #007acc;",
     hotelReservationRooms
   );
+  const submitHandler2 = async () => {
+    if (startDateState && endDateState) {
+      setHandleSubmit(true);
+    }
+  };
   return (
     <PageLayout>
       <div className="px-4 pt-6 pb-10 space-y-4">
@@ -303,12 +328,12 @@ export default function PackageDetailsPage({
             return (
               <div
                 key={ele}
-                className="w-20 h-20 me-4 cursor-pointer rounded-lg "
+                className="md:w-20 md:h-20 w-15 h-15 me-4 cursor-pointer rounded-lg "
               >
                 <Image
                   alt="package cover"
                   src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
-                  className="w-20 h-20 object-cover rounded-lg "
+                  className="md:w-20 md:h-20 w-15 h-15 object-cover rounded-lg "
                   width={80}
                   onClick={() =>
                     setChoosenImage(`http://gammats.com:7009/be/${ele}`)
@@ -354,6 +379,60 @@ export default function PackageDetailsPage({
           </section>
         )}
         <>
+          <>
+            <div className="bg-white flex justify-center flex-col p-4 rounded-xl">
+              <div className="flex justify-center">
+                <div className="mt-2 me-3 space-y-2">
+                  <label className="text-copy mb-0 pb-0 truncate font-medium text-xs 2xl:text-sm">
+                    {t("Check-in Date")}
+                  </label>
+                  <DatePicker
+                    selected={startDateState}
+                    onChange={(date) => {
+                      if (date) {
+                        setStartDateState(date);
+                      }
+                    }}
+                    selectsStart
+                    startDate={startDateState}
+                    endDate={endDateState}
+                    dateFormat="yyyy-MM-dd"
+                    className={`form__input ${optionsFontSize || ""}`}
+                    wrapperClassName="react-datepicker-wrapper"
+                  />
+                </div>
+                <div className="mt-2 space-y-2">
+                  <label className="text-copy truncate font-medium text-xs 2xl:text-sm">
+                    {t("Check-out Date")}
+                  </label>
+                  <DatePicker
+                    selected={endDateState}
+                    onChange={(date) => {
+                      if (date) {
+                        setEndDateState(date);
+                      }
+                    }}
+                    selectsEnd
+                    startDate={startDateState}
+                    endDate={endDateState}
+                    minDate={startDateState}
+                    dateFormat="yyyy-MM-dd"
+                    className={`form__input ${optionsFontSize || ""}`}
+                    wrapperClassName="react-datepicker-wrapper"
+                  />
+                </div>
+              </div>
+              <button
+                type="bottom"
+                onClick={() => submitHandler2()}
+                className="btn mt-3 primary sm:w-48 w-full mx-auto h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Submit
+              </button>
+            </div>
+          </>
+        </>
+        <>
           <Form
             onSubmit={submitHandler}
             initialValues={{ reservationPackageCompanions: [{}] }}
@@ -367,113 +446,123 @@ export default function PackageDetailsPage({
               pristine,
               values,
             }) => (
-              <div className=" rounded-xl bg-white py-5 px-4">
-                <h1 className="font-bold mb-2">Seasons</h1>
-                {detailsValue?.length ? (
-                  detailsValue.map((room) => {
-                    const selectedRoom = selectedRooms.find(
-                      (r) => r.id === room.Id
-                    ) || {
-                      count: 1,
-                      extras: ["ExtraBedPrice", "LunchPrice", "DinnerPrice"],
-                    };
+              <>
+                {detailsValue.length >= 1 && (
+                  <div className=" rounded-xl bg-white py-5 px-4">
+                    <h1 className="font-bold mb-2">Seasons</h1>
+                    {detailsValue?.length ? (
+                      detailsValue.map((room) => {
+                        const selectedRoom = selectedRooms.find(
+                          (r) => r.id === room.Id
+                        ) || {
+                          count: 1,
+                          extras: [
+                            "ExtraBedPrice",
+                            "LunchPrice",
+                            "DinnerPrice",
+                          ],
+                        };
 
-                    return (
-                      <div
-                        key={room.Id}
-                        className="p-4 mb-4 border rounded-xl bg-[#F0EDF5] shadow-sm"
-                      >
-                        <div className="flex flex-col md:flex-row justify-between items-center mb-2">
-                          <h3 className="text-sm mb-3 md:mb-0">
-                            {room.RoomType} {t("Room")}
-                          </h3>
-                          <div className="flex gap-4 justify-center md:justify-between flex-wrap">
-                            {services.map((service) => {
-                              const isActive =
-                                selectedRoom.extras.includes(service);
-                              const color = isActive
-                                ? "bg-[#6a55a0]  text-white  border-[#6a55a0]  border-white"
-                                : "bg-[#F0EDF5] text-[#6A55A0] border-[#6A55A0] hover:bg-[#6a55a0] hover:text-white";
+                        return (
+                          <div
+                            key={room.Id}
+                            className="p-4 mb-4 border rounded-xl bg-[#F0EDF5] shadow-sm"
+                          >
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-2">
+                              <h3 className="text-sm mb-3 md:mb-0">
+                                {room.RoomType} {t("Room")}
+                              </h3>
+                              <div className="flex gap-4 justify-center md:justify-between flex-wrap">
+                                {services.map((service) => {
+                                  const isActive =
+                                    selectedRoom.extras.includes(service);
+                                  const color = isActive
+                                    ? "bg-[#6a55a0]  text-white  border-[#6a55a0]  border-white"
+                                    : "bg-[#F0EDF5] text-[#6A55A0] border-[#6A55A0] hover:bg-[#6a55a0] hover:text-white";
 
-                              return (
-                                <button
-                                  key={service}
-                                  type="button"
-                                  className={`border px-4 py-2 rounded-xl text-sm ${color}`}
-                                  onClick={() => toggleExtra(room.Id, service)}
-                                >
-                                  {service.replace("Price", "")}
-                                  <br />
-                                  {room[service]} {t("EGP/Night")}
-                                </button>
-                              );
-                            })}
-                          </div>
-                          <div className="flex mt-3 md:mt-0 w-full justify-around md:justify-center items-center flex-row md:w-[150px] md:flex-col ">
-                            <p className="text-sm ">{t("Total Price")}</p>
-                            <span className="text-sm py-1 font-bold">
-                              {calculateTotalPrice(room)} {t("EGP/Night")}
-                            </span>
-                            <div className="flex justify-center items-center">
-                              <div className="flex items-center gap-2">
-                                <button
-                                  className=""
-                                  type="button"
-                                  onClick={() => updateCount(room.Id, -1)}
-                                >
-                                  {/* <img src={minus} alt="minus" className="mx-1 w-7 h-7" /> */}
-                                  -
-                                </button>
-                                <span className=" text-sm">
-                                  {selectedRoom.count}
+                                  return (
+                                    <button
+                                      key={service}
+                                      type="button"
+                                      className={`border px-4 py-2 rounded-xl text-sm ${color}`}
+                                      onClick={() =>
+                                        toggleExtra(room.Id, service)
+                                      }
+                                    >
+                                      {service.replace("Price", "")}
+                                      <br />
+                                      {room[service]} {t("EGP/Night")}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                              <div className="flex mt-3 md:mt-0 w-full justify-around md:justify-center items-center flex-row md:w-[150px] md:flex-col ">
+                                <p className="text-sm ">{t("Total Price")}</p>
+                                <span className="text-sm py-1 font-bold">
+                                  {calculateTotalPrice(room)} {t("EGP/Night")}
                                 </span>
-                                <button
-                                  className=""
-                                  type="button"
-                                  onClick={() => updateCount(room.Id, 1)}
-                                >
-                                  {/* <img src={plus} alt="plus" className="mx-1 w-7 h-7" /> */}
-                                  +
-                                </button>
+                                <div className="flex justify-center items-center">
+                                  <div className="flex items-center gap-2">
+                                    <button
+                                      className=""
+                                      type="button"
+                                      onClick={() => updateCount(room.Id, -1)}
+                                    >
+                                      {/* <img src={minus} alt="minus" className="mx-1 w-7 h-7" /> */}
+                                      -
+                                    </button>
+                                    <span className=" text-sm">
+                                      {selectedRoom.count}
+                                    </span>
+                                    <button
+                                      className=""
+                                      type="button"
+                                      onClick={() => updateCount(room.Id, 1)}
+                                    >
+                                      {/* <img src={plus} alt="plus" className="mx-1 w-7 h-7" /> */}
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
+                        );
+                      })
+                    ) : (
+                      <p className="text-center text-gray-500">
+                        {t("No rooms available")}
+                      </p>
+                    )}
+                    <section className="py-2 px-3 bg-white rounded-md text-copy">
+                      {auth.user?.loggedIn && detailsValue.length >= 1 ? (
+                        <div className="my-2 space-y-4 flex flex-col">
+                          <BookingForm
+                            handleSubmit={handleSubmit}
+                            submitting={submitting}
+                            pristine={pristine}
+                            reqLoading={reqLoading}
+                            change={change}
+                          />
                         </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-center text-gray-500">
-                    {t("No rooms available")}
-                  </p>
+                      ) : (
+                        <div className="sm:self-end flex gap-4 items-center justify-center my-2">
+                          <PopoverBtn
+                            triggerElement={
+                              <button
+                                type="button"
+                                className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                              >
+                                {t("Book Now")}
+                              </button>
+                            }
+                          />
+                        </div>
+                      )}
+                    </section>
+                  </div>
                 )}
-                <section className="py-2 px-3 bg-white rounded-md text-copy">
-                  {auth.user?.loggedIn ? (
-                    <div className="my-2 space-y-4 flex flex-col">
-                      <BookingForm
-                        handleSubmit={handleSubmit}
-                        submitting={submitting}
-                        pristine={pristine}
-                        reqLoading={reqLoading}
-                        change={change}
-                      />
-                    </div>
-                  ) : (
-                    <div className="sm:self-end flex gap-4 items-center justify-center my-2">
-                      <PopoverBtn
-                        triggerElement={
-                          <button
-                            type="button"
-                            className="py-2 sm:px-8 lg:px-28 mt-4 w-full max-w-xs sm:max-w-none self-center sm:w-fit bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            {t("Book Now")}
-                          </button>
-                        }
-                      />
-                    </div>
-                  )}
-                </section>
-              </div>
+              </>
             )}
           />
         </>

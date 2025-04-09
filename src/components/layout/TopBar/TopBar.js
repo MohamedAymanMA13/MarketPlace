@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
-import { SignedInMenu } from 'components/UI';
-import LangSwitcher from './LangSwitcher/LangSwitcher';
-import NavMenu from './NavMenu/NavMenu';
-import { useAuth } from 'hooks/useAuth';
+import { SignedInMenu } from "components/UI";
+import LangSwitcher from "./LangSwitcher/LangSwitcher";
+import NavMenu from "./NavMenu/NavMenu";
+import { useAuth } from "hooks/useAuth";
 
-import Link from 'next/link';
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { MenuAlt1Icon, UserIcon, LoginIcon } from '@heroicons/react/outline';
-import { useTranslation } from 'next-i18next';
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { MenuAlt1Icon, UserIcon, LoginIcon } from "@heroicons/react/outline";
+import { useTranslation } from "next-i18next";
 
 const TopBar = () => {
   const { t } = useTranslation();
@@ -17,14 +17,14 @@ const TopBar = () => {
   const { pathname, asPath } = useRouter();
   const auth = useAuth();
 
-  const toggleMenuHandler = () => setIsMenuShown(prevState => !prevState);
+  const toggleMenuHandler = () => setIsMenuShown((prevState) => !prevState);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     if (!auth.user) {
-      console.log(' GG ');
-      const user = localStorage.getItem('loggedInUser');
+      console.log(" GG ");
+      const user = localStorage.getItem("loggedInUser");
       auth.setUser(JSON.parse(user));
     }
   }, [auth]);
@@ -51,12 +51,12 @@ const TopBar = () => {
         <Link href="/tourism">
           <a
             className={`nav__item nav__link ${
-              pathname === '/tourism'
-                ? 'text-main nav__link--active'
-                : 'text-copy'
+              pathname === "/tourism"
+                ? "text-main nav__link--active"
+                : "text-copy"
             }`}
           >
-            {t('Packages')}
+            {t("Packages")}
           </a>
         </Link>
 
@@ -71,54 +71,54 @@ const TopBar = () => {
             {t('Umrah')}
           </a>
         </Link> */}
-{/* ------------------------------------------------------------------------------------- */}
+        {/* ------------------------------------------------------------------------------------- */}
         <Link href="/hotels">
           <a
             className={`nav__item nav__link ${
-              pathname === '/hotels'
-                ? 'text-main nav__link--active'
-                : 'text-copy'
+              pathname === "/hotels"
+                ? "text-main nav__link--active"
+                : "text-copy"
             }`}
           >
-            {t('Hotels')}
+            {t("Hotels")}
           </a>
         </Link>
         <Link href="/flights">
           <a
             className={`nav__item nav__link ${
-              pathname === '/flights'
-                ? 'text-main nav__link--active'
-                : 'text-copy'
+              pathname === "/flights"
+                ? "text-main nav__link--active"
+                : "text-copy"
             }`}
           >
-            {t('Flights')}
+            {t("Flights")}
           </a>
         </Link>
-        
+
         <Link href="/catering">
           <a
             className={`nav__item nav__link ${
-              pathname === '/catering'
-                ? 'text-main nav__link--active'
-                : 'text-copy'
+              pathname === "/catering"
+                ? "text-main nav__link--active"
+                : "text-copy"
             }`}
           >
-            {t('Catering')}
+            {t("Catering")}
           </a>
         </Link>
 
         <Link href="/transportation">
           <a
             className={`nav__item nav__link ${
-              pathname === '/transportation'
-                ? 'text-main nav__link--active'
-                : 'text-copy'
+              pathname === "/transportation"
+                ? "text-main nav__link--active"
+                : "text-copy"
             }`}
           >
-            {t('Transportation')}
+            {t("Transportation")}
           </a>
         </Link>
-        <Link href="http://gammats.com:7005/">
+        {/* <Link href="http://gammats.com:7005/">
           <a
             className={`nav__item nav__link ${
               pathname === '/Events'
@@ -128,8 +128,8 @@ const TopBar = () => {
           >
             {t('Events')}
           </a>
-        </Link>
-{/* ------------------------------------------------------------------------------------- */}
+        </Link> */}
+        {/* ------------------------------------------------------------------------------------- */}
 
         {/* <a
           href="http://gammats.com:8002/Hotels"
@@ -158,7 +158,7 @@ const TopBar = () => {
         ) : (
           <Link
             href={{
-              pathname: '/sign-in',
+              pathname: "/sign-in",
               query: {
                 from: asPath,
               },
@@ -166,17 +166,17 @@ const TopBar = () => {
           >
             <a
               className={`flex items-center gap-1 nav__item nav__link ${
-                pathname === '/sign-in'
-                  ? 'text-main nav__link--active'
-                  : 'text-copy'
+                pathname === "/sign-in"
+                  ? "text-main nav__link--active"
+                  : "text-copy"
               }`}
             >
               <LoginIcon className="w-4 h-4 lg:w-5 lg:h-5" />
-              <span className="whitespace-nowrap">{t('Login')}</span>
+              <span className="whitespace-nowrap">{t("Login")}</span>
             </a>
           </Link>
         )}
-          {/* <Link href="http://gammats.com:8011/">
+        {/* <Link href="http://gammats.com:8011/">
             <a
               className={`flex items-center gap-1 nav__item nav__link ${
                 pathname === '/sign-in'

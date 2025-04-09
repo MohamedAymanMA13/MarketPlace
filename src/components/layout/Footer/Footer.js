@@ -58,7 +58,7 @@ const Footer = () => {
 
       <div className="py-2 bg-main w-full text-center text-white text-xs ltr:font-poppins rtl:font-noto">
         {t("All rights reserved. Madar")} ©{" "}
-        <span className="font-medium">2022</span>
+        <span className="font-medium">2025</span>
       </div>
     </>
   );

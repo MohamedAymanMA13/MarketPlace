@@ -1,18 +1,18 @@
-import { TextField, TextArea } from 'components/form';
+import { TextField, TextArea } from "components/form";
 
 import {
   required,
   onlyPositives,
   emailAddress,
   composeValidators,
-} from 'utils/helpers/validation.helpers';
+} from "utils/helpers/validation.helpers";
 
-import { Form, Field } from 'react-final-form';
-import { useTranslation } from 'next-i18next';
+import { Form, Field } from "react-final-form";
+import { useTranslation } from "next-i18next";
 
 const ContactForm = () => {
   const { t } = useTranslation();
-  const submitHandler = values => console.log(values);
+  const submitHandler = (values) => console.log(values);
 
   return (
     <Form
@@ -72,7 +72,7 @@ const ContactForm = () => {
               className="py-2 w-full md:w-3/4 bg-main text-white font-medium text-sm text-center rounded-md md:col-start-2
               md:justify-self-end"
             >
-              {t('Send Message')}
+              {t("Send Message")}
             </button>
           </div>
         </form>

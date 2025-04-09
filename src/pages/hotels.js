@@ -61,11 +61,9 @@ export default function Hotels({ response, optionsFontSize }) {
       value: "5",
     },
   ];
-
   const toggleModal = () => {
     setIsOpen((prevState) => !prevState);
   };
-
   const submitHandler = async (values) => {
     console.log("Form Submitted:", values);
     console.log(values.ratings, "values.rating");
@@ -133,7 +131,9 @@ export default function Hotels({ response, optionsFontSize }) {
             <form onSubmit={handleSubmit} id="hotel_form">
               <div className="px-3 pb-4 md:pb-6 lg:pb-8 md:px-6 lg:px-8 mx-4 sm:mx-auto mt-4 md:mt-6 lg:mt-8 gap-4 grid grid-cols-1 sm:grid-cols-[208px_1fr] md:grid-cols-[240px_1fr] lg:grid-cols-[288px_1fr]">
                 <section
-                  className={`py-4 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col `}
+                  className={`py-4 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col ${
+                    isOpen ? "w-72" : "w-full"
+                  }`}
                 >
                   <h3 className="font-bold text-sm md:text-base lg:text-lg">
                     {t("Filters")}
@@ -221,7 +221,16 @@ export default function Hotels({ response, optionsFontSize }) {
                   <button
                     type="button"
                     className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={reset}
+                    onClick={() => {
+                      reset();
+                      router.replace({
+                        pathname: "/hotels",
+                        query: {
+                          checkIn: startDate.toISOString(),
+                          checkOut: endDate.toISOString(),
+                        },
+                      });
+                    }}
                   >
                     {t("Reset")}
                   </button>
@@ -381,7 +390,16 @@ export default function Hotels({ response, optionsFontSize }) {
                   <button
                     type="button"
                     className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={reset}
+                    onClick={() => {
+                      reset();
+                      router.replace({
+                        pathname: "/hotels",
+                        query: {
+                          checkIn: startDate.toISOString(),
+                          checkOut: endDate.toISOString(),
+                        },
+                      });
+                    }}
                   >
                     {t("Reset")}
                   </button>
