@@ -85,7 +85,7 @@ const FiltersPane = ({
 
   return (
     <section
-      className={`py-4 w-full sm:w-2/12 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col ${
+      className={`py-4 w-full sm:w-3/12 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col ${
         isOpen ? "w-full" : "hidden"
       }`}
     >
@@ -108,7 +108,6 @@ const FiltersPane = ({
             ))}
           </Field>
         </div>
-
         {router.pathname !== "/umrah" && (
           <div className="relative w-full flex justify-between">
             <Field
@@ -138,24 +137,29 @@ const FiltersPane = ({
             </option>
           ))}
         </Field> */}
-
+        <div className="flex  w-full gap-2 items-center">
+          <Field
+            name="sort"
+            id="orderBy"
+            component="select"
+            className="py-[5px] w-full text-sm rounded-lg text-inputGray focus:border-main"
+          >
+            <option value="">{t("Sort by")}</option>
+            <option value="price_ascend">{t("Price: Low to High")}</option>
+            <option value="price_desc">{t("Price: High to Low")}</option>
+          </Field>
+        </div>
         <div>
           <div className="flex items-center justify-between">
             <h4 className="text-inputGray text-xs md:text-sm font-semibold">
               {t("Prices")}
             </h4>
-            <Field
-              name="rangeToggle"
-              component="input"
-              type="checkbox"
-              className="w-4 h-4 rounded"
-            />
           </div>
           <div className="mt-11">
             <DynamicRange
               minPrice={minPrice}
               maxPrice={maxPrice}
-              disabledSlider={disabledSlider}
+              disabledSlider={false}
               setPriceRange={setPriceRange}
             />
           </div>

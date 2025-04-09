@@ -27,11 +27,13 @@ const TripCard = ({
   };
   return (
     <div
-      className={`relative mb-2 mx-2 bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center ${additionalClasses}`}
+      className={`relative mb-2 w-fill mx-2 bg-white rounded-md shadow-md overflow-hidden h-[350px] flex-shrink-0 snap-center ${additionalClasses}`}
     >
       {forPackageDetails ? (
-        <Link href={`/hotels/${PkgDetails?.HotelId}`}>
-          <a className={`block relative ${imgAspectRatio}`}>
+        <Link className="h-1/2" href={`/hotels/${PkgDetails?.HotelId}`}>
+          <a
+            className={`block relative h-[58%] w-full object-cover ${imgAspectRatio}`}
+          >
             <Image
               alt={`${PkgDetails?.Name} cover`}
               src={
@@ -39,13 +41,13 @@ const TripCard = ({
                 "/bg3.jpg"
               }
               layout="fill"
-              className="w-full h-full object-cover"
+              className="w-full h-[220px] object-cover"
             />
           </a>
         </Link>
       ) : (
-        <Link href={`/packages/${PkgDetails?.Id}`}>
-          <a className={`block relative ${imgAspectRatio}`}>
+        <Link className="h-[220px]" href={`/packages/${PkgDetails?.Id}`}>
+          <a className={`block relative h-[220px] ${imgAspectRatio}`}>
             <Image
               alt={`${PkgDetails?.Name} cover`}
               src={
@@ -53,7 +55,7 @@ const TripCard = ({
                 "/bg3.jpg"
               }
               layout="fill"
-              className="w-full h-full object-cover"
+              className="w-full h-[220px] object-cover"
             />
           </a>
         </Link>

@@ -60,7 +60,7 @@ export default function PackageDetailsPage({
   //   from_date: startDate,
   //   to_date: endDate,
   // };
-  // here
+  // here   
   useEffect(() => {
     async function fetchDetails() {
       try {
@@ -328,12 +328,12 @@ export default function PackageDetailsPage({
             return (
               <div
                 key={ele}
-                className="w-20 h-20 me-4 cursor-pointer rounded-lg "
+                className="md:w-20 md:h-20 w-15 h-15 me-4 cursor-pointer rounded-lg "
               >
                 <Image
                   alt="package cover"
                   src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
-                  className="w-20 h-20 object-cover rounded-lg "
+                  className="md:w-20 md:h-20 w-15 h-15 object-cover rounded-lg "
                   width={80}
                   onClick={() =>
                     setChoosenImage(`http://gammats.com:7009/be/${ele}`)
@@ -425,7 +425,7 @@ export default function PackageDetailsPage({
               <button
                 type="bottom"
                 onClick={() => submitHandler2()}
-                className="btn mt-3 primary md:w-48 mx-auto h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn mt-3 primary sm:w-48 w-full mx-auto h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Submit
               </button>

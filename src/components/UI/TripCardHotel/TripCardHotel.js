@@ -24,7 +24,7 @@ const TripCardFlight = ({
   const PkgCurrency = "EGP";
   return (
     <div
-      className={`relative bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center flex flex-col w-full `}
+      className={`relative bg-white mt-2 rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center flex flex-col w-full `}
     >
       <div className="flex w-full flex-col md:flex-row">
         {/* Airline logo and info */}

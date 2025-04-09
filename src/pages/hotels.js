@@ -61,11 +61,9 @@ export default function Hotels({ response, optionsFontSize }) {
       value: "5",
     },
   ];
-
   const toggleModal = () => {
     setIsOpen((prevState) => !prevState);
   };
-
   const submitHandler = async (values) => {
     console.log("Form Submitted:", values);
     console.log(values.ratings, "values.rating");
@@ -223,7 +221,16 @@ export default function Hotels({ response, optionsFontSize }) {
                   <button
                     type="button"
                     className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={reset}
+                    onClick={() => {
+                      reset();
+                      router.replace({
+                        pathname: "/hotels",
+                        query: {
+                          checkIn: startDate.toISOString(),
+                          checkOut: endDate.toISOString(),
+                        },
+                      });
+                    }}
                   >
                     {t("Reset")}
                   </button>
@@ -383,7 +390,16 @@ export default function Hotels({ response, optionsFontSize }) {
                   <button
                     type="button"
                     className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={reset}
+                    onClick={() => {
+                      reset();
+                      router.replace({
+                        pathname: "/hotels",
+                        query: {
+                          checkIn: startDate.toISOString(),
+                          checkOut: endDate.toISOString(),
+                        },
+                      });
+                    }}
                   >
                     {t("Reset")}
                   </button>

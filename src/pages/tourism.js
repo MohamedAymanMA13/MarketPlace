@@ -71,11 +71,17 @@ export default function Tourism({ response }) {
                 <FiltersPane
                   isOpen={false}
                   tables={config.tables}
-                  reset={reset}
+                  reset={() => {
+                    reset();
+                    router.replace({
+                      pathname: "/tourism",
+                      query: {},
+                    });
+                  }}
                   submitting={submitting}
                   pristine={pristine}
-                  minPrice={1000}
-                  maxPrice={10000}
+                  minPrice={10}
+                  maxPrice={100000}
                   setPriceRange={setPriceRange}
                   disabledSlider={!values.rangeToggle}
                   formId="tourism_form"
@@ -99,25 +105,6 @@ export default function Tourism({ response }) {
                         <AdjustmentsIcon className="w-5 h-5 rotate-90" />
                         <span>{t("Filters")}</span>
                       </button>
-
-                      <div className="flex gap-2 items-center">
-                        <label
-                          htmlFor="orderBy"
-                          className="hidden sm:block text-copy font-medium text-xs"
-                        >
-                          {t("Sort by")}:
-                        </label>
-                        <Field
-                          name="orderBy"
-                          id="orderBy"
-                          component="select"
-                          className="py-[5px] text-sm rounded-lg text-inputGray focus:border-main"
-                        >
-                          <option value="">{t("Select filter")}</option>
-                          <option value="1">{t("Price: Low to High")}</option>
-                          <option value="2">{t("Price: High to Low")}</option>
-                        </Field>
-                      </div>
                     </div>
                   </div>
 
