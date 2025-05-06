@@ -43,37 +43,37 @@ import { axios_instance as axios } from 'apis/axios-instance';
 
 //-------------------------------------------------------------------------------------------------------------------------
 
-export function fetchUserCateringBookings(lang, token) {
+export function fetchUserCateringBookings( token) {
   return axios.get('/Catering/GetCateringWebsiteBookings', {
     headers: {
-      lang,
+      // lang,
       Authorization: 'Bearer ' + token,
     },
   });
 }
 
-export function fetchUserFlightBookings(lang, token) {
-  return axios.get('/Catering/GetFlightWebsiteBookings', {
+export function fetchUserFlightBookings(token) {
+  return axios.get('/Reservations/FlightReservations', {
     headers: {
-      lang,
-      Authorization: 'Bearer ' + token,
+      // lang,
+      authorization: "Bearer " + token,
     },
   });
 }
 
-export function fetchUserHotelBookings(lang, token) {
+export function fetchUserHotelBookings( token) {
   return axios.get('/Catering/GetHotelWebsiteBookings', {
     headers: {
-      lang,
+      // lang,
       Authorization: 'Bearer ' + token,
     },
   });
 }
 
-export function fetchUserPackagesBookings(lang, token) {
+export function fetchUserPackagesBookings( token) {
   return axios.get('/Package/GetPackageWebsiteBookings', {
     headers: {
-      lang,
+      // lang,
       Authorization: 'Bearer ' + token,
     },
   });

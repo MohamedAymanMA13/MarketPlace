@@ -88,7 +88,9 @@ useEffect(() => {
           </div>
         </div>
 
-        <Link href={`/packages/${PkgDetails.PkgId}`}>
+        <Link 
+          href={`/hotelpackages/packageId=${PkgDetails?.OfferDetails?.Id}&Id=${PkgDetails?.HotelDetails?.Id}&offerfromDate=${PkgDetails?.OfferDetails?.StartDate}&offertoDate=${PkgDetails?.OfferDetails?.EndDate}`}
+        >
           <a className="block py-2 mt-4 w-full bg-main text-white font-medium text-sm text-center rounded-md">
             {t('Book Now')}
           </a>

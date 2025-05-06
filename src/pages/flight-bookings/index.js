@@ -33,14 +33,14 @@ export default function MyBookings() {
     setIsLoading(true);
     try {
       const response = await fetchUserFlightBookings(
-        router.locale,
-        auth.user.AccessToken
+        // router.locale,
+        auth.user.Token
       );
 
       if (response.data) {
         setUserBookings({
-          data: response.data.Data,
-          totalRow: response.data.totalRow,
+          data: response.data.Items,
+          // totalRow: response.data.totalRow,
         });
       }
       setIsLoading(false);
@@ -52,8 +52,8 @@ export default function MyBookings() {
       );
       toast.error(errorMsg);
     }
-  }, [auth, t, router.locale]);
-
+  }, [auth]);
+console.log('%csrc\pages\flight-bookings\index.js:56 userBookings', 'color: #007acc;', userBookings);
   // const cancelBookingHandler = async bookingId => {
   //   try {
   //     const response = await cancelBooking(

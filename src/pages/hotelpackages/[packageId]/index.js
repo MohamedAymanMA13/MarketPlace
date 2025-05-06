@@ -33,6 +33,8 @@ export default function PackageDetailsPage({
   Id,
   startDate,
   endDate,
+  offertoDate,
+  offerfromDate,
   optionsFontSize,
 }) {
   const { t } = useTranslation();
@@ -100,25 +102,6 @@ export default function PackageDetailsPage({
     const timeDiff = end - start;
     const nights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
     return nights;
-  };
-  const NumberOfNight = calculateNights(startDate, endDate);
-
-  const incrementRooms = (index) => {
-    setNumberOfRooms((prevRooms) =>
-      prevRooms.map((rooms, i) =>
-        i === index && rooms < PkgDetails[index].availableRooms
-          ? rooms + 1
-          : rooms
-      )
-    );
-  };
-
-  const decrementRooms = (index) => {
-    setNumberOfRooms((prevRooms) =>
-      prevRooms.map((rooms, i) =>
-        i === index && rooms > 0 ? rooms - 1 : rooms
-      )
-    );
   };
 
   const submitHandler = async (values) => {
@@ -283,6 +266,19 @@ export default function PackageDetailsPage({
     "color: #007acc;",
     hotelReservationRooms
   );
+  const formatDateTime = (dateTime) => {
+    const date = new Date(dateTime);
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+    const formattedDate = date
+      .toLocaleDateString(undefined, options)
+      .replace(/\//g, "-");
+    const formattedTime = date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+    return ` ${formattedDate}`;
+  };
   const submitHandler2 = async () => {
     if (startDateState && endDateState) {
       setHandleSubmit(true);
@@ -294,15 +290,15 @@ export default function PackageDetailsPage({
         <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
           <div>
             <StarRating
-              filledStars={getStarRating(PkgDetails?.HotelDetails?.Rating)}
+              filledStars={getStarRating(PkgDetails?.Rating)}
             />
             <h2 className="font-bold text-base md:text-lg xl:text-xl text-copy">
-              {PkgDetails?.HotelDetails?.Name}
+              {PkgDetails?.Name}
             </h2>
             <div className="mt-2 flex items-center justify-between sm:flex-col sm:items-start sm:gap-2">
               <p className="text-copy text-sm font-medium xl:text-base">
-                {PkgDetails?.HotelDetails?.CityName} ,{" "}
-                {PkgDetails?.HotelDetails?.CountryName}
+                {PkgDetails?.CityName} ,{" "}
+                {PkgDetails?.CountryName}
               </p>
               <p className="text-copy text-sm font-medium xl:text-base">
                 {calculateNights(startDate, endDate)} {t("Nights")}
@@ -315,7 +311,7 @@ export default function PackageDetailsPage({
             alt="package cover"
             src={
               choosenImage ||
-              `http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
+              `http://gammats.com:7009/be/${PkgDetails?.Paths[0]}` ||
               "/bg5.jpg"
             }
             layout="fill"
@@ -324,7 +320,7 @@ export default function PackageDetailsPage({
           />
         </div>
         <div className="w-full  flex flex-wrap mt-4  rounded-xl">
-          {PkgDetails?.HotelDetails?.Paths.map((ele) => {
+          {PkgDetails?.Paths.map((ele) => {
             return (
               <div
                 key={ele}
@@ -350,19 +346,19 @@ export default function PackageDetailsPage({
           </h3>
           <div className="mt-2">
             <span className="font-bold">Address</span> :{" "}
-            {PkgDetails?.HotelDetails?.Address}
+            {PkgDetails?.Address}
           </div>
           <div className="mt-2">
             <span className="font-bold">Closest Landmark</span> :{" "}
-            {PkgDetails?.HotelDetails?.ClosestLandmark1}
+            {PkgDetails?.ClosestLandmark1}
           </div>
           <div className="mt-2">
             <span className="font-bold">Website</span> :{" "}
-            <p className="break-words">{PkgDetails?.HotelDetails?.Website}</p>
+            <p className="break-words">{PkgDetails?.Website}</p>
           </div>
           <div className="mt-2">
             <span className="font-bold">Description</span> :{" "}
-            {PkgDetails?.HotelDetails?.Description}
+            {PkgDetails?.Description}
           </div>
         </section>
         {isEmpty(PkgDetails.roomTypes) ? null : (
@@ -429,6 +425,11 @@ export default function PackageDetailsPage({
               >
                 Submit
               </button>
+              {offertoDate && 
+                <div className="mt-2">
+                  <p><span className="font-bold ">Notice :</span> we have offer from : {formatDateTime(offerfromDate)} to : {formatDateTime(offertoDate)}</p>
+                </div>
+              }
             </div>
           </>
         </>
@@ -575,11 +576,13 @@ export async function getServerSideProps(context) {
   const { query, locale } = context;
   let { packageId } = query;
 
-  let PkgId, startDate, endDate, Id;
+  let PkgId, startDate, endDate, Id ,offertoDate, offerfromDate;
 
   if (packageId.includes("&")) {
     const params = new URLSearchParams(packageId);
     PkgId = params.get("packageId");
+    offerfromDate = params.get("offerfromDate");
+    offertoDate = params.get("offertoDate");
     startDate = params.get("fromDate");
     endDate = params.get("toDate");
     Id = params.get("Id");
@@ -587,10 +590,10 @@ export async function getServerSideProps(context) {
 
   let resToSend;
   try {
-    const response = await GetHotelDetailsWebsiteContent(PkgId);
+    const response = await GetHotelDetailsWebsiteContent(Id);
 
-    if (response.data && response.data?.Items) {
-      resToSend = response.data.Items;
+    if (response.data && response.data?.data) {
+      resToSend = response.data.data;
     } else {
       throw new Error("not found");
     }
@@ -605,6 +608,8 @@ export async function getServerSideProps(context) {
       ...(await serverSideTranslations(locale, ["common", "messages"])),
       PkgDetails: resToSend,
       PkgId,
+      offertoDate,
+      offerfromDate,
       startDate,
       endDate,
       Id,
