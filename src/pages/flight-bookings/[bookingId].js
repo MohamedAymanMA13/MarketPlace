@@ -32,67 +32,67 @@ export default function BookingPage() {
   const auth = useAuth();
 
   const submitHandler = async values => {
-    console.log(values);
-    delete values.packageImageUrl;
-    delete values.pkgTitle;
-    delete values.noOfNights;
-    delete values.pkgClass;
-    delete values.currency;
-    delete values.reservationDate;
-    delete values.price;
-    delete values.totalPrice;
+    // console.log(values);
+    // delete values.packageImageUrl;
+    // delete values.pkgTitle;
+    // delete values.noOfNights;
+    // delete values.pkgClass;
+    // delete values.currency;
+    // delete values.reservationDate;
+    // delete values.price;
+    // delete values.totalPrice;
 
-    values.reservationPackageCompanions.forEach(comp => {
-      if (typeof comp.passportImageFile === 'string') {
-        delete comp.passportImageFile;
-      } else if (comp.passportImageFile && comp.passportImageUrl) {
-        delete comp.passportImageUrl;
-      }
-    });
+    // values.reservationPackageCompanions.forEach(comp => {
+    //   if (typeof comp.passportImageFile === 'string') {
+    //     delete comp.passportImageFile;
+    //   } else if (comp.passportImageFile && comp.passportImageUrl) {
+    //     delete comp.passportImageUrl;
+    //   }
+    // });
 
-    let valuesToSubmit = serialize(values, {
-      indices: true,
-      dotsForObjectNotation: true,
-    });
-    valuesToSubmit.append(
-      'totalPrice',
-      +bookingDetails.price * values.reservationPackageCompanions.length
-    );
+    // let valuesToSubmit = serialize(values, {
+    //   indices: true,
+    //   dotsForObjectNotation: true,
+    // });
+    // valuesToSubmit.append(
+    //   'totalPrice',
+    //   +bookingDetails.price * values.reservationPackageCompanions.length
+    // );
 
-    for (var pair of valuesToSubmit.entries()) {
-      console.log(pair[0] + ', ' + pair[1]);
-    }
+    // for (var pair of valuesToSubmit.entries()) {
+    //   console.log(pair[0] + ', ' + pair[1]);
+    // }
 
-    try {
-      setReqLoading(true);
-      const response = await updateBooking(
-        valuesToSubmit,
-        auth.user.accessToken
-      );
+    // try {
+    //   setReqLoading(true);
+    //   const response = await updateBooking(
+    //     valuesToSubmit,
+    //     auth.user.accessToken
+    //   );
 
-      if (response.data.data) {
-        toast.success(
-          <b>
-            {t('Booking Successfully Updated!', {
-              ns: 'messages',
-            })}
-          </b>
-        );
-        router.push('/');
-        // setBookingNo(response.data.data);
-        // toggleModalHandler();
-      }
-      setReqLoading(false);
-    } catch (error) {
-      setReqLoading(false);
-      const errorMsg = httpErrorHandler(
-        error,
-        t('Failed to update the booking. Please try again!', {
-          ns: 'messages',
-        })
-      );
-      toast.error(errorMsg);
-    }
+    //   if (response.data.data) {
+    //     toast.success(
+    //       <b>
+    //         {t('Booking Successfully Updated!', {
+    //           ns: 'messages',
+    //         })}
+    //       </b>
+    //     );
+    //     router.push('/');
+    //     // setBookingNo(response.data.data);
+    //     // toggleModalHandler();
+    //   }
+    //   setReqLoading(false);
+    // } catch (error) {
+    //   setReqLoading(false);
+    //   const errorMsg = httpErrorHandler(
+    //     error,
+    //     t('Failed to update the booking. Please try again!', {
+    //       ns: 'messages',
+    //     })
+    //   );
+    //   toast.error(errorMsg);
+    // }
   };
 
   // * This useEffect handles redirecting un-auth users to the login page.
@@ -116,15 +116,15 @@ export default function BookingPage() {
     const fetcher = async bookingId => {
       setDetailLoading(true);
       try {
-        const response = await fetchBookingById(
-          bookingId,
-          router.locale,
-          auth.user.accessToken
-        );
+        // const response = await fetchBookingById(
+        //   bookingId,
+        //   router.locale,
+        //   auth.user.accessToken
+        // );
 
-        if (response.data.data) {
-          setBookingDetails(response.data.data);
-        }
+        // if (response.data.data) {
+        //   setBookingDetails(response.data.data);
+        // }
         setDetailLoading(false);
       } catch (error) {
         setDetailLoading(false);
