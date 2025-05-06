@@ -65,23 +65,23 @@ export default function BookingPage() {
 
     try {
       setReqLoading(true);
-      // const response = await updateBooking(
-      //   valuesToSubmit,
-      //   auth.user.accessToken
-      // );
+      const response = await updateBooking(
+        valuesToSubmit,
+        auth.user.accessToken
+      );
 
-      // if (response.data.data) {
-      //   toast.success(
-      //     <b>
-      //       {t('Booking Successfully Updated!', {
-      //         ns: 'messages',
-      //       })}
-      //     </b>
-      //   );
-      //   router.push('/');
-      //   // setBookingNo(response.data.data);
-      //   // toggleModalHandler();
-      // }
+      if (response.data.data) {
+        toast.success(
+          <b>
+            {t('Booking Successfully Updated!', {
+              ns: 'messages',
+            })}
+          </b>
+        );
+        router.push('/');
+        // setBookingNo(response.data.data);
+        // toggleModalHandler();
+      }
       setReqLoading(false);
     } catch (error) {
       setReqLoading(false);
