@@ -60,7 +60,7 @@ export default function PackageDetailsPage({
   //   from_date: startDate,
   //   to_date: endDate,
   // };
-  // here   
+  // here
   useEffect(() => {
     async function fetchDetails() {
       try {
@@ -315,7 +315,7 @@ export default function PackageDetailsPage({
             alt="package cover"
             src={
               choosenImage ||
-              `http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
+              `http://gammats.com:7010/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
               "/bg5.jpg"
             }
             layout="fill"
@@ -332,11 +332,11 @@ export default function PackageDetailsPage({
               >
                 <Image
                   alt="package cover"
-                  src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
+                  src={`http://gammats.com:7010/be/${ele}` || "/bg5.jpg"}
                   className="md:w-20 md:h-20 w-15 h-15 object-cover rounded-lg "
                   width={80}
                   onClick={() =>
-                    setChoosenImage(`http://gammats.com:7009/be/${ele}`)
+                    setChoosenImage(`http://gammats.com:7010/be/${ele}`)
                   }
                   height={80}
                 />
