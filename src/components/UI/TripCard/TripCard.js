@@ -27,7 +27,7 @@ const TripCard = ({
   };
   return (
     <div
-      className={`relative mb-2 w-fill mx-2 bg-white rounded-md shadow-md overflow-hidden h-[350px] flex-shrink-0 snap-center ${additionalClasses}`}
+      className={`relative mb-2 w-fill mx-2 bg-white rounded-md shadow-md overflow-hidden h-[400px] flex-shrink-0 snap-center ${additionalClasses}`}
     >
       {forPackageDetails ? (
         <Link className="h-1/2" href={`/hotels/${PkgDetails?.HotelId}`}>
@@ -37,7 +37,7 @@ const TripCard = ({
             <Image
               alt={`${PkgDetails?.Name} cover`}
               src={
-                `http://gammats.com:7009/be/${PkgDetails?.Images[0]}` ||
+                `http://gammats.com:7010/be/${PkgDetails?.Images[0]}` ||
                 "/bg3.jpg"
               }
               layout="fill"
@@ -51,7 +51,7 @@ const TripCard = ({
             <Image
               alt={`${PkgDetails?.Name} cover`}
               src={
-                `http://gammats.com:7009/be/${PkgDetails?.PackageImage}` ||
+                `http://gammats.com:7010/be/${PkgDetails?.PackageImage}` ||
                 "/bg3.jpg"
               }
               layout="fill"
@@ -150,3 +150,4 @@ const TripCard = ({
 // };
 
 export default TripCard;
+ 

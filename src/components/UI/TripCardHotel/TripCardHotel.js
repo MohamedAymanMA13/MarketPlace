@@ -33,7 +33,7 @@ const TripCardFlight = ({
           <img
             className="h-full w-full object-cover"
             src={
-              `http://gammats.com:7009/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
+              `http://gammats.com:7010/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
               "/hotel1.jpg"
             }
             alt={PkgDetails?.HotelDetails?.Name}
