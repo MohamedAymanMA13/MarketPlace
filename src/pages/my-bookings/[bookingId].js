@@ -65,23 +65,23 @@ export default function BookingPage() {
 
     try {
       setReqLoading(true);
-      // const response = await updateBooking(
-      //   valuesToSubmit,
-      //   auth.user.AccessToken
-      // );
+      const response = await updateBooking(
+        valuesToSubmit,
+        auth.user.AccessToken
+      );
 
-      // if (response.data.data) {
-      //   toast.success(
-      //     <b>
-      //       {t('Booking Successfully Updated!', {
-      //         ns: 'messages',
-      //       })}
-      //     </b>
-      //   );
-      //   router.push('/');
-      //   // setBookingNo(response.data.data);
-      //   // toggleModalHandler();
-      // }
+      if (response.data.data) {
+        toast.success(
+          <b>
+            {t('Booking Successfully Updated!', {
+              ns: 'messages',
+            })}
+          </b>
+        );
+        router.push('/');
+        // setBookingNo(response.data.data);
+        // toggleModalHandler();
+      }
       setReqLoading(false);
     } catch (error) {
       setReqLoading(false);
@@ -116,15 +116,15 @@ export default function BookingPage() {
     const fetcher = async bookingId => {
       setDetailLoading(true);
       try {
-        // const response = await fetchBookingById(
-        //   bookingId,
-        //   router.locale,
-        //   auth.user.accessToken
-        // );
+        const response = await fetchBookingById(
+          bookingId,
+          router.locale,
+          auth.user.accessToken
+        );
 
-        // if (response.data.data) {
-        //   setBookingDetails(response.data.data);
-        // }
+        if (response.data.data) {
+          setBookingDetails(response.data.data);
+        }
         setDetailLoading(false);
       } catch (error) {
         setDetailLoading(false);

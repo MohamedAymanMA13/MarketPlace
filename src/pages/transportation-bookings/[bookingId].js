@@ -116,15 +116,15 @@ export default function BookingPage() {
     const fetcher = async bookingId => {
       setDetailLoading(true);
       try {
-        // const response = await fetchBookingById(
-        //   bookingId,
-        //   router.locale,
-        //   auth.user.accessToken
-        // );
+        const response = await fetchBookingById(
+          bookingId,
+          router.locale,
+          auth.user.accessToken
+        );
 
-        // if (response.data.data) {
-        //   setBookingDetails(response.data.data);
-        // }
+        if (response.data.data) {
+          setBookingDetails(response.data.data);
+        }
         setDetailLoading(false);
       } catch (error) {
         setDetailLoading(false);

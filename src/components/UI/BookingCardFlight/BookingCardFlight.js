@@ -9,19 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
-const formatDateTime = (dateTime) => {
-  const date = new Date(dateTime);
-  const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-  const formattedDate = date
-    .toLocaleDateString(undefined, options)
-    .replace(/\//g, "-");
-  const formattedTime = date.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-    hour12: true,
-  });
-  return ` ${formattedDate} , ${formattedTime}`;
-};
+
 const BookingCardCatering = ({
   bookingDetails,
   cancelBookingHandler,
@@ -50,13 +38,11 @@ const BookingCardCatering = ({
 
         <div className="py-3 md:py-4 px-4 md:flex md:justify-between md:items-center md:w-full md:gap-6">
           <div className="text-copy w-full">
-            <p className="font-semibold">{bookingDetails?.FlightTravel?.flightCompany?.Name}</p>
             <div className="flex justify-between text-main py-1">
                 <div>
-                  <p className="font-semibold">{bookingDetails?.FlightTravel?.FromCountryName}</p>
-                  <p className="font-semibold py-2">{bookingDetails?.FlightTravel?.FromAirportName}</p>
-                  <p className="text-sm ">Departure at </p>
-                  <p className="text-sm ">{formatDateTime(bookingDetails?.FlightTravel?.DepartureDateTime)}</p>
+                  <p className="font-semibold">{bookingDetails?.fromCountry}</p>
+                  <p className="font-semibold py-2">{bookingDetails?.departureAirport}</p>
+                  <p className="text-sm ">Departure at  {bookingDetails?.departureTime}</p>
                 </div>
                 <div className="flex items-center">
                 <img
@@ -66,11 +52,9 @@ const BookingCardCatering = ({
                 />
                 </div>
                 <div>
-                  <p className="font-semibold">{bookingDetails?.FlightTravel?.ToCountryName}</p>
-                  <p className="font-semibold py-2">{bookingDetails?.FlightTravel?.ToAirportName}</p>
-                  <p className="text-sm ">Arrival at</p>
-                  <p className="text-sm ">{formatDateTime(bookingDetails?.FlightTravel?.ArrivalDateTime)}</p>
-
+                  <p className="font-semibold">{bookingDetails?.toCountry}</p>
+                  <p className="font-semibold py-2">{bookingDetails?.arrivalAirport}</p>
+                  <p className="text-sm ">Arrival at  {bookingDetails?.arrivalTime}</p>
                 </div>
             </div>
           </div>
@@ -82,13 +66,13 @@ const BookingCardCatering = ({
             <div className="flex items-center text-inputGray text-sm lg:text-base font-medium gap-1">
               <UserIcon className="w-4 h-4 lg:w-5 lg:h-5" />
               <span>
-                {bookingDetails.GroupMembersNumber}{' '}
+                {bookingDetails.noOfCompanions}{' '}
                 {t('Travellers')}
               </span>
             </div>
             <div className="flex items-center text-inputGray text-sm lg:text-base font-medium gap-1">
               <span>
-                {bookingDetails.Class}
+                {bookingDetails.className}
               </span>
             </div>
 
@@ -104,22 +88,12 @@ const BookingCardCatering = ({
             </div> */}
 
             <div className="mt-1 flex items-center justify-between gap-1">
-              <p className="text-inputGray font-medium">{t('Price')}</p>
-              <p className="text-main text-base lg:text-lg font-semibold">
-                {moneyRenderer(
-                  locale,
-                  PkgCurrency,
-                  bookingDetails.Price
-                )}
-              </p>
-            </div>
-            <div className="mt-1 flex items-center justify-between gap-1">
               <p className="text-inputGray font-medium">{t('Total Price')}</p>
               <p className="text-main text-base lg:text-lg font-semibold">
                 {moneyRenderer(
                   locale,
                   PkgCurrency,
-                  bookingDetails.TotalPrice
+                  bookingDetails.price
                 )}
               </p>
             </div>

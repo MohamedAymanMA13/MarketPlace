@@ -63,21 +63,22 @@ export default function Home({ response, optionsFontSize }) {
   ];
   const submitHandler = async (values) => {
     console.log("Form Submitted:", values);
-    const valuesToSubmit = {
-      cityId: values.cityId,
-      countryId: values.countryId,
-      ratings: values.ratings || [1, 2, 3, 4, 5],
-      checkIn: startDate.toISOString(),
-      checkOut: endDate.toISOString(),
-      // numberOfRooms,
-    };
 
+    // const valuesToSubmit = {
+    //   hotelName: -1,
+    //   location: values.location || 0 ,
+    //   rating: values.rating === undefined || (Array.isArray(values.rating) && values.rating.length === 0) ? -1 : values.rating,
+    //   from_date: startDate.toISOString(),
+    //   to_date: endDate.toISOString(),
+    //   // numberOfRooms,
+
+    // };
 
     // console.log('Form valuesToSubmit:', valuesToSubmit);
 
     router.push({
       pathname: "/hotels",
-      query: valuesToSubmit,
+      query: values,
     });
   };
   console.log("%csrcpagesindex.js:84 response", "color: #007acc;", response);
@@ -142,7 +143,7 @@ export default function Home({ response, optionsFontSize }) {
                                   {t("Country")}
                                 </label>
                                 <Field
-                                  name="countryId"
+                                  name="Countries"
                                   component={SelectField}
                                   // label="Countries"
                                   options={config.tables?.fromCountries}

@@ -4,6 +4,6 @@ module.exports = {
   i18n,
   reactStrictMode: true,
   images: {
-    domains: ['rwandatourshub.com'],
+    domains: ['gammats.com'],
   },
 };

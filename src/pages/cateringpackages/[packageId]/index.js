@@ -167,7 +167,7 @@ export default function PackageDetailsPage({ PkgDetails, optionsFontSize }) {
             <Image
               alt="package cover"
               src={
-                `http://gammats.com:7009/be/${PkgDetails?.Photo}` || "/bg5.jpg"
+                `http://gammats.com:7010/be/${PkgDetails?.Photo}` || "/bg5.jpg"
               }
               layout="fill"
               className=" w-[400px] h-[400px] min-h-fit "
@@ -268,7 +268,7 @@ export default function PackageDetailsPage({ PkgDetails, optionsFontSize }) {
                               <Image
                                 alt={`${item?.item} cover`}
                                 src={
-                                  `http://gammats.com:7009/be/${item?.Photo}` ||
+                                  `http://gammats.com:7010/be/${item?.Photo}` ||
                                   "/bg3.jpg"
                                 }
                                 layout="fill"
@@ -329,7 +329,7 @@ export default function PackageDetailsPage({ PkgDetails, optionsFontSize }) {
                               <Image
                                 alt={`${combo?.Name} cover`}
                                 src={
-                                  `http://gammats.com:7009/be/${combo?.Photo}` ||
+                                  `http://gammats.com:7010/be/${combo?.Photo}` ||
                                   "/bg3.jpg"
                                 }
                                 layout="fill"

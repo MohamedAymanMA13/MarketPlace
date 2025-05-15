@@ -33,8 +33,6 @@ export default function PackageDetailsPage({
   Id,
   startDate,
   endDate,
-  offertoDate,
-  offerfromDate,
   optionsFontSize,
 }) {
   const { t } = useTranslation();
@@ -103,6 +101,25 @@ export default function PackageDetailsPage({
     const nights = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
     return nights;
   };
+  const NumberOfNight = calculateNights(startDate, endDate);
+
+  const incrementRooms = (index) => {
+    setNumberOfRooms((prevRooms) =>
+      prevRooms.map((rooms, i) =>
+        i === index && rooms < PkgDetails[index].availableRooms
+          ? rooms + 1
+          : rooms
+      )
+    );
+  };
+
+  const decrementRooms = (index) => {
+    setNumberOfRooms((prevRooms) =>
+      prevRooms.map((rooms, i) =>
+        i === index && rooms > 0 ? rooms - 1 : rooms
+      )
+    );
+  };
 
   const submitHandler = async (values) => {
     console.log(
@@ -170,7 +187,7 @@ export default function PackageDetailsPage({
           id: room.Id,
           count: 0,
           extras: [],
-          RoomPrice: room.DiscountTotalPrice !== 0 ? room.DiscountTotalPrice : room.OriginalTotalPrice,
+          RoomPrice: room.OriginalTotalPrice,
           ExtraBedPrice: room.ExtraBedPrice,
           LunchPrice: room.LunchPrice,
           DinnerPrice: room.DinnerPrice,
@@ -208,7 +225,7 @@ export default function PackageDetailsPage({
     const selectedRoom = selectedRooms.find((r) => r.id === room.Id);
     if (!selectedRoom) return room.OriginalTotalPrice || 0;
 
-    const basePrice = room.DiscountTotalPrice !== 0 ? room.DiscountTotalPrice : room.OriginalTotalPrice || 0;
+    const basePrice = room.OriginalTotalPrice || 0;
     const selectedExtras = selectedRoom.extras;
     const extraCost = selectedExtras.reduce((sum, extra) => {
       const extraValue = room[extra];
@@ -220,9 +237,9 @@ export default function PackageDetailsPage({
   const [choosenImage, setChoosenImage] = useState();
   const services = ["ExtraBedPrice", "LunchPrice", "DinnerPrice"];
   const updateHotelReservationRooms = () => {
-    const HotelReservationRooms = selectedRooms.map(room => {
-      const basePrice = room.DiscountTotalPrice !== 0 ? room.DiscountTotalPrice : room.OriginalTotalPrice || 0; // Updated line
-      const selectedExtras = room.extras
+    const HotelReservationRooms = selectedRooms.map((room) => {
+      const basePrice = room.RoomPrice || 0;
+      const selectedExtras = room.extras;
       const extraCost = selectedExtras.reduce((sum, extra) => {
         const extraValue = room[extra];
         return sum + (typeof extraValue === "number" ? extraValue : 0);
@@ -266,19 +283,6 @@ export default function PackageDetailsPage({
     "color: #007acc;",
     hotelReservationRooms
   );
-  const formatDateTime = (dateTime) => {
-    const date = new Date(dateTime);
-    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-    const formattedDate = date
-      .toLocaleDateString(undefined, options)
-      .replace(/\//g, "-");
-    const formattedTime = date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-    return ` ${formattedDate}`;
-  };
   const submitHandler2 = async () => {
     if (startDateState && endDateState) {
       setHandleSubmit(true);
@@ -290,15 +294,15 @@ export default function PackageDetailsPage({
         <div className="p-4 w-full bg-white rounded-md sm:flex sm:items-start sm:justify-between">
           <div>
             <StarRating
-              filledStars={getStarRating(PkgDetails?.Rating)}
+              filledStars={getStarRating(PkgDetails?.HotelDetails?.Rating)}
             />
             <h2 className="font-bold text-base md:text-lg xl:text-xl text-copy">
-              {PkgDetails?.Name}
+              {PkgDetails?.HotelDetails?.Name}
             </h2>
             <div className="mt-2 flex items-center justify-between sm:flex-col sm:items-start sm:gap-2">
               <p className="text-copy text-sm font-medium xl:text-base">
-                {PkgDetails?.CityName} ,{" "}
-                {PkgDetails?.CountryName}
+                {PkgDetails?.HotelDetails?.CityName} ,{" "}
+                {PkgDetails?.HotelDetails?.CountryName}
               </p>
               <p className="text-copy text-sm font-medium xl:text-base">
                 {calculateNights(startDate, endDate)} {t("Nights")}
@@ -311,7 +315,7 @@ export default function PackageDetailsPage({
             alt="package cover"
             src={
               choosenImage ||
-              `http://gammats.com:7009/be/${PkgDetails?.Paths[0]}` ||
+              `http://gammats.com:7010/be/${PkgDetails?.HotelDetails?.Paths[0]}` ||
               "/bg5.jpg"
             }
             layout="fill"
@@ -320,19 +324,19 @@ export default function PackageDetailsPage({
           />
         </div>
         <div className="w-full  flex flex-wrap mt-4  rounded-xl">
-          {PkgDetails?.Paths.map((ele) => {
+          {PkgDetails?.HotelDetails?.Paths.map((ele) => {
             return (
               <div
                 key={ele}
-                className="w-20 h-20 me-4 cursor-pointer rounded-lg "
+                className="md:w-20 md:h-20 w-15 h-15 me-4 cursor-pointer rounded-lg "
               >
                 <Image
                   alt="package cover"
-                  src={`http://gammats.com:7009/be/${ele}` || "/bg5.jpg"}
-                  className="w-20 h-20 object-cover rounded-lg "
+                  src={`http://gammats.com:7010/be/${ele}` || "/bg5.jpg"}
+                  className="md:w-20 md:h-20 w-15 h-15 object-cover rounded-lg "
                   width={80}
                   onClick={() =>
-                    setChoosenImage(`http://gammats.com:7009/be/${ele}`)
+                    setChoosenImage(`http://gammats.com:7010/be/${ele}`)
                   }
                   height={80}
                 />
@@ -346,19 +350,19 @@ export default function PackageDetailsPage({
           </h3>
           <div className="mt-2">
             <span className="font-bold">Address</span> :{" "}
-            {PkgDetails?.Address}
+            {PkgDetails?.HotelDetails?.Address}
           </div>
           <div className="mt-2">
             <span className="font-bold">Closest Landmark</span> :{" "}
-            {PkgDetails?.ClosestLandmark1}
+            {PkgDetails?.HotelDetails?.ClosestLandmark1}
           </div>
           <div className="mt-2">
             <span className="font-bold">Website</span> :{" "}
-            <p className="break-words">{PkgDetails?.Website}</p>
+            <p className="break-words">{PkgDetails?.HotelDetails?.Website}</p>
           </div>
           <div className="mt-2">
             <span className="font-bold">Description</span> :{" "}
-            {PkgDetails?.Description}
+            {PkgDetails?.HotelDetails?.Description}
           </div>
         </section>
         {isEmpty(PkgDetails.roomTypes) ? null : (
@@ -421,15 +425,10 @@ export default function PackageDetailsPage({
               <button
                 type="bottom"
                 onClick={() => submitHandler2()}
-                className="btn mt-3 primary md:w-48 mx-auto h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn mt-3 primary sm:w-48 w-full mx-auto h-8 bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Submit
               </button>
-              {offertoDate && 
-                <div className="mt-2">
-                  <p><span className="font-bold ">Notice :</span> we have offer from : {formatDateTime(offerfromDate)} to : {formatDateTime(offertoDate)}</p>
-                </div>
-              }
             </div>
           </>
         </>
@@ -576,13 +575,11 @@ export async function getServerSideProps(context) {
   const { query, locale } = context;
   let { packageId } = query;
 
-  let PkgId, startDate, endDate, Id ,offertoDate, offerfromDate;
+  let PkgId, startDate, endDate, Id;
 
   if (packageId.includes("&")) {
     const params = new URLSearchParams(packageId);
     PkgId = params.get("packageId");
-    offerfromDate = params.get("offerfromDate");
-    offertoDate = params.get("offertoDate");
     startDate = params.get("fromDate");
     endDate = params.get("toDate");
     Id = params.get("Id");
@@ -590,10 +587,10 @@ export async function getServerSideProps(context) {
 
   let resToSend;
   try {
-    const response = await GetHotelDetailsWebsiteContent(Id);
+    const response = await GetHotelDetailsWebsiteContent(PkgId);
 
-    if (response.data && response.data?.data) {
-      resToSend = response.data.data;
+    if (response.data && response.data?.Items) {
+      resToSend = response.data.Items;
     } else {
       throw new Error("not found");
     }
@@ -608,8 +605,6 @@ export async function getServerSideProps(context) {
       ...(await serverSideTranslations(locale, ["common", "messages"])),
       PkgDetails: resToSend,
       PkgId,
-      offertoDate,
-      offerfromDate,
       startDate,
       endDate,
       Id,
