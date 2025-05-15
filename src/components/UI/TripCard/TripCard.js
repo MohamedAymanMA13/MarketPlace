@@ -27,35 +27,33 @@ const TripCard = ({
   };
   return (
     <div
-      className={`relative mb-2 w-fill mx-2 bg-white rounded-md shadow-md overflow-hidden h-[400px] flex-shrink-0 snap-center ${additionalClasses}`}
+      className={`relative mb-2 mx-2 bg-white rounded-md shadow-md overflow-hidden flex-shrink-0 snap-center ${additionalClasses}`}
     >
       {forPackageDetails ? (
-        <Link className="h-1/2" href={`/hotels/${PkgDetails?.HotelId}`}>
-          <a
-            className={`block relative h-[58%] w-full object-cover ${imgAspectRatio}`}
-          >
+        <Link href={`/hotels/${PkgDetails?.HotelId}`}>
+          <a className={`block relative ${imgAspectRatio}`}>
             <Image
               alt={`${PkgDetails?.Name} cover`}
               src={
-                `http://gammats.com:7010/be/${PkgDetails?.Images[0]}` ||
+                `http://gammats.com:7009/be/${PkgDetails?.Images[0]}` ||
                 "/bg3.jpg"
               }
               layout="fill"
-              className="w-full h-[220px] object-cover"
+              className="w-full h-full object-cover"
             />
           </a>
         </Link>
       ) : (
-        <Link className="h-[220px]" href={`/packages/${PkgDetails?.Id}`}>
-          <a className={`block relative h-[220px] ${imgAspectRatio}`}>
+        <Link href={`/packages/${PkgDetails?.Id}`}>
+          <a className={`block relative ${imgAspectRatio}`}>
             <Image
               alt={`${PkgDetails?.Name} cover`}
               src={
-                `http://gammats.com:7010/be/${PkgDetails?.PackageImage}` ||
+                `http://gammats.com:7009/be/${PkgDetails?.PackageImage}` ||
                 "/bg3.jpg"
               }
               layout="fill"
-              className="w-full h-[220px] object-cover"
+              className="w-full h-full object-cover"
             />
           </a>
         </Link>
@@ -150,4 +148,3 @@ const TripCard = ({
 // };
 
 export default TripCard;
- 

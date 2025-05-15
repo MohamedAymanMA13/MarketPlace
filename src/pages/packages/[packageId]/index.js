@@ -52,7 +52,7 @@ export default function PackageDetailsPage({ PkgDetails }) {
           <Image
             alt="package cover"
             src={
-              `http://gammats.com:7010/be/${PkgDetails.PackageImage}` ||
+              `http://gammats.com:7009/be/${PkgDetails.PackageImage}` ||
               "/bg5.jpg"
             }
             layout="fill"

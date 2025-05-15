@@ -42,7 +42,7 @@ const TopCarousel = ({ Packages }) => {
               <Image
                 isBgImage
                 // tag="div"
-                src={`http://gammats.com:7010/be/${pkg?.Image}` || "/bg2.jpg"}
+                src={`http://gammats.com:7009/be/${pkg?.Image}` || "/bg2.jpg"}
                 alt={`${pkg?.PkgTitle} cover`}
                 className="aspect-[12/10] object-cover h-full sm:aspect-[21/10]"
                 style={{ height: "100vh" }}

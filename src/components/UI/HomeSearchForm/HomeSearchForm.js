@@ -1,19 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-import { CustomDateRange } from "components/UI";
-import { useConfig } from "hooks/useConfig";
+import { CustomDateRange } from 'components/UI';
+import { useConfig } from 'hooks/useConfig';
 
-import Link from "next/link";
+import Link from 'next/link';
 import {
   LocationMarkerIcon,
   MinusIcon,
   PlusIcon,
-} from "@heroicons/react/outline";
-import differenceInDays from "date-fns/differenceInDays";
-import addDays from "date-fns/addDays";
-import subDays from "date-fns/subDays";
-import format from "date-fns/format";
-import { useTranslation } from "next-i18next";
+} from '@heroicons/react/outline';
+import differenceInDays from 'date-fns/differenceInDays';
+import addDays from 'date-fns/addDays';
+import subDays from 'date-fns/subDays';
+import format from 'date-fns/format';
+import { useTranslation } from 'next-i18next';
 
 const HomeSearchForm = () => {
   const { t } = useTranslation();
@@ -23,27 +23,27 @@ const HomeSearchForm = () => {
     {
       startDate: new Date(),
       endDate: addDays(new Date(), 1),
-      key: "selection",
+      key: 'selection',
     },
   ]);
-  const [country, setCountry] = useState("");
+  const [country, setCountry] = useState('');
 
   const addDayHandler = () => {
-    setRanges((prevState) => [
+    setRanges(prevState => [
       {
         startDate: prevState[0].startDate,
         endDate: addDays(prevState[0].endDate, 1),
-        key: "selection",
+        key: 'selection',
       },
     ]);
   };
 
   const removeDayHandler = () => {
-    setRanges((prevState) => [
+    setRanges(prevState => [
       {
         startDate: prevState[0].startDate,
         endDate: subDays(prevState[0].endDate, 1),
-        key: "selection",
+        key: 'selection',
       },
     ]);
   };
@@ -133,13 +133,13 @@ const HomeSearchForm = () => {
             name="country"
             className="py-3 w-full text-sm font-medium border-none bg-transparent text-inputGray focus:ring-0"
             value={country}
-            onChange={(e) => {
+            onChange={e => {
               setCountry(e.target.value);
             }}
           >
-            <option value="">{t("Country")}</option>
+            <option value="">{t('Country')}</option>
             {config?.tables && config?.tables?.fromCountries
-              ? config?.tables?.fromCountries?.map((country) => (
+              ? config?.tables?.fromCountries?.map(country => (
                   <option key={country?.id} value={country?.id}>
                     {country?.value}
                   </option>
@@ -153,7 +153,7 @@ const HomeSearchForm = () => {
         <CustomDateRange ranges={ranges} setRanges={setRanges} />
 
         <div className="px-3 py-2 text-sm font-medium text-inputGray flex items-center justify-between">
-          <span>{t("Nights")}</span>
+          <span>{t('Nights')}</span>
 
           <div className="flex items-center gap-3">
             <button
@@ -175,18 +175,19 @@ const HomeSearchForm = () => {
             </button>
           </div>
         </div>
+
         <Link
           href={{
-            pathname: "/tourism",
+            pathname: '/tourism',
             query: {
               country,
-              startDate: format(ranges[0].startDate, "yyyy-MM-dd"),
-              endDate: format(ranges[0].endDate, "yyyy-MM-dd"),
+              startDate: format(ranges[0].startDate, 'yyyy-MM-dd'),
+              endDate: format(ranges[0].endDate, 'yyyy-MM-dd'),
             },
           }}
         >
           <a className="flex items-center justify-center w-full bg-main text-white font-medium ltr:rounded-r-md rtl:rounded-l-md">
-            {t("Search")}
+            {t('Search')}
           </a>
         </Link>
       </section>

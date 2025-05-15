@@ -18,7 +18,7 @@ const ResultsSection = ({ Packages, isLoading, forPackageDetails }) => {
             ? Packages?.packageHotels?.map((pkg) => (
                 <TripCard
                   key={pkg.Id}
-                  additionalClasses="  mb-2  sm:max-w-none  "
+                  additionalClasses="  mb-2 w-full sm:max-w-none  "
                   imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
                   PkgDetails={pkg}
                   forPackageDetails={forPackageDetails}
@@ -27,7 +27,7 @@ const ResultsSection = ({ Packages, isLoading, forPackageDetails }) => {
             : Packages?.map((pkg) => (
                 <TripCard
                   key={pkg.Id}
-                  additionalClasses=" mb-2  sm:max-w-none"
+                  additionalClasses="w-full max-w-sm sm:w-72 sm:max-w-none"
                   imgAspectRatio="aspect-[10/5] sm:aspect-[10/6]"
                   PkgDetails={pkg}
                 />

@@ -70,7 +70,7 @@ export default function PackageDetailsPage({
           ReservationFlightCompanions: values.reservationPackageCompanions,
           FlightTravelId: +ID,
           Price: +selectedClass.price,
-          ClassName: selectedClass.name,
+          Class: selectedClass.name,
         },
         {
           headers: {

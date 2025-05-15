@@ -40,6 +40,7 @@ export default function Flights({ response, optionsFontSize }) {
   const [endDate, setEndDate] = useState(addDays(new Date(), 1));
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState(null);
+
   console.log("%csrcpages\flights.js:46 response", "color: #007acc;", response);
   useEffect(() => {
     if (selectedCountry) {
@@ -56,6 +57,7 @@ export default function Flights({ response, optionsFontSize }) {
       setCities([]);
     }
   }, [selectedCountry]);
+
   const toggleModal = () => {
     setIsOpen((prevState) => !prevState);
   };
@@ -92,6 +94,7 @@ export default function Flights({ response, optionsFontSize }) {
             </h2>
           </div>
         </section>
+
         <Form
           onSubmit={submitHandler}
           initialValues={{}}
@@ -134,41 +137,25 @@ export default function Flights({ response, optionsFontSize }) {
                         />
                       </div>
                       <div className="mt-2 space-y-2">
-                        <Field
-                          name="departureDate"
-                          component={DateField}
-                          label="Departure Date"
-                        />
-                      </div>
-                      <div className="mt-2 space-y-2">
-                        <Field
-                          name="arrivalDate"
-                          component={DateField}
-                          label="Arrival Date"
-                        />
+                        <Field name="date" component={DateField} label="Date" />
                       </div>
                     </div>
                   </div>
                   <button
-                    className="py-1 mt-6 w-full  self-center sm:w-full bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="py-1 mt-6 w-full md:w-3/4 self-center sm:w-full bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                     type="submit"
                   >
                     {t("Search")}
                   </button>
                   <button
                     type="button"
-                    className="py-1 mt-3 w-full  self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={() => {
-                      reset();
-                      router.replace({
-                        pathname: "/flights",
-                        query: {},
-                      });
-                    }}
+                    className="py-1 mt-3 w-full md:w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
+                    onClick={reset}
                   >
                     {t("Reset")}
                   </button>
                 </section>
+
                 <div>
                   {/* {JSON.stringify(response)} */}
                   <ResultsSectionFlight
@@ -178,6 +165,7 @@ export default function Flights({ response, optionsFontSize }) {
                   />
                 </div>
               </div>
+
               <CustomModal isOpen={isOpen} toggleModalHandler={toggleModal}>
                 <section
                   className={`py-4 px-3 md:px-4 sm:block bg-white shadow-sm rounded-md h-max flex flex-col ${
@@ -209,37 +197,20 @@ export default function Flights({ response, optionsFontSize }) {
                         />
                       </div>
                       <div className="mt-2 space-y-2">
-                        <Field
-                          name="departureDate"
-                          component={DateField}
-                          label="Departure Date"
-                        />
-                      </div>
-                      <div className="mt-2 space-y-2">
-                        <Field
-                          name="arrivalDate"
-                          component={DateField}
-                          label="Arrival Date"
-                        />
+                        <Field name="date" component={DateField} label="Date" />
                       </div>
                     </div>
                   </div>
                   <button
-                    className="py-1 mt-6 w-full self-center sm:w-full bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="py-1 mt-6 w-3/4 self-center sm:w-full bg-main text-white font-medium text-sm text-center rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                     type="submit"
                   >
                     {t("Search")}
                   </button>
                   <button
                     type="button"
-                    className="py-1 mt-3 w-full self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={() => {
-                      reset();
-                      router.replace({
-                        pathname: "/flights",
-                        query: {},
-                      });
-                    }}
+                    className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
+                    onClick={reset}
                   >
                     {t("Reset")}
                   </button>

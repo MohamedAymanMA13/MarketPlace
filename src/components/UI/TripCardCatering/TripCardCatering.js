@@ -33,7 +33,7 @@ const TripCardCatering = ({
           <Image
             alt={`${PkgDetails?.Name} cover`}
             src={
-              `http://gammats.com:7010/be/${PkgDetails?.Photo}` || "/bg3.jpg"
+              `http://gammats.com:7009/be/${PkgDetails?.Photo}` || "/bg3.jpg"
             }
             layout="fill"
             className="w-full h-full object-cover"

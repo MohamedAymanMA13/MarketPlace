@@ -24,8 +24,8 @@ export function fetchPackageById(PkgId, lang) {
     // },
   });
 }
-export function GetHotelDetailsWebsiteContent(PkgId) {
-  const url = `/EntityHotelSeason/${PkgId}/MarketPlace`;
+export function GetHotelDetailsWebsiteContent(Id) {
+  const url = `/Hotel/${Id}`;
   console.log('API URL:', url); // Log the full URL being called
   return axios.get(url);
 }

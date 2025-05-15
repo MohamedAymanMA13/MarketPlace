@@ -163,13 +163,7 @@ export default function Catering({ response, optionsFontSize }) {
                   <button
                     type="button"
                     className="py-1 mt-3 w-full  self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
-                    onClick={() => {
-                      reset();
-                      router.replace({
-                        pathname: "/catering",
-                        query: {},
-                      });
-                    }}
+                    onClick={reset}
                   >
                     {t("Reset")}
                   </button>
@@ -300,10 +294,9 @@ export default function Catering({ response, optionsFontSize }) {
                     type="button"
                     className="py-1 mt-3 w-3/4 self-center sm:w-full bg-white text-red-500 border border-red-500 font-medium text-sm text-center rounded-md hover:bg-red-500 hover:text-white"
                     onClick={() => {
-                      reset();
-                      router.replace({
+                      router.push({
                         pathname: "/catering",
-                        query: {},
+                        query: "",
                       });
                     }}
                   >

@@ -1,17 +1,17 @@
 // TODO: update the placeholder image below
 
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
-import { Spinner, StarRating } from "components/UI";
-import { moneyRenderer } from "utils/helpers/general.helpers";
+import { Spinner, StarRating } from 'components/UI';
+import { moneyRenderer } from 'utils/helpers/general.helpers';
 
-import { isEmpty, sortBy } from "lodash";
-import Image from "next/image";
-import { useFormState } from "react-final-form";
-import { UserIcon } from "@heroicons/react/outline";
-import { useTranslation } from "next-i18next";
-import { useRouter } from "next/router";
-import { BedIcon } from "components/Icons";
+import { isEmpty, sortBy } from 'lodash';
+import Image from 'next/image';
+import { useFormState } from 'react-final-form';
+import { UserIcon } from '@heroicons/react/outline';
+import { useTranslation } from 'next-i18next';
+import { useRouter } from 'next/router';
+import { BedIcon } from 'components/Icons';
 
 const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
   const { t } = useTranslation();
@@ -49,7 +49,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
 
         // * with rooms
       } else if (!isEmpty(PkgDetails.roomTypes)) {
-        const cheapestRoom = sortBy(PkgDetails.roomTypes, (r) => r.price)[0];
+        const cheapestRoom = sortBy(PkgDetails.roomTypes, r => r.price)[0];
 
         // * no query
         if (!query.roomType) {
@@ -57,7 +57,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
           setSelectedRoom(cheapestRoom);
         } else {
           const foundType = PkgDetails.roomTypes.find(
-            (room) => +room.id === +query.roomType
+            room => +room.id === +query.roomType
           );
 
           if (foundType) {
@@ -81,17 +81,14 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
         </div>
       ) : !detailLoading && isEmpty(PkgDetails) ? (
         <div className="p-2 w-full bg-white rounded-md flex items-center justify-center max-h-[25rem]">
-          <p className="text-xs text-red-500">{t("No data available")}</p>
+          <p className="text-xs text-red-500">{t('No data available')}</p>
         </div>
       ) : (
         <div className="p-2 w-full bg-white rounded-md sm:h-max">
           <div className="relative aspect-video lg:aspect-[2/1] rounded-md overflow-hidden">
             <Image
               alt={`${PkgDetails.PkgTitle} cover`}
-              src={
-                `http://gammats.com:7010/be/${PkgDetails.PackageImage}` ||
-                "/bg5.jpg"
-              }
+              src={`http://gammats.com:7009/be/${PkgDetails.PackageImage}`|| '/bg5.jpg'}
               layout="fill"
               className="w-full h-full object-cover"
               priority
@@ -113,15 +110,15 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
 
           <section className="px-1">
             <h3 className="font-bold text-base lg:text-lg text-copy">
-              {t("Price")}
+              {t('Price')}
             </h3>
 
             <div className="mt-2 flex flex-col gap-3">
               <div className="flex items-center text-inputGray text-sm font-medium gap-1">
                 <UserIcon className="w-4 h-4" />
                 <p>
-                  {formState.values.reservationPackageCompanions?.length}{" "}
-                  {t("Travellers")}
+                  {formState.values.reservationPackageCompanions?.length}{' '}
+                  {t('Travellers')}
                 </p>
               </div>
 
@@ -136,7 +133,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
 
               <div className="flex items-center justify-between">
                 <p className="text-inputGray text-sm font-medium">
-                  {t("Price")}
+                  {t('Price')}
                 </p>
                 <p className="text-copy text-sm font-semibold">
                   {moneyRenderer(locale, PkgCurrency, selectedPrice)}
@@ -144,7 +141,7 @@ const PkgDetailsPane = ({ detailLoading, PkgDetails }) => {
               </div>
               <div className="flex items-center justify-between">
                 <p className="text-inputGray text-sm font-medium">
-                  {t("Total Price")}
+                  {t('Total Price')}
                 </p>
                 <p className="text-main text-base font-semibold">
                   {moneyRenderer(locale, PkgCurrency, totalPrice)}
